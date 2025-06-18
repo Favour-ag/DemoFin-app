@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import ProfileTabs from "@/components/users/ProfileTabs";
+import Image from "next/image";
+import Link from "next/link";
 
 // Mock data - replace with actual data fetching
 const getUserById = (id: string) => {
@@ -8,8 +10,11 @@ const getUserById = (id: string) => {
       id: "1",
       name: "Savannah Nguyen",
       email: "savanna@gmail.com",
+      role: "Admin",
       status: "active",
-      balance: 144.55,
+      phone: "(406) 555-0120",
+      joinDate: "Jan 6, 2025",
+      image: "/images/user1.jpg",
       walletBalance: "$144.55",
       transactions: 35,
       transactionVolume: "$191.95",
@@ -33,32 +38,60 @@ const getUserById = (id: string) => {
     {
       id: "2",
       name: "Dianne Russell",
-      email: "diane@gmail.com",
-      status: "pending",
-      balance: 144.55,
-      walletBalance: "$122.30",
-      transactions: 12,
-      transactionVolume: "$85.75",
+      email: "Diane@gmail.com",
+      role: "Admin",
+      status: "inactive",
+      phone: "(406) 555-0120",
+      joinDate: "Jan 6, 2025",
+      image: "/images/user1.jpg",
+      walletBalance: "$144.55",
+      transactions: 35,
+      transactionVolume: "$191.95",
       activities: [
         {
-          id: "txn-003",
+          id: "txn-001",
           type: "Credit",
-          description: "Sample transaction",
-          date: "Jan 4, 2025",
-          amount: 50.0,
+          description: "Transaction description",
+          date: "Jan 6, 2025",
+          amount: 144.55,
+        },
+        {
+          id: "txn-002",
+          type: "Debit",
+          description: "Another transaction",
+          date: "Jan 5, 2025",
+          amount: 44.22,
         },
       ],
     },
     {
       id: "3",
       name: "Ronald Richards",
-      email: "ronald@gmail.com",
+      email: "Ronald@gmail.com",
+      role: "Admin",
       status: "active",
-      balance: 144.55,
-      walletBalance: "$89.20",
-      transactions: 27,
-      transactionVolume: "$210.40",
-      activities: [],
+      phone: "(406) 555-0120",
+      joinDate: "Jan 6, 2025",
+      image: "/images/user1.jpg",
+      walletBalance: "$144.55",
+      transactions: 35,
+      transactionVolume: "$191.95",
+      activities: [
+        {
+          id: "txn-001",
+          type: "Credit",
+          description: "Transaction description",
+          date: "Jan 6, 2025",
+          amount: 144.55,
+        },
+        {
+          id: "txn-002",
+          type: "Debit",
+          description: "Another transaction",
+          date: "Jan 5, 2025",
+          amount: 44.22,
+        },
+      ],
     },
   ];
 
@@ -67,11 +100,46 @@ const getUserById = (id: string) => {
 
 export default function UserProfile({ params }: { params: { id: string } }) {
   const user = getUserById(params.id);
-
   if (!user) return notFound();
 
   return (
-    <div className="p-4 md:p-8">
+    <div className="p-4 md:p-8 space-y-6">
+      {/* Go Back + Path Info */}
+      <div className="text-sm text-gray-500 mb-2">
+        <Link href="/users" className="hover:underline">
+          &larr; Go Back
+        </Link>{" "}
+        / View user
+      </div>
+
+      {/* Profile Header */}
+      <div className="flex flex-col md:flex-row items-center gap-6">
+        <Image
+          src={user.image}
+          alt={user.name}
+          width={100}
+          height={100}
+          className="rounded-full border"
+        />
+        <div>
+          <h2 className="text-2xl font-bold">{user.name}</h2>
+          <div className="flex gap-2 mt-1">
+            <span className="bg-gray-100 text-gray-700 px-2 py-1 text-xs rounded">
+              {user.role}
+            </span>
+            <span className="bg-green-100 text-green-700 px-2 py-1 text-xs rounded capitalize">
+              {user.status}
+            </span>
+          </div>
+          <div className="mt-2 text-sm text-gray-600 flex flex-col gap-1">
+            <p>Email: {user.email}</p>
+            <p>Phone: {user.phone}</p>
+            <p>Joined: {user.joinDate}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs */}
       <ProfileTabs
         user={{
           name: user.name,

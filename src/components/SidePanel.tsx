@@ -180,9 +180,9 @@ const menuItems = [
     isSettings: false,
   },
   {
-    text: "User",
+    text: "Users",
     icon: User,
-    path: "/user",
+    path: "/users",
     isSettings: false,
   },
   {
@@ -197,12 +197,7 @@ const menuItems = [
     path: "/wallets",
     isSettings: false,
   },
-  {
-    text: "Liquidity",
-    icon: Icon,
-    path: "/liquidity",
-    isSettings: false,
-  },
+
   {
     text: "Admins",
     icon: Users,

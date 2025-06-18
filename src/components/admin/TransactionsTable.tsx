@@ -1,159 +1,157 @@
 "use client";
-import {
-  CheckCircle,
-  Clock,
-  RotateCcw,
-  ArrowDownCircle,
-  ArrowUpCircle,
-} from "lucide-react";
+
+import { CheckCircle, RotateCcw, MoreVertical } from "lucide-react";
 import Avatar from "../Avatar";
 import Pagination from "../Pagination";
 import { useState } from "react";
-import Button from "../Button";
 
-const role = [
+const admins = [
   {
-    user: "Olivia Rhye",
+    name: "Savannah Nguyen",
+    email: "Savana@gmail.com",
     role: "Admin",
     status: "Active",
     login: "Jan 6, 2025",
-    action: "",
   },
   {
-    user: "Olivia Rhye",
+    name: "Dianne Russell",
+    email: "Diane@gmail.com",
     role: "Editor",
     status: "Inactive",
     login: "Jan 6, 2025",
-    action: "",
   },
   {
-    user: "Olivia Rhye",
+    name: "Ronald Richards",
+    email: "Ronald@gmail.com",
     role: "Admin",
     status: "Active",
     login: "Jan 6, 2025",
-    action: "",
   },
   {
-    user: "Olivia Rhye",
+    name: "Jacob Jones",
+    email: "Jacob@gmail.com",
     role: "Editor",
-    status: "Inactive",
-    login: "Jan 6, 2025",
-    action: "",
+    status: "Active",
+    login: "Jan 5, 2025",
   },
   {
-    user: "Olivia Rhye",
+    name: "Cody Fisher",
+    email: "codycandy@gmail.com",
+    role: "Admin",
+    status: "Inactive",
+    login: "Jan 5, 2025",
+  },
+  {
+    name: "Cameron Williamson",
+    email: "WilliamsonC@gmail.com",
+    role: "Editor",
+    status: "Active",
+    login: "Jan 5, 2025",
+  },
+  {
+    name: "Theresa Webb",
+    email: "Theresa@gmail.com",
     role: "Admin",
     status: "Active",
-    login: "Jan 6, 2025",
-    action: "",
+    login: "Jan 4, 2025",
   },
   {
-    user: "Olivia Rhye",
+    name: "Ralph Edwards",
+    email: "REdwards@gmail.com",
     role: "Editor",
-    status: "Inactive",
-    login: "Jan 6, 2025",
-    action: "",
-  },
-  {
-    user: "Olivia Rhye",
-    role: "Admin",
     status: "Active",
-    login: "Jan 6, 2025",
-    action: "",
+    login: "Jan 3, 2025",
   },
   {
-    user: "Olivia Rhye",
-    role: "Editor",
-    status: "Inactive",
-    login: "Jan 6, 2025",
-    action: "",
-  },
-  {
-    user: "Olivia Rhye",
+    name: "Annette Black",
+    email: "AnnetteB@gmail.com",
     role: "Admin",
-    status: "Active",
-    login: "Jan 6, 2025",
-    action: "",
+    status: "Inactive",
+    login: "Jan 3, 2025",
   },
   {
-    user: "Olivia Rhye",
+    name: "Albert Flores",
+    email: "Albert@gmail.com",
     role: "Editor",
-    status: "Inactive",
-    login: "Jan 6, 2025",
-    action: "",
+    status: "Active",
+    login: "Jan 3, 2025",
   },
 ];
 
-export default function TransactionTable() {
+export default function AdminTable() {
   const [currentPage, setCurrentPage] = useState(1);
-  return (
-    <div className="bg-white p-4 rounded-lg shadow-sm overflow-auto">
-      {/* Title and View All */}
-      <div className="flex items-center mb-4">
-        <h2 className="text-lg font-semibold text-gray-800">Administrators</h2>
-        <Button className="gap-2 border text-purple-700">
-          <span>100 admins</span>
-        </Button>
 
-        {/* <button className="text-sm font-medium text-primary hover:underline">
-          View all
-        </button> */}
+  return (
+    <div className="bg-white p-4 rounded-lg shadow-sm overflow-x-auto">
+      <div className="flex items-center  mb-4">
+        <h2 className="text-lg font-semibold text-gray-800">Administrators</h2>
+        <span className="text-sm font-medium text-purple-700 bg-purple-100 px-3 py-1 rounded-full">
+          100 admins
+        </span>
       </div>
 
-      {/* Table */}
       <table className="min-w-full text-sm">
         <thead>
-          <tr className="text-left border-b text-gray-500 font-medium">
-            <th className="p-2">
+          <tr className="text-left text-gray-500 font-medium border-b">
+            <th className="p-3">
               <input type="checkbox" className="accent-gray-300" />
             </th>
-            <th className="p-2">Name</th>
-            <th className="p-2">Role</th>
-            <th className="p-2">Status</th>
-            <th className="p-2">Last Login</th>
-            <th className="p-2">Action</th>
+            <th className="p-3">Name</th>
+            <th className="p-3">Role</th>
+            <th className="p-3">Status</th>
+            <th className="p-3">Last Login</th>
+            <th className="p-3">Action</th>
           </tr>
         </thead>
         <tbody>
-          {role.map((tx, i) => (
+          {admins.map((admin, i) => (
             <tr key={i} className="border-b hover:bg-gray-50">
-              <td className="p-2">
+              <td className="p-3">
                 <input type="checkbox" className="accent-gray-300" />
               </td>
-
-              <td className="p-2 flex items-center gap-2">
-                <Avatar name={tx.user} />
+              <td className="p-3 flex items-center gap-3 whitespace-nowrap">
+                <Avatar name={admin.name} />
                 <div>
-                  <div className="text-gray-800 font-medium">{tx.user}</div>
-                  <div className="text-xs text-gray-500">{tx.role}</div>
+                  <div className="text-gray-800 font-medium">{admin.name}</div>
+                  <div className="text-xs text-gray-500">{admin.email}</div>
                 </div>
               </td>
-              <td className="p-2 text-gray-800 font-medium">{tx.role}</td>
-
-              <td className="p-2">
+              <td className="p-3">
                 <span
-                  className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full ${
-                    tx.status === "Active"
-                      ? "bg-green-100 text-green-600"
-                      : tx.status === "Inactive"
-                      ? "bg-gray-100 text-gray-600"
-                      : ""
+                  className={`inline-block text-xs font-medium px-2 py-1 rounded-full ${
+                    admin.role === "Admin"
+                      ? "bg-purple-100 text-purple-700"
+                      : "bg-blue-100 text-blue-700"
                   }`}
                 >
-                  {tx.status === "Active" && <CheckCircle size={14} />}
-
-                  {tx.status === "Inactive" && <RotateCcw size={14} />}
-                  {tx.status}
+                  {admin.role}
                 </span>
               </td>
-              <td className="p-2 text-gray-600">{tx.login}</td>
-              <td className="p-2 text-gray-600">{tx.action}</td>
+              <td className="p-3">
+                <span
+                  className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full ${
+                    admin.status === "Active"
+                      ? "bg-green-100 text-green-600"
+                      : "bg-red-100 text-red-600"
+                  }`}
+                >
+                  {admin.status === "Active" ? (
+                    <CheckCircle size={14} />
+                  ) : (
+                    <RotateCcw size={14} />
+                  )}
+                  {admin.status}
+                </span>
+              </td>
+              <td className="p-3 text-gray-600">{admin.login}</td>
+              <td className="p-3">
+                <MoreVertical className="text-gray-500 cursor-pointer" />
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      {/* Pagination */}
       <div className="mt-4">
         <Pagination
           currentPage={currentPage}

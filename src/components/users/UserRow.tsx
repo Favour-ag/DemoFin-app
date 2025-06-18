@@ -1,47 +1,65 @@
 "use client";
 
-import { MoreVertical } from "lucide-react";
+import { useRouter } from "next/navigation";
+import Toggle from "../Toggle";
+import Avatar from "../Avatar";
 
-export default function UserRow({ name, email, status, balance, date }) {
+type UserProps = {
+  id: string;
+  name: string;
+  email: string;
+  status: "active" | "pending" | "inactive";
+  balance: number;
+  date: string;
+};
+
+export default function UserRow({
+  id,
+  name,
+  email,
+  status,
+  balance,
+  date,
+}: UserProps) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/users/${id}`);
+  };
+
   return (
-    <tr className="border-b hover:bg-gray-50 transition">
-      <td className="px-4 py-3">
+    <tr
+      className="border-b hover:bg-gray-50 cursor-pointer"
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") handleClick();
+      }}
+    >
+      <td className="pl-6 pr-2 py-4 w-10 align-middle">
+        <input
+          type="checkbox"
+          className="accent-gray-300 h-4 w-4 rounded border-gray-300"
+          onClick={(e) => e.stopPropagation()}
+        />
+      </td>
+      <td className="px-4 py-2">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center text-xs font-semibold">
-            {name
-              .split(" ")
-              .map((n) => n[0])
-              .join("")}
-          </div>
+          <Avatar name={name} />
           <div>
             <p className="font-medium text-gray-800">{name}</p>
-            <p className="text-gray-500 text-xs">{email}</p>
+            <p className="text-xs text-gray-500">{email}</p>
           </div>
         </div>
       </td>
-
-      <td className="px-4 py-3">
-        <div className="flex items-center gap-2 text-xs font-medium">
-          <span
-            className={`w-3 h-3 rounded-full ${
-              status === "active" ? "bg-purple-600" : "bg-gray-300"
-            }`}
-          ></span>
-          <span
-            className={`${
-              status === "active" ? "text-purple-700" : "text-gray-500"
-            }`}
-          >
-            {status.charAt(0).toUpperCase() + status.slice(1)}
-          </span>
-        </div>
+      <td className="px-4 py-2">
+        <Toggle active={status === "active"} />
       </td>
-
-      <td className="px-4 py-3">${balance.toFixed(2)}</td>
-      <td className="px-4 py-3">{date}</td>
-
-      <td className="px-4 py-3 text-right">
-        <MoreVertical className="w-4 h-4 text-gray-400 cursor-pointer" />
+      <td className="px-4 py-2">${balance.toFixed(2)}</td>
+      <td className="px-4 py-2">{date}</td>
+      <td className="px-4 py-2 text-right">
+        <span className="text-purple-600 hover:underline text-xs">⋮</span>
       </td>
     </tr>
   );

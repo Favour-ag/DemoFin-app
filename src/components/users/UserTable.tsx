@@ -4,7 +4,16 @@ import UserRow from "@/components/users/UserRow";
 import Pagination from "@/components/Pagination";
 import { useState } from "react";
 
-const users = [
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  status: "active" | "pending" | "inactive"; // More specific type for status
+  balance: number;
+  date: string;
+}
+
+const users: User[] = [
   {
     id: "1",
     name: "Savannah Nguyen",
@@ -32,7 +41,7 @@ const users = [
 ];
 
 export default function UserTable() {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm overflow-auto">
@@ -65,7 +74,7 @@ export default function UserTable() {
         <Pagination
           currentPage={currentPage}
           totalPages={10}
-          onPageChange={(page) => setCurrentPage(page)}
+          onPageChange={(page: number) => setCurrentPage(page)}
         />
       </div>
     </div>

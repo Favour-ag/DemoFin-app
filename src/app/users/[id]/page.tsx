@@ -153,19 +153,19 @@
 //     </div>
 //   );
 // }
-// app/users/[id]/page.tsx
-
 import { notFound } from "next/navigation";
 import ProfileTabs from "@/components/users/ProfileTabs";
 import Image from "next/image";
 import Link from "next/link";
 
-type PageProps = {
+// ✅ Rename the type to avoid conflict
+type UserProfilePageProps = {
   params: {
     id: string;
   };
 };
 
+// Mock data - replace with actual data fetching
 const getUserById = (id: string) => {
   const users = [
     {
@@ -180,7 +180,22 @@ const getUserById = (id: string) => {
       walletBalance: "$144.55",
       transactions: 35,
       transactionVolume: "$191.95",
-      activities: [],
+      activities: [
+        {
+          id: "txn-001",
+          type: "Credit",
+          description: "Transaction description",
+          date: "Jan 6, 2025",
+          amount: 144.55,
+        },
+        {
+          id: "txn-002",
+          type: "Debit",
+          description: "Another transaction",
+          date: "Jan 5, 2025",
+          amount: 44.22,
+        },
+      ],
     },
     {
       id: "2",
@@ -194,19 +209,64 @@ const getUserById = (id: string) => {
       walletBalance: "$144.55",
       transactions: 35,
       transactionVolume: "$191.95",
-      activities: [],
+      activities: [
+        {
+          id: "txn-001",
+          type: "Credit",
+          description: "Transaction description",
+          date: "Jan 6, 2025",
+          amount: 144.55,
+        },
+        {
+          id: "txn-002",
+          type: "Debit",
+          description: "Another transaction",
+          date: "Jan 5, 2025",
+          amount: 44.22,
+        },
+      ],
+    },
+    {
+      id: "3",
+      name: "Ronald Richards",
+      email: "Ronald@gmail.com",
+      role: "Admin",
+      status: "active",
+      phone: "(406) 555-0120",
+      joinDate: "Jan 6, 2025",
+      image: "/images/user1.jpg",
+      walletBalance: "$144.55",
+      transactions: 35,
+      transactionVolume: "$191.95",
+      activities: [
+        {
+          id: "txn-001",
+          type: "Credit",
+          description: "Transaction description",
+          date: "Jan 6, 2025",
+          amount: 144.55,
+        },
+        {
+          id: "txn-002",
+          type: "Debit",
+          description: "Another transaction",
+          date: "Jan 5, 2025",
+          amount: 44.22,
+        },
+      ],
     },
   ];
 
   return users.find((user) => user.id === id);
 };
 
-export default function UserProfile({ params }: PageProps) {
+export default function UserProfile({ params }: UserProfilePageProps) {
   const user = getUserById(params.id);
   if (!user) return notFound();
 
   return (
     <div className="p-4 md:p-8 space-y-6">
+      {/* Go Back + Path Info */}
       <div className="text-sm text-gray-500 mb-2">
         <Link href="/users" className="hover:underline">
           &larr; Go Back
@@ -214,6 +274,7 @@ export default function UserProfile({ params }: PageProps) {
         / View user
       </div>
 
+      {/* Profile Header */}
       <div className="flex flex-col md:flex-row items-center gap-6">
         <Image
           src={user.image}
@@ -240,6 +301,7 @@ export default function UserProfile({ params }: PageProps) {
         </div>
       </div>
 
+      {/* Tabs */}
       <ProfileTabs
         user={{
           name: user.name,

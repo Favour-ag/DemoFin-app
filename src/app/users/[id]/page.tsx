@@ -3,7 +3,13 @@ import ProfileTabs from "@/components/users/ProfileTabs";
 import Image from "next/image";
 import Link from "next/link";
 
-// Mock data - replace with actual data fetching
+type PageProps = {
+  params: {
+    id: string;
+  };
+};
+
+// Mock data - replace with real API or DB fetch logic
 const getUserById = (id: string) => {
   const users = [
     {
@@ -98,7 +104,7 @@ const getUserById = (id: string) => {
   return users.find((user) => user.id === id);
 };
 
-export default function UserProfile({ params }: { params: { id: string } }) {
+export default function UserProfile({ params }: PageProps) {
   const user = getUserById(params.id);
   if (!user) return notFound();
 

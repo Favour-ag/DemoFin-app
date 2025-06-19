@@ -72,16 +72,18 @@ function SidePanel() {
   return (
     <aside className="fixed inset-y-0 left-0 z-40 w-20 lg:w-56 bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ease-in-out">
       <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-        <div className="flex items-center gap-2 px-4 mb-8">
-          {/* Icon Block */}
-          <div className="w-8 h-8 rounded-md bg-purple-600 text-white flex items-center justify-center font-bold text-sm">
-            S
-          </div>
+        <div className="flex items-center justify-center mb-4 lg:justify-start pl-0 lg:pl-2 mt-2">
+          <div className="flex items-center gap-2 px-4 mb-8 cursor-pointer">
+            {/* Icon Block */}
+            <div className="w-6 h-6 rounded-md bg-purple-600 text-white flex items-center justify-center font-bold text-sm">
+              S
+            </div>
 
-          {/* Text */}
-          <span className="text-lg font-semibold text-gray-900 hidden lg:block">
-            spendin_admin
-          </span>
+            {/* Text */}
+            <span className="text-lg font-semibold text-gray-900 hidden lg:block">
+              spendin_admin
+            </span>
+          </div>
         </div>
 
         <nav className="flex-1 px-2 space-y-1">

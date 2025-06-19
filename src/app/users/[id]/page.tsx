@@ -325,29 +325,31 @@ import ProfileTabs from "@/components/users/ProfileTabs";
 import Image from "next/image";
 import Link from "next/link";
 
+interface UserActivity {
+  id: string;
+  type: string;
+  description: string;
+  date: string;
+  amount: number;
+}
+
 interface User {
   id: string;
   name: string;
   email: string;
   role: string;
-  status: string;
+  status: "active" | "inactive";
   phone: string;
   joinDate: string;
   image: string;
   walletBalance: string;
   transactions: number;
   transactionVolume: string;
-  activities: Array<{
-    id: string;
-    type: string;
-    description: string;
-    date: string;
-    amount: number;
-  }>;
+  activities: UserActivity[];
 }
 
 // Mock data - replace with actual DB/API fetch
-const getUserById = async (id: string): Promise<User | undefined> => {
+async function getUserById(id: string): Promise<User | undefined> {
   const users: User[] = [
     {
       id: "1",
@@ -382,13 +384,14 @@ const getUserById = async (id: string): Promise<User | undefined> => {
   ];
 
   return users.find((user) => user.id === id);
-};
-
-interface PageProps {
-  params: { id: string };
 }
 
-export default async function UserProfile({ params }: PageProps) {
+interface UserProfilePageProps {
+  params: { id: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
+
+export default async function UserProfile({ params }: UserProfilePageProps) {
   const user = await getUserById(params.id);
 
   if (!user) return notFound();

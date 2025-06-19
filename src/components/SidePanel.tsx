@@ -20,12 +20,12 @@ const menuItems = [
     path: "/dashboard",
     isSettings: false,
   },
-  {
-    text: "Users",
-    icon: User,
-    path: "/users",
-    isSettings: false,
-  },
+  // {
+  //   text: "Users",
+  //   icon: User,
+  //   path: "/users",
+  //   isSettings: false,
+  // },
   {
     text: "Transactions",
     icon: Dollar,

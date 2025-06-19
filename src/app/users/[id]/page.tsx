@@ -98,14 +98,7 @@ const getUserById = (id: string) => {
   return users.find((user) => user.id === id);
 };
 
-// Define the correct props type for Next.js dynamic route
-type UserProfileProps = {
-  params: {
-    id: string;
-  };
-};
-
-export default function UserProfile({ params }: UserProfileProps) {
+export default function UserProfile({ params }: { params: { id: string } }) {
   const user = getUserById(params.id);
   if (!user) return notFound();
 

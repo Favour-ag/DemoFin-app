@@ -1,4 +1,3 @@
-import AdminTable from "@/components/admin/TransactionsTable";
 import TransactionTable from "@/components/admin/TransactionsTable";
 
 import { CalendarDays, Funnel, Plus } from "lucide-react";

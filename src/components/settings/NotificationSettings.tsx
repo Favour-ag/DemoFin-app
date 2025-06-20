@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Toggle from "../Toggle";
 
 export default function NotificationSettings() {
   const [notifications, setNotifications] = useState({
@@ -40,15 +41,7 @@ export default function NotificationSettings() {
             </p>
           </div>
           <label className="inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              checked={notifications.email}
-              onChange={() => toggle("email")}
-              className="sr-only peer"
-            />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-purple-500 rounded-full peer dark:bg-gray-300 peer-checked:bg-purple-600 relative">
-              <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-5" />
-            </div>
+            <Toggle active={status === "active"} />
             <span className="ml-2 text-sm">Enable</span>
           </label>
         </div>
@@ -63,15 +56,7 @@ export default function NotificationSettings() {
             </p>
           </div>
           <label className="inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              checked={notifications.userActivity}
-              onChange={() => toggle("userActivity")}
-              className="sr-only peer"
-            />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-purple-500 rounded-full peer dark:bg-gray-300 peer-checked:bg-purple-600 relative">
-              <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-5" />
-            </div>
+            <Toggle active={status === "active"} />
             <span className="ml-2 text-sm">Enable</span>
           </label>
         </div>
@@ -85,15 +70,8 @@ export default function NotificationSettings() {
             </p>
           </div>
           <label className="inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              checked={notifications.transactions}
-              onChange={() => toggle("transactions")}
-              className="sr-only peer"
-            />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-purple-500 rounded-full peer dark:bg-gray-300 peer-checked:bg-purple-600 relative">
-              <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-5" />
-            </div>
+            <Toggle active={status === "active"} />
+
             <span className="ml-2 text-sm">Enable</span>
           </label>
         </div>
@@ -107,15 +85,8 @@ export default function NotificationSettings() {
             </p>
           </div>
           <label className="inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              checked={notifications.securityAlerts}
-              onChange={() => toggle("securityAlerts")}
-              className="sr-only peer"
-            />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-purple-500 rounded-full peer dark:bg-gray-300 peer-checked:bg-purple-600 relative">
-              <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-5" />
-            </div>
+            <Toggle active={status === "active"} />
+
             <span className="ml-2 text-sm">Enable</span>
           </label>
         </div>

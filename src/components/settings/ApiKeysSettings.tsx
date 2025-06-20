@@ -1,7 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, EyeOff, Copy, Filter, Plus } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Copy,
+  Filter,
+  Plus,
+  Search,
+  ListFilter,
+  UserPlus,
+  Key,
+} from "lucide-react";
+import Button from "../Button";
+import Pagination from "../Pagination";
 
 type ApiKey = {
   id: number;
@@ -28,6 +40,7 @@ const mockKeys: ApiKey[] = Array.from({ length: 10 }, (_, i) => ({
 }));
 
 export default function ApiKeysSettings() {
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [keys, setKeys] = useState<ApiKey[]>(mockKeys);
   const [showKeys, setShowKeys] = useState<{ [id: number]: boolean }>({});
 
@@ -63,28 +76,42 @@ export default function ApiKeysSettings() {
         </p>
       </div>
 
-      {/* Controls */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <input
-          type="text"
-          placeholder="Search by name, email"
-          className="border px-4 py-2 rounded-md w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-        />
-        <div className="flex gap-2">
-          <button className="flex items-center gap-1 border px-4 py-2 rounded-md text-sm text-gray-600">
-            <Filter className="w-4 h-4" /> Filters
-          </button>
-          <button className="flex items-center gap-1 bg-purple-600 text-white px-4 py-2 rounded-md text-sm hover:bg-purple-700">
-            <Plus className="w-4 h-4" /> Generate new key
-          </button>
+      {/* Search and Action Buttons */}
+      <div className="flex flex-col md:flex-row justify-between p-3 items-start md:items-center bg-gray-50 mt-4">
+        {/* Input Search */}
+        <div className="h-10 w-[356px] relative">
+          <input
+            className="w-full h-full  text-gray-400 placeholder:text-gray-400 placeholder:text-[14px] border border-gray-300 rounded-md pl-10 pr-3"
+            placeholder="Search by name, email"
+          />
+          <div className="absolute left-3 top-1/2 -translate-y-1/2">
+            <Search stroke="#A4A7AE" width={18} height={18} />
+          </div>
+        </div>
+        {/* Filters and Create Button */}
+        <div className="mt-4 md:mt-0 flex gap-2 ">
+          <Button className="bg-white text-black border border-gray-300 px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-gray-50">
+            <ListFilter className="w-4 h-4" />
+            Filters
+          </Button>
+          <Button className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-purple-700">
+            <Key className="w-4 h-4" />
+            Generate new key
+          </Button>
         </div>
       </div>
-
+      {/* Header */}
+      <div className="flex items-center  flex-wrap gap-2 mb-4">
+        <h2 className="text-lg font-semibold text-gray-800">Api keys</h2>
+        <span className="bg-purple-100 text-purple-700 px-3 py-1 text-xs rounded-full whitespace-nowrap">
+          {mockKeys.length} Api keys
+        </span>
+      </div>
       {/* Table */}
-      <div className="overflow-x-auto border rounded-md">
+      <div className="overflow-x-auto border rounded-md hide-scrollbar">
         <table className="min-w-full text-sm text-left">
           <thead className="bg-gray-50 border-b">
-            <tr>
+            <tr className="text-gray-500">
               <th className="px-4 py-3">
                 <input type="checkbox" />
               </th>
@@ -103,26 +130,26 @@ export default function ApiKeysSettings() {
                   <input type="checkbox" />
                 </td>
                 <td className="px-4 py-3">{key.name}</td>
-                <td className="px-4 py-3 flex items-center gap-2 max-w-xs">
+                <td className="px-4 py-3 flex items-center gap-2 max-w-xs text-gray-500">
                   <input
                     readOnly
                     type={showKeys[key.id] ? "text" : "password"}
                     value={key.key}
-                    className="w-full bg-transparent outline-none"
+                    className="w-full bg-transparent border border-gray-200 p-3 rounded-md text-gray-500"
                   />
-                  <button onClick={() => toggleVisibility(key.id)}>
+                  <Button onClick={() => toggleVisibility(key.id)}>
                     {showKeys[key.id] ? (
                       <EyeOff className="w-4 h-4" />
                     ) : (
                       <Eye className="w-4 h-4" />
                     )}
-                  </button>
-                  <button onClick={() => copyToClipboard(key.key)}>
+                  </Button>
+                  <Button onClick={() => copyToClipboard(key.key)}>
                     <Copy className="w-4 h-4" />
-                  </button>
+                  </Button>
                 </td>
-                <td className="px-4 py-3">{key.created}</td>
-                <td className="px-4 py-3">{key.lastUsed}</td>
+                <td className="px-4 py-3 text-gray-500">{key.created}</td>
+                <td className="px-4 py-3 text-gray-500">{key.lastUsed}</td>
                 <td className="px-4 py-3">
                   <span
                     className={`text-xs font-medium px-2 py-1 rounded-full ${
@@ -135,7 +162,7 @@ export default function ApiKeysSettings() {
                   </span>
                 </td>
                 <td className="px-4 py-3">
-                  <button
+                  <Button
                     onClick={() => toggleStatus(key.id)}
                     className={`text-sm px-3 py-1 rounded-md border ${
                       key.status === "Activated"
@@ -144,7 +171,7 @@ export default function ApiKeysSettings() {
                     }`}
                   >
                     {key.status === "Activated" ? "Revoke" : "Activate"}
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -153,21 +180,12 @@ export default function ApiKeysSettings() {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-between items-center text-sm text-gray-600 mt-4">
-        <button className="px-4 py-1 border rounded-md">← Previous</button>
-        <div className="flex items-center gap-2">
-          {[1, 2, 3, "...", 10].map((page, idx) => (
-            <button
-              key={idx}
-              className={`px-3 py-1 rounded-md ${
-                page === 1 ? "bg-purple-600 text-white" : "hover:bg-gray-100"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
-        </div>
-        <button className="px-4 py-1 border rounded-md">Next →</button>
+      <div className="mt-4 overflow-x-auto hide-scrollbar">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={10}
+          onPageChange={(page: number) => setCurrentPage(page)}
+        />
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} `}>
         <div className="w-full flex max-w-[1800px] mx-auto justify-center font-inter bg-gray-50 ">
           <div className="w-1/6 max-w-1/6  ">

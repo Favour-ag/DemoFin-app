@@ -35,6 +35,7 @@ const config: Config = {
       fontFamily: {
         inter: ["Inter", "sans-serif"],
       },
+      transform: ["peer-checked"],
     },
   },
   plugins: [],

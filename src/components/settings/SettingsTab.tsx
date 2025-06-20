@@ -5,6 +5,8 @@ import GeneralSettings from "./GeneralSettings";
 import SecuritySettings from "./SecuritySettings";
 import ApiKeysSettings from "./ApiKeysSettings";
 import NotificationSettings from "./NotificationSettings";
+import Button from "../Button";
+import { CalendarDays } from "lucide-react";
 
 const tabs = [
   { label: "General", value: "general" },
@@ -17,8 +19,17 @@ export default function SettingsTabs() {
   const [activeTab, setActiveTab] = useState("general");
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Settings</h1>
+    <div className="p-6 space-y-6 bg-white">
+      <div className="flex justify-between">
+        <h1 className="text-2xl font-bold">Settings</h1>
+        <Button
+          className="gap-2 border text-gray-700 text-sm md:text-base"
+          bgColor="#fff"
+        >
+          <CalendarDays className="w-4 h-4" />
+          <span className="whitespace-nowrap">Jan 06, 2025 - Jan 13, 2025</span>
+        </Button>
+      </div>
 
       <div className="flex gap-6 border-b border-gray-200">
         {tabs.map((tab) => (

@@ -1,4 +1,17 @@
+import { CloudUpload, Mail } from "lucide-react";
+import { useState } from "react";
+import Button from "../Button";
+
 export default function GeneralSettings() {
+  const [form, setForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
   return (
     <div className="space-y-6">
       <div>
@@ -9,36 +22,48 @@ export default function GeneralSettings() {
       </div>
 
       <form className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium mb-1">Company name</label>
-          <input
-            type="text"
-            placeholder="Enter company name"
-            className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">
-            Company email address
-          </label>
-          <div className="relative">
+        {/* Company Name */}
+        <div className="flex space-x-0 lg:space-x-36 border-b">
+          <label className="block text-sm font-medium ">Company name</label>
+          <div className="flex items-center w-96">
             <input
-              type="email"
-              placeholder="Enter email address"
-              className="w-full border px-4 py-2 pl-10 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              type="password"
+              name="currentPassword"
+              value={form.currentPassword}
+              onChange={handleChange}
+              placeholder="Enter company name"
+              className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 mb-4"
             />
-            <span className="absolute left-3 top-2.5 text-gray-400">@</span>
           </div>
         </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">Company logo</label>
-          <div className="flex items-center gap-4">
+        {/* Company Email  */}
+        <div className="flex space-x-0 lg:space-x-24 border-b">
+          <label className="block text-sm font-medium ">
+            Company email address
+          </label>
+          <div className="flex items-center w-96 relative">
+            <Mail className="absolute top-2.5 left-2.5 text-gray-500" />
+            <input
+              type="password"
+              name="currentPassword"
+              value={form.currentPassword}
+              onChange={handleChange}
+              placeholder="Enter company email address"
+              className="w-full border px-4 py-2 pl-10 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 mb-4"
+            />
+          </div>
+        </div>
+        {/* Company Logo */}
+        <div className="flex space-x-0 lg:space-x-36 border-b">
+          <label className="block text-sm font-medium ">Company logo</label>
+          <div className="flex items-center gap-4 mb-4">
             <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center font-bold text-purple-600">
               OR
             </div>
-            <label className="flex-1 border-dashed border-2 border-gray-300 rounded-md p-6 text-center cursor-pointer text-sm text-gray-500">
+            <label className="flex-1 items-center justify-center border-dashed border-2 border-gray-300 rounded-md p-6 text-center cursor-pointer text-sm text-gray-500">
+              <span className="">
+                <CloudUpload />
+              </span>
               <input type="file" className="hidden" />
               <span className="text-purple-600 font-medium underline">
                 Click to upload
@@ -51,22 +76,15 @@ export default function GeneralSettings() {
             </label>
           </div>
         </div>
-
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            className="border px-4 py-2 rounded-md text-sm text-gray-600"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm"
-          >
-            Save
-          </button>
-        </div>
       </form>
+      <div className="flex justify-end gap-2">
+        <Button className="border px-4 py-2 rounded-md text-sm text-gray-600">
+          Cancel
+        </Button>
+        <Button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm">
+          Save
+        </Button>
+      </div>
     </div>
   );
 }

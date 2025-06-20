@@ -1,10 +1,16 @@
 import Button from "@/components/Button";
 import TransactionsTable from "@/components/audit-logs/TransactionsTable";
-import { CalendarDays, Filter } from "lucide-react";
+import {
+  CalendarDays,
+  RotateCcw,
+  ListFilter,
+  Search,
+  UserPlus,
+} from "lucide-react";
 
 export default function AuditLogs() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <main className="max-w-screen-2xl mx-auto p-4 sm:p-6 lg:p-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -24,17 +30,26 @@ export default function AuditLogs() {
         </div>
 
         {/* Controls */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between mt-6 gap-4">
-          <input
-            type="text"
-            placeholder="Search by name, email"
-            className="w-full md:w-1/2 border border-gray-300 p-2 rounded-md text-sm"
-          />
-          <div className="flex gap-2">
-            <Button className="border px-4 py-2 text-sm flex items-center gap-1">
-              <Filter size={16} /> Filters
+
+        <div className="flex flex-col md:flex-row justify-between p-3 items-start md:items-center bg-gray-50 mt-4">
+          {/* Input Search */}
+          <div className="h-10 w-[356px] relative">
+            <input
+              className="w-full h-full  text-gray-400 placeholder:text-gray-400 placeholder:text-[14px] border border-gray-300 rounded-md pl-10 pr-3"
+              placeholder="Search by name, email"
+            />
+            <div className="absolute left-3 top-1/2 -translate-y-1/2">
+              <Search stroke="#A4A7AE" width={18} height={18} />
+            </div>
+          </div>
+          {/* Filters and Create Button */}
+          <div className="mt-4 md:mt-0 flex gap-2 ">
+            <Button className="bg-white text-black border border-gray-300 px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-gray-50">
+              <ListFilter className="w-4 h-4" />
+              Filters
             </Button>
-            <Button className="bg-purple-600 text-white px-4 py-2 text-sm rounded-md">
+            <Button className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-purple-700">
+              <RotateCcw className="w-4 h-4" />
               Reset demo data
             </Button>
           </div>

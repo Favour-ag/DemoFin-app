@@ -58,7 +58,7 @@ export default function UserRow({
       </td>
       <td className="px-4 py-2">${balance.toFixed(2)}</td>
       <td className="px-4 py-2">{date}</td>
-      <td className="px-4 py-2 text-right">
+      <td className="px-4 py-2 text-center">
         <span className="text-purple-600 hover:underline text-xs">⋮</span>
       </td>
     </tr>

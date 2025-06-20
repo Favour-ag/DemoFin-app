@@ -27,12 +27,12 @@ const data = [
 
 export default function ChartCard({ title }: { title: string }) {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm">
+    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+        <h3 className="text-sm font-medium text-gray-500 mb-2">{title}</h3>
         <div className="flex space-x-4">
           <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-[#D8B4FE] mr-2"></div>
+            <div className="w-3 h-3 rounded-full bg-[#A855F7] mr-2"></div>
             <span className="text-xs text-gray-500">Series 1</span>
           </div>
           <div className="flex items-center">
@@ -40,35 +40,31 @@ export default function ChartCard({ title }: { title: string }) {
             <span className="text-xs text-gray-500">Series 2</span>
           </div>
           <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-[#A855F7] mr-2"></div>
+            <div className="w-3 h-3 rounded-full bg-[#D8B4FE] mr-2"></div>
             <span className="text-xs text-gray-500">Series 3</span>
           </div>
         </div>
       </div>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} barSize={20}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+          <BarChart data={data} barSize={24}>
+            <CartesianGrid
+              strokeDasharray="0"
+              vertical={false}
+              stroke="#F3F4F6"
+            />
             <XAxis dataKey="name" stroke="#9CA3AF" />
             <YAxis stroke="#9CA3AF" />
             <Tooltip />
+            {/* Series 3 is bottom */}
+            <Bar dataKey="series3" stackId="a" fill="#6941C6" />
+            <Bar dataKey="series2" stackId="a" fill="#9E77ED " />
+            {/* Series 1 is top and gets border radius */}
             <Bar
               dataKey="series1"
               stackId="a"
-              fill="#D8B4FE"
-              radius={[4, 4, 0, 0]}
-            />
-            <Bar
-              dataKey="series2"
-              stackId="a"
-              fill="#C084FC"
-              radius={[4, 4, 0, 0]}
-            />
-            <Bar
-              dataKey="series3"
-              stackId="a"
-              fill="#A855F7"
-              radius={[4, 4, 0, 0]}
+              fill="#D6BBFB"
+              radius={[10, 10, 0, 0]}
             />
           </BarChart>
         </ResponsiveContainer>

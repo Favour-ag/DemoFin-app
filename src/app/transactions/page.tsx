@@ -1,11 +1,11 @@
 import Button from "@/components/Button";
-import TransactionsTable from "@/components/TransactionsTable";
-import { CalendarDays } from "lucide-react";
+import TransactionsTable from "@/components/transaction/TransactionsTable";
+import { CalendarDays, ListFilter, Plus, Search } from "lucide-react";
 
 export default function TransactionsPage() {
   return (
-    <div className="flex min-h-screen">
-      <main className="flex-1 p-4 md:p-8">
+    <div className="flex min-h-screen bg-white">
+      <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
         {/* Page Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div className="mb-4 md:mb-0">
@@ -14,26 +14,36 @@ export default function TransactionsPage() {
               See the whole list of your transactions here
             </p>
           </div>
-          <Button className="gap-2 border text-gray-700" bgColor="#fff">
+          <Button
+            className="gap-2 border text-gray-700 text-sm md:text-base"
+            bgColor="#fff"
+          >
             <CalendarDays className="w-4 h-4" />
-            <span>Jan 06, 2025 - Jan 13, 2025</span>
+            <span className="whitespace-nowrap">
+              Jan 06, 2025 - Jan 13, 2025
+            </span>
           </Button>
         </div>
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-          <div className="mt-6 ">
+        <div className="flex flex-col md:flex-row justify-between p-3 items-start md:items-center bg-gray-50 mt-4">
+          {/* Input Search */}
+          <div className="h-10 w-[356px] relative">
             <input
-              type="text"
+              className="w-full h-full  text-gray-400 placeholder:text-gray-400 placeholder:text-[14px] border border-gray-300 rounded-md pl-10 pr-3"
               placeholder="Search by name, email"
-              className="w-full md:max-w-md border p-2 rounded-md mb-4"
             />
+            <div className="absolute left-3 top-1/2 -translate-y-1/2">
+              <Search stroke="#A4A7AE" width={18} height={18} />
+            </div>
           </div>
-          <div className="mt-4 md:mt-0 flex gap-2">
-            <button className="border px-4 py-2 rounded-md text-sm">
+          {/* Filters and Create Button */}
+          <div className="mt-4 md:mt-0 flex gap-2 ">
+            <Button className="bg-white text-black border border-gray-300 px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-gray-50">
+              <ListFilter className="w-4 h-4" />
               Filters
-            </button>
-            <button className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm">
+            </Button>
+            <Button className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-purple-700">
               Create new
-            </button>
+            </Button>
           </div>
         </div>
 

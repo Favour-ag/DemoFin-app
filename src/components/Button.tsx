@@ -43,10 +43,12 @@ interface ButtonProps {
   color?: string;
   border?: string;
   className?: string;
+  disabled?: boolean;
 }
 
 function Button({
   children,
+  disabled,
   onClick,
   bgColor,
   color,
@@ -56,7 +58,8 @@ function Button({
   return (
     <button
       onClick={onClick}
-      className={`flex justify-center items-center space-x-2 font-sora rounded-xl py-2 px-4 text-sm ${className}`}
+      disabled={disabled}
+      className={`flex justify-center items-center space-x-2 font-sora rounded-xl py-2 px-2 text-sm ${className}`}
       style={{ backgroundColor: bgColor, color, border }}
     >
       {children}

@@ -11,8 +11,21 @@ import {
   CheckCircle,
   Clock,
   RotateCcw,
+  Users,
+  Wallet,
+  CircleDollarSign,
+  BarChart2,
+  ArrowDownLeft,
+  ArrowUpRight,
+  ListFilter,
+  Search,
 } from "lucide-react";
 import clsx from "clsx";
+import StatCard from "@/components/dashboard/StatCard";
+import Button from "@/components/Button";
+import TransactionTable from "@/components/users/TransactionsTable";
+import Pagination from "@/components/Pagination";
+import { useState } from "react";
 
 const mockTransactions = [
   {
@@ -43,6 +56,7 @@ const mockTransactions = [
 ];
 
 export default function WalletDetailPage() {
+  const [currentPage, setCurrentPage] = useState(1);
   const { id } = useParams();
   const router = useRouter();
   const user = mockWallets.find((u) => u.id === id);
@@ -82,129 +96,100 @@ export default function WalletDetailPage() {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Breadcrumb */}
-      <div className="text-sm text-gray-500 flex items-center gap-2">
-        <button onClick={() => router.back()}>
-          <ArrowLeft className="w-4 h-4" />
-        </button>
-        <span className="text-gray-700 font-medium">Go back</span>
-        <span>/</span>
-        <span className="text-gray-700 font-medium">Ademola</span>
-        <span>/</span>
-        <span className="text-black font-semibold">View User</span>
-      </div>
+    <>
+      <div className="p-6 space-y-6 bg-white">
+        {/* Breadcrumb */}
+        <div className="text-sm text-gray-500 flex items-center gap-2">
+          <button onClick={() => router.back()}>
+            <ArrowLeft className="w-4 h-4" />
+          </button>
+          <span className="text-gray-700 font-medium">Go back</span>
+          <span>/</span>
+          <span className="text-gray-700 font-medium">Ademola</span>
+          <span>/</span>
+          <span className="text-black font-semibold">View User</span>
+        </div>
 
-      {/* Profile */}
-      <div className="flex items-center gap-4">
-        {user.image ? (
-          <Image
-            src={user.image}
-            alt={user.name}
-            width={48}
-            height={48}
-            className="rounded-full object-cover"
+        {/* Stat Cards with Icons */}
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+          <StatCard
+            title="Wallet Balance"
+            value="$8,836.78"
+            percent={40}
+            icon={<Wallet className="w-4 h-4 text-purple-800" />}
+            iconBgColor="bg-purple-100"
+            trend="up"
+            showButtons
           />
-        ) : (
-          <div className="w-12 h-12 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-xl">
-            {user.name.charAt(0)}
+
+          <StatCard
+            title="Total Credits"
+            value="$1,731.95"
+            percent={40}
+            icon={<ArrowDownLeft className="w-4 h-4 text-green-700" />}
+            iconBgColor="bg-green-100"
+            trend="up"
+            progressValue={80}
+          />
+
+          <StatCard
+            title="Total Debits"
+            value="$191.95"
+            percent={40}
+            icon={<ArrowUpRight className="w-4 h-4 text-orange-600" />}
+            iconBgColor="bg-orange-100"
+            trend="up"
+            progressValue={20}
+          />
+        </section>
+
+        {/* Controls */}
+        <div className="flex flex-col md:flex-row justify-between p-3 items-start md:items-center bg-gray-50 mt-4">
+          {/* Input Search */}
+          <div className="h-10 w-[356px] relative">
+            <input
+              className="w-full h-full  text-gray-400 placeholder:text-gray-400 placeholder:text-[14px] border border-gray-300 rounded-md pl-10 pr-3"
+              placeholder="Search by name, email"
+            />
+            <div className="absolute left-3 top-1/2 -translate-y-1/2">
+              <Search stroke="#A4A7AE" width={18} height={18} />
+            </div>
           </div>
-        )}
-        <div>
-          <h2 className="text-xl font-semibold">{user.name}</h2>
-          <p className="text-sm text-gray-500">{user.email}</p>
+          {/* Filters and Create Button */}
+          <div className="mt-4 md:mt-0 flex gap-2 ">
+            <Button className="bg-white text-black border border-gray-300 px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-gray-50">
+              All time ✕
+            </Button>
+            <Button className="bg-white text-black border border-gray-300 px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-gray-50">
+              US, AU +4 ✕
+            </Button>
+            <Button className="bg-white text-black border border-gray-300 px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-gray-50">
+              <ListFilter className="w-4 h-4" />
+              More Filters
+            </Button>
+          </div>
+        </div>
+
+        {/* Transaction Table */}
+        <div className="bg-white rounded-md shadow border">
+          <div className="p-4 font-semibold border-b">
+            Transaction History
+            <span className="text-sm font-medium text-purple-700 bg-purple-100 px-3 py-1 rounded-full ml-2">
+              {mockWallets.length} transactions
+            </span>
+          </div>
+          {/* Table */}
+          <TransactionTable transactions={mockTransactions} />
         </div>
       </div>
-
-      {/* Wallet Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white border rounded-lg p-4 shadow">
-          <div className="flex justify-between items-center text-sm text-gray-500 mb-2">
-            <span>Wallet Balance</span>
-            <TrendingUp className="w-4 h-4 text-green-500" />
-          </div>
-          <div className="text-2xl font-semibold">{user.balance}</div>
-          <div className="text-sm text-green-600 mt-1">↑ 40% vs last month</div>
-        </div>
-
-        <div className="bg-white border rounded-lg p-4 shadow">
-          <div className="flex justify-between items-center text-sm text-gray-500 mb-2">
-            <span>Total Credits</span>
-            <ArrowRightLeft className="w-4 h-4 text-green-500" />
-          </div>
-          <div className="text-2xl font-semibold">
-            ${totalCredits.toFixed(2)}
-          </div>
-          <div className="text-sm text-green-600 mt-1">↑ 40% vs last month</div>
-        </div>
-
-        <div className="bg-white border rounded-lg p-4 shadow">
-          <div className="flex justify-between items-center text-sm text-gray-500 mb-2">
-            <span>Total Debits</span>
-            <TrendingDown className="w-4 h-4 text-orange-500" />
-          </div>
-          <div className="text-2xl font-semibold">
-            ${totalDebits.toFixed(2)}
-          </div>
-          <div className="text-sm text-green-600 mt-1">↑ 40% vs last month</div>
-        </div>
+      {/* Pagination */}
+      <div className="mt-6">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={10}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </div>
-
-      {/* Transaction Table */}
-      <div className="bg-white rounded-md shadow border">
-        <div className="p-4 font-semibold border-b">Transaction History</div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="text-left bg-gray-50 border-b">
-                <th className="px-4 py-3">ID</th>
-                <th className="px-4 py-3">Type</th>
-                <th className="px-4 py-3">Description</th>
-                <th className="px-4 py-3">Amount</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mockTransactions.map((tx, index) => (
-                <tr key={index} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-3 text-gray-800 text-sm">#{tx.id}</td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={clsx(
-                        "inline-block px-2 py-1 text-xs font-medium rounded-full",
-                        tx.type === "Credit"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
-                      )}
-                    >
-                      {tx.type}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 truncate max-w-xs">
-                    {tx.description}
-                  </td>
-                  <td className="px-4 py-3 font-medium">
-                    ${tx.amount.toFixed(2)}
-                  </td>
-                  <td className="px-4 py-3 flex items-center gap-2">
-                    {getStatusIcon(tx.status)}
-                    <span
-                      className={clsx(
-                        "text-xs font-medium",
-                        getStatusStyle(tx.status)
-                      )}
-                    >
-                      {tx.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-gray-500 text-sm">{tx.date}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }

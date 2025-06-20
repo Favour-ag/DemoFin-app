@@ -1,57 +1,52 @@
 "use client";
 import { Check, Clock, CornerUpLeft, ArrowDown, ArrowUp } from "lucide-react";
 import Avatar from "../Avatar";
-import Pagination from "../Pagination";
+import Pagination from "../Pagination"; // Import the pagination component
 import { useState } from "react";
 import transactions from "@/mockData/dashboardTableMockData";
-import Button from "../Button";
 
 export default function TransactionTable() {
   const [currentPage, setCurrentPage] = useState(1);
-
   return (
-    <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm">
+    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-base sm:text-lg font-semibold text-gray-800">
-          Recent Transactions
+      <div className="flex items-center gap-2 mb-4">
+        <h2 className="text-lg font-semibold text-gray-800">
+          Transaction History
         </h2>
-        <Button className="text-sm font-medium text-primary hover:underline whitespace-nowrap">
-          View all
-        </Button>
+        <span className="bg-purple-100 text-purple-700 px-3 py-1 text-xs rounded-full">
+          {transactions.length} transactions
+        </span>
       </div>
 
-      {/* Table Container */}
+      {/* Table */}
       <div className="overflow-x-auto hide-scrollbar">
         <table className="min-w-full text-sm table-auto border border-gray-200">
           <thead>
-            <tr className="text-left border-b text-gray-500 font-medium bg-[#E9EAEB]">
-              <th className="p-2 sm:p-3">
+            <tr className="text-left border-b text-gray-500 font-medium bg-gray-50 ">
+              <th className="p-2">
                 <input type="checkbox" className="accent-gray-300" />
               </th>
-              <th className="p-2 sm:p-3">
-                <div className="flex items-center">
-                  ID
-                  <ArrowDown className="w-4 h-4 ml-1" />
-                </div>
-              </th>
-              <th className="p-2 sm:p-3">User</th>
-              <th className="p-2 sm:p-3">Type</th>
-              <th className="p-2 sm:p-3">Amount</th>
-              <th className="p-2 sm:p-3">Status</th>
-              <th className="p-2 sm:p-3">Date</th>
+              <th className="p-2">ID</th>
+              <th className="p-2">User</th>
+              <th className="p-2">Type</th>
+              <th className="p-2">Amount</th>
+              <th className="p-2">Status</th>
+              <th className="p-2">Date</th>
+              <th className="p-2">Action</th>
             </tr>
           </thead>
+
           <tbody>
             {transactions.map((transaction, i) => (
-              <tr key={i} className="border-b hover:bg-gray-50">
-                <td className="p-2 sm:p-3">
+              <tr key={i} className="border-b ">
+                <td className="p-2">
                   <input type="checkbox" className="accent-gray-300" />
                 </td>
-                <td className="p-2 sm:p-3 text-gray-800 font-medium break-all">
+                <td className="p-2 text-gray-800 font-medium">
                   {transaction.id}
                 </td>
-                <td className="p-2 sm:p-3 flex items-center gap-2 sm:gap-4">
+                <td className="p-2 flex items-center gap-2">
                   <Avatar name={transaction.user} />
                   <div>
                     <div className="text-gray-800 font-medium">
@@ -62,7 +57,7 @@ export default function TransactionTable() {
                     </div>
                   </div>
                 </td>
-                <td className="p-2 sm:p-3">
+                <td className="p-2">
                   <span
                     className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full ${
                       transaction.type === "Credit"
@@ -75,10 +70,8 @@ export default function TransactionTable() {
                     {transaction.type}
                   </span>
                 </td>
-                <td className="p-2 sm:p-3 text-gray-600">
-                  ${transaction.amount.toFixed(2)}
-                </td>
-                <td className="p-2 sm:p-3">
+                <td className="p-2">${transaction.amount.toFixed(2)}</td>
+                <td className="p-2">
                   <span
                     className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full ${
                       transaction.status === "Completed"
@@ -96,7 +89,8 @@ export default function TransactionTable() {
                     {transaction.status}
                   </span>
                 </td>
-                <td className="p-2 sm:p-3 text-gray-600">{transaction.date}</td>
+                <td className="p-2 text-gray-600">{transaction.date}</td>
+                <td className="p-2 text-gray-600 text-center">⋮</td>
               </tr>
             ))}
           </tbody>

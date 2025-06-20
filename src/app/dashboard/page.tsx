@@ -2,7 +2,13 @@
 import StatCard from "@/components/dashboard/StatCard";
 import ChartCard from "@/components/dashboard/ChartCard";
 import TransactionTable from "@/components/dashboard/TransactionTable";
-import { CalendarDays, Users, Wallet, Repeat, BarChart2 } from "lucide-react";
+import {
+  CalendarDays,
+  Users,
+  Wallet,
+  CircleDollarSign,
+  BarChart2,
+} from "lucide-react";
 import Button from "@/components/Button";
 import LineChartCard from "@/components/dashboard/LineChartCard";
 
@@ -38,30 +44,34 @@ export default function DashboardPage() {
             value="20"
             percent={40}
             icon={<Users className="w-4 md:w-5 h-4 md:h-5" />}
-            iconBgColor="bg-green-50"
+            iconBgColor="bg-blue-50"
             trend="up"
           />
           <StatCard
             title="Wallet Balance"
             value="$8,836.78"
             percent={40}
-            icon={<Wallet className="w-4 md:w-5 h-4 md:h-5" />}
-            iconBgColor="bg-green-50"
+            icon={<Wallet className="w-4 md:w-5 h-4 md:h-5 text-purple-800" />}
+            iconBgColor="bg-purple-50"
             trend="up"
           />
           <StatCard
             title="Transactions"
             value="35"
             percent={40}
-            icon={<Repeat className="w-4 md:w-5 h-4 md:h-5" />}
-            iconBgColor="bg-green-50"
+            icon={
+              <CircleDollarSign className="w-4 md:w-5 h-4 md:h-5 text-orange-500" />
+            }
+            iconBgColor="bg-orange-50"
             trend="up"
           />
           <StatCard
             title="Transaction Volume"
             value="$191.95"
             percent={40}
-            icon={<BarChart2 className="w-4 md:w-5 h-4 md:h-5" />}
+            icon={
+              <BarChart2 className="w-4 md:w-5 h-4 md:h-5 text-green-800" />
+            }
             iconBgColor="bg-green-50"
             trend="up"
           />

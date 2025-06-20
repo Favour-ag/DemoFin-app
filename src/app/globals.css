@@ -9,3 +9,13 @@
     @apply text-gray-700 text-[14px] leading-[20px] font-[400];
   }
 }
+/* hide-scrollbar.css */
+@media (max-width: 640px) {
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}

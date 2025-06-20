@@ -21,7 +21,7 @@ export default function SettingsTabs() {
   return (
     <div className="p-6 space-y-6 bg-white">
       <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">Settings</h1>
+        <h1 className="text-2xl font-bold mt-2">Settings</h1>
         <Button
           className="gap-2 border text-gray-700 text-sm md:text-base"
           bgColor="#fff"

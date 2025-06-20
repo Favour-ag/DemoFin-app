@@ -57,17 +57,17 @@ export default function GeneralSettings() {
         <div className="flex space-x-0 lg:space-x-36 border-b">
           <label className="block text-sm font-medium ">Company logo</label>
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center font-bold text-purple-600">
+            <div className="w-10 h-10 relative bottom-14 bg-purple-100 rounded-full flex items-center justify-center font-bold text-purple-600">
               OR
             </div>
-            <label className="flex-1 items-center justify-center border-dashed border-2 border-gray-300 rounded-md p-6 text-center cursor-pointer text-sm text-gray-500">
-              <span className="">
+            <label className="flex flex-col items-center justify-center border-dashed border-2 border-gray-300 rounded-md p-6 text-center cursor-pointer text-sm text-gray-500 space-y-2 w-full lg:w-[350px]">
+              <span className="text-3xl  w-10 h-10  bg-gray-50 rounded-full flex items-center justify-center font-bold text-gray-500">
                 <CloudUpload />
               </span>
               <input type="file" className="hidden" />
               <span className="text-purple-600 font-medium underline">
                 Click to upload
-              </span>{" "}
+              </span>
               or drag and drop
               <br />
               <span className="text-xs text-gray-400">

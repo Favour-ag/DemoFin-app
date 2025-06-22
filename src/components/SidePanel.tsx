@@ -1,22 +1,22 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  BarChart,
-  Dollar,
+  BarChart3,
+  CircleDollarSign,
   FileText,
   Wallet,
   User,
   Users,
   Settings,
-  Logout,
-} from "../../public/svg/index";
+  LogOut,
+} from "lucide-react";
 
 const menuItems = [
   {
     text: "Dashboard",
-    icon: BarChart,
+    icon: BarChart3,
     path: "/dashboard",
     isSettings: false,
   },
@@ -28,7 +28,7 @@ const menuItems = [
   },
   {
     text: "Transactions",
-    icon: Dollar,
+    icon: CircleDollarSign,
     path: "/transactions",
     isSettings: false,
   },
@@ -60,26 +60,24 @@ const menuItems = [
 
 function SidePanel() {
   const pathname = usePathname();
-  const [activePath, setActivePath] = useState(pathname);
 
-  useEffect(() => {
-    setActivePath(pathname);
-  }, [pathname]);
-
-  const mainMenuItems = menuItems.filter((item) => !item.isSettings);
-  const settingsItem = menuItems.find((item) => item.isSettings);
+  const mainMenuItems = useMemo(
+    () => menuItems.filter((item) => !item.isSettings),
+    []
+  );
+  const settingsItem = useMemo(
+    () => menuItems.find((item) => item.isSettings),
+    []
+  );
 
   return (
     <aside className="fixed inset-y-0 left-0 z-40 w-20 lg:w-56 bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ease-in-out">
       <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
         <div className="flex items-center justify-center mb-4 lg:justify-start pl-0 lg:pl-2 mt-2">
           <div className="flex items-center gap-2 px-4 mb-8 cursor-pointer">
-            {/* Icon Block */}
             <div className="w-6 h-6 rounded-md bg-purple-600 text-white flex items-center justify-center font-bold text-sm">
               S
             </div>
-
-            {/* Text */}
             <span className="text-lg font-semibold text-gray-900 hidden lg:block">
               spendin_admin
             </span>
@@ -89,7 +87,7 @@ function SidePanel() {
         <nav className="flex-1 px-2 space-y-1">
           {mainMenuItems.map((item, index) => {
             const IconComponent = item.icon;
-            const isActive = activePath === item.path;
+            const isActive = pathname === item.path;
 
             return (
               <Link
@@ -103,7 +101,7 @@ function SidePanel() {
               >
                 <IconComponent
                   stroke={isActive ? "#8A00F5" : "#414651"}
-                  className="flex-shrink-0 mr-0 md:mr-3"
+                  className="w-5 h-5 flex-shrink-0 mr-0 md:mr-3"
                 />
                 <span className="hidden lg:inline">{item.text}</span>
               </Link>
@@ -117,14 +115,14 @@ function SidePanel() {
           <Link
             href={settingsItem.path}
             className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
-              activePath === settingsItem.path
+              pathname === settingsItem.path
                 ? "bg-purple-50 text-purple-700"
                 : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
             }`}
           >
             <Settings
-              stroke={activePath === settingsItem.path ? "#8A00F5" : "#414651"}
-              className="flex-shrink-0 mr-0 lg:mr-3"
+              stroke={pathname === settingsItem.path ? "#8A00F5" : "#414651"}
+              className="w-5 h-5 flex-shrink-0 mr-0 lg:mr-3"
             />
             <span className="hidden lg:inline">{settingsItem.text}</span>
           </Link>
@@ -141,7 +139,7 @@ function SidePanel() {
             </div>
           </div>
           <button className="text-gray-500 hover:text-gray-700">
-            <Logout />
+            <LogOut className="w-5 h-5" />
           </button>
         </div>
       </div>
@@ -149,4 +147,4 @@ function SidePanel() {
   );
 }
 
-export default SidePanel;
+export default React.memo(SidePanel);

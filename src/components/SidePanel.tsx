@@ -75,12 +75,14 @@ function SidePanel() {
       <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
         <div className="flex items-center justify-center mb-4 lg:justify-start pl-0 lg:pl-2 mt-2">
           <div className="flex items-center gap-2 px-4 mb-8 cursor-pointer">
-            <div className="w-6 h-6 rounded-md bg-purple-600 text-white flex items-center justify-center font-bold text-sm">
-              S
-            </div>
-            <span className="text-lg font-semibold text-gray-900 hidden lg:block">
-              spendin_admin
-            </span>
+            <Link href="/dashboard" className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-md bg-purple-600 text-white flex items-center justify-center font-bold text-sm">
+                S
+              </div>
+              <span className="text-lg font-semibold text-gray-900 hidden lg:block">
+                spendin_admin
+              </span>
+            </Link>
           </div>
         </div>
 

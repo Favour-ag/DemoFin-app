@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Image from "next/image";
+
 import Link from "next/link";
 
 export default function LoginPage() {
@@ -9,12 +9,10 @@ export default function LoginPage() {
       <div className=" w-[600px] max-w-[600px] space-y-8 p-8  rounded-lg shadow-sm">
         <div className="space-y-6 ">
           <div className="flex flex-col justify-center items-center space-y-5">
-            <Image
-              src="/svg/single_logo.svg"
-              alt="logo"
-              width={48}
-              height={48}
-            />
+            <div className="w-8 h-8 rounded-md bg-purple-600 text-white flex items-center justify-center font-bold text-2xl">
+              S
+            </div>
+
             <h2 className="text-[30px] leading-[24px] font-[600] text-gray-900 ">
               Spendin Admin
             </h2>
@@ -88,12 +86,14 @@ export default function LoginPage() {
               </div>
             </div>
             <div>
-              <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-              >
-                Sign in
-              </button>
+              <Link href={"/dashboard"} className="w-full">
+                <button
+                  type="submit"
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                >
+                  Sign in
+                </button>
+              </Link>
             </div>
           </form>
         </div>

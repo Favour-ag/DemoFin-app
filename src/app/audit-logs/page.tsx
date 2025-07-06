@@ -11,7 +11,7 @@ import {
 export default function AuditLogs() {
   return (
     <div className="min-h-screen bg-white">
-      <main className="max-w-screen-2xl mx-auto p-4 sm:p-6 lg:p-8">
+      <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>

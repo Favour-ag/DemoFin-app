@@ -14,7 +14,7 @@ import {
 export default function AdminManagement() {
   return (
     <div className="flex min-h-screen bg-white">
-      <main className="flesx-1 p-4 sm:p-6 md:p-8 max-w-screen-xl mx-auto w-full">
+      <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>

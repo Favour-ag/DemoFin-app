@@ -1,17 +1,14 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
 
 import { Search, Notification } from "../../public/svg";
 import Image from "next/image";
-import { LogOut } from "lucide-react";
 
 function Header() {
-  const { user, logout, isHydrated } = useAuth();
+  const { user, isHydrated } = useAuth();
   const router = useRouter();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   if (!isHydrated) return null;
 
@@ -38,7 +35,7 @@ function Header() {
           </p>
 
           <Image
-            src="/svg/avatar.svg"
+            src="/image.png"
             alt="avatar"
             width={32}
             height={32}

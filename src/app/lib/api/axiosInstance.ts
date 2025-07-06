@@ -1,5 +1,4 @@
-// utils/api.ts
-import axios, { AxiosRequestConfig, Method } from "axios";
+import axios from "axios";
 
 // Optional: Set your base URL here
 const baseURL =
@@ -9,7 +8,6 @@ const baseURL =
 // Create an Axios instance
 const api = axios.create({
   baseURL,
-
   headers: {
     "Content-Type": "application/json",
   },

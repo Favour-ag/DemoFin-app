@@ -34,7 +34,7 @@ export default function DashboardPage() {
   return (
     <ProtectedRoute>
       <div className="flex min-h-screen bg-white">
-        <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
+        <main className="flex-1 p-4  overflow-x-hidden">
           {/* Page Header */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div className="mb-4 md:mb-0">

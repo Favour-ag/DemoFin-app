@@ -138,6 +138,7 @@ import {
 
 import { overview } from "../lib/api/dashboardcalls";
 import { useEffect, useState } from "react";
+import Spinner from "@/components/Spinner";
 
 //  Define a proper type for balance item
 type Balance = {
@@ -219,7 +220,7 @@ export default function DashboardPage() {
           <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mt-6">
             <StatCard
               title="Total Users"
-              value={loading ? "..." : stats.totalUsers.toString()}
+              value={loading ? <Spinner /> : stats.totalUsers.toString()}
               percent={40}
               icon={<Users className="w-4 md:w-5 h-4 md:h-5" />}
               iconBgColor="bg-blue-50"
@@ -227,7 +228,9 @@ export default function DashboardPage() {
             />
             <StatCard
               title="Wallet Balance"
-              value={loading ? "..." : `$${stats.walletBalanceUSD.toFixed(2)}`}
+              value={
+                loading ? <Spinner /> : `$${stats.walletBalanceUSD.toFixed(2)}`
+              }
               percent={40}
               icon={
                 <Wallet className="w-4 md:w-5 h-4 md:h-5 text-purple-800" />
@@ -237,7 +240,7 @@ export default function DashboardPage() {
             />
             <StatCard
               title="Transactions"
-              value={loading ? "..." : stats.transactions.toString()}
+              value={loading ? <Spinner /> : stats.transactions.toString()}
               percent={40}
               icon={
                 <CircleDollarSign className="w-4 md:w-5 h-4 md:h-5 text-orange-500" />
@@ -248,7 +251,11 @@ export default function DashboardPage() {
             <StatCard
               title="Transaction Volume"
               value={
-                loading ? "..." : `$${stats.transactionVolumeUSD.toFixed(2)}`
+                loading ? (
+                  <Spinner />
+                ) : (
+                  `$${stats.transactionVolumeUSD.toFixed(2)}`
+                )
               }
               percent={40}
               icon={

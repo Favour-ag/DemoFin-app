@@ -4,7 +4,7 @@ import Button from "../Button";
 
 interface StatCardProps {
   title: string;
-  value: string | number;
+  value: string | number | ReactNode;
   percent: number;
   icon: ReactNode;
   iconBgColor?: string;

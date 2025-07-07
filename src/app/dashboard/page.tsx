@@ -204,15 +204,13 @@ export default function DashboardPage() {
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <Button
-                className="gap-2 border text-gray-700 text-sm md:text-base"
+                className="border text-gray-700 text-sm md:text-base"
                 bgColor="#fff"
               >
                 <CalendarDays className="w-4 h-4" />
-                <span className="whitespace-nowrap">
-                  Jan 06, 2025 - Jan 13, 2025
-                </span>
+                <span className="text-sm">Jan 06, 2025 - Jan 13, 2025</span>
               </Button>
             </div>
           </div>

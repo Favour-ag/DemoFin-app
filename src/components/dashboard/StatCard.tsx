@@ -27,7 +27,7 @@ export default function StatCard({
   const TrendIcon = trend === "up" ? ArrowUp : ArrowDownRight;
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm relative space-y-4">
+    <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm relative space-y-4">
       {/* Top Right Icon */}
       <div className="absolute top-4 right-4">
         <div

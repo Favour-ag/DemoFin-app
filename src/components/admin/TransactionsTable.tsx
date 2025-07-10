@@ -85,8 +85,8 @@ export default function AdminTable() {
     <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
       <div className="flex items-center  mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Administrators</h2>
-        <span className="text-sm font-medium text-purple-700 bg-purple-100 px-3 py-1 rounded-full">
-          {admins.length} admins
+        <span className="bg-purple-100 text-purple-700 px-3 py-1 text-xs rounded-full">
+          {admins.length} transactions
         </span>
       </div>
       {/* Table */}

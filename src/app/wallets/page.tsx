@@ -14,10 +14,15 @@ export default function WalletsPage() {
               Total balance: <strong>$8,836.78</strong>
             </p>
           </div>
-          <Button className="gap-2 border text-gray-700" bgColor="#fff">
-            <CalendarDays className="w-4 h-4" />
-            <span>Jan 06, 2025 - Jan 13, 2025</span>
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button
+              className="border text-gray-700 text-sm md:text-base"
+              bgColor="#fff"
+            >
+              <CalendarDays className="w-4 h-4" />
+              <span className="text-sm">Jan 06, 2025 - Jan 13, 2025</span>
+            </Button>
+          </div>
         </div>
 
         {/* Controls */}

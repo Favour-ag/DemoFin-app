@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type User = {
+  _id: string; // ✅ Add this line
   email: string;
   role?: string;
   name?: string;

@@ -1,6 +1,6 @@
 import { apiRequest } from "./api";
 
-type User = { email: string; role?: string };
+type User = { id: string; email: string; role?: string };
 // type LoginResponse = {
 //   status: string;
 //   message: string;

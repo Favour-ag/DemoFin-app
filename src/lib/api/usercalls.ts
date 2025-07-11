@@ -36,43 +36,39 @@
 //   return res.data;
 // };
 // lib/api/usercalls.ts
-// lib/api/usercalls.ts
+
 import { apiRequest } from "./api";
 
-/** List of users */
 export const fetchUsers = async (page = 1, limit = 10) => {
-  type ApiResponse = {
-    records: any[];
-    total: number;
-    page: number;
-    limit: number;
-  };
-
-  // The first .data unwraps Axios, the second unwraps your envelope
-  const res = await apiRequest<{ data: ApiResponse }>({
+  const res = await apiRequest<{
+    data: { records: any[]; total: number; page: number; limit: number };
+  }>({
     method: "GET",
     url: `/users?page=${page}&limit=${limit}`,
   });
-
-  return res.data; // { records, total, page, limit }
+  return res.data;
 };
 
-/** Single user by id */
-export const fetchUserById = async (id: string) => {
-  const res = await apiRequest<{ data: any }>({
+export const fetchUserById = async (id: string, token?: string) => {
+  return await apiRequest<{ data: any }>({
     method: "GET",
     url: `/users/${id}`,
-  });
-
-  return res.data; // the user object
+    config: {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    },
+  }).then((res) => res.data);
 };
 
-/** Stats for a user */
-export const fetchUserStats = async (id: string) => {
-  const res = await apiRequest<{ data: any }>({
+export const fetchUserStats = async (id: string, token?: string) => {
+  return await apiRequest<{ data: any }>({
     method: "GET",
     url: `/users/${id}/stats`,
-  });
-
-  return res.data; // the stats object
+    config: {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    },
+  }).then((res) => res.data);
 };

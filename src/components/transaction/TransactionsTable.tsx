@@ -110,7 +110,7 @@
 // }
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, Clock, CornerUpLeft, ArrowDown, ArrowUp } from "lucide-react";
 import Avatar from "../Avatar";
 import Pagination from "../Pagination";
@@ -127,15 +127,15 @@ export default function TransactionsTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
-
-  const limit = 8;
+  const tableRef = useRef<HTMLDivElement>(null);
+  const limit = 10;
 
   /* ---------- load whenever page changes ---------- */
   useEffect(() => {
     let mounted = true;
     setLoading(true);
 
-    fetchTransactionsForTable(currentPage, limit)
+    fetchTransactionsForTable({ page: currentPage, limit })
       .then(({ records, totalPages }) => {
         if (!mounted) return;
         setTransactions(records);
@@ -164,12 +164,12 @@ export default function TransactionsTable() {
       {/* Spinner while loading */}
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <Spinner /> {/* use any size/props your Spinner supports */}
+          <Spinner />
         </div>
       ) : (
         <>
           {/* Table */}
-          <div className="overflow-x-auto hide-scrollbar">
+          <div ref={tableRef} className="overflow-x-auto hide-scrollbar">
             <table className="min-w-full text-sm table-auto border border-gray-200">
               <thead>
                 <tr className="text-left border-b text-gray-500 font-medium bg-gray-50">
@@ -189,11 +189,11 @@ export default function TransactionsTable() {
 
               <tbody>
                 {transactions.map((tx, index) => (
-                  <tr key={`${tx.id}-${index}`} className="border-b">
+                  <tr key={`${tx._id}-${index}`} className="border-b">
                     <td className="p-2">
                       <input type="checkbox" className="accent-gray-300" />
                     </td>
-                    <td className="p-2 break-all font-medium">{tx.id}</td>
+                    <td className="p-2 break-all font-medium">{tx._id}</td>
                     <td className="p-2 flex items-center gap-2">
                       <Avatar name={tx.user} />
                       <div>
@@ -249,10 +249,8 @@ export default function TransactionsTable() {
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
-              onPageChange={(page) => {
-                setCurrentPage(page);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
+              onPageChange={setCurrentPage}
+              scrollTargetRef={tableRef}
             />
           </div>
         </>

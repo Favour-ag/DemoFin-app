@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import StatCard from "@/components/dashboard/StatCard";
 import ChartCard from "@/components/dashboard/ChartCard";

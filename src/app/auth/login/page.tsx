@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/app/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { login as loginAPI } from "@/lib/api/auth";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";

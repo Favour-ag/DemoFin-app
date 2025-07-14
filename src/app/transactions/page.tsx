@@ -122,7 +122,6 @@ export default function TransactionsPage() {
           {/* Table */}
           <div className="mt-6">
             <TransactionsTable />
-            {/* <TransactionsTable transactions={filteredTransactions} /> */}
           </div>
         </main>
       </div>

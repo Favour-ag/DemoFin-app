@@ -11,7 +11,7 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
-import { useAuth } from "@/app/context/AuthContext"; // ✅ import your auth context
+import { useAuth } from "@/context/AuthContext"; // ✅ import your auth context
 
 const menuItems = [
   { text: "Dashboard", icon: BarChart3, path: "/dashboard", isSettings: false },

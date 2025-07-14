@@ -21,7 +21,7 @@
 // }
 "use client";
 
-import { useAuth } from "@/app/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 
 export default function ClientWrapper({

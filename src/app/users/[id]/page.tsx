@@ -47,7 +47,7 @@ export default async function UserProfile({ params }: Props) {
         {/* Profile Header */}
         <div className="flex flex-col lg:flex-row items-center gap-4 relative bottom-12">
           <Image
-            src={user.image || "/default-avatar.png"}
+            src={user.image || "/image.png"}
             alt={`${user.firstname} ${user.lastname}`}
             width={150}
             height={150}

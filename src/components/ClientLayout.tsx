@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import SidePanel from "@/components/SidePanel";
 import Header from "@/components/Header";
 import ClientWrapper from "./ClientWrapper";
-import { useAuth } from "@/app/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ClientLayout({
   children,

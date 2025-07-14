@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import ClientLayout from "@/components/ClientLayout";
-import { AuthProvider } from "@/app/context/AuthContext"; // ✅ import it
+import { AuthProvider } from "@/context/AuthContext"; // ✅ import it
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const inter = Inter({ subsets: ["latin"] });

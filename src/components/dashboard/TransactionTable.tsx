@@ -1,61 +1,71 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import {
-  Check,
-  Clock,
-  CornerUpLeft,
-  ArrowDown,
-  ArrowUp,
-  XCircle,
-  Undo,
-} from "lucide-react";
+import { Check, Clock, ArrowDown, ArrowUp, XCircle } from "lucide-react";
 import Avatar from "../Avatar";
 import Button from "../Button";
 import Pagination from "../Pagination";
 import Spinner from "@/components/Spinner";
-import {
-  fetchRecentTransactions,
-  RawTransaction,
-} from "@/lib/api/transactioncalls";
+import { transactions } from "@/lib/api/transactioncalls";
 import Link from "next/link";
 
 export default function TransactionTable() {
-  const [transactions, setTransactions] = useState<RawTransaction[]>([]);
+  const [transactionList, setTransactionList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const tableRef = useRef<HTMLDivElement>(null);
 
-  const limit = 10;
+  const itemsPerPage = 10;
 
-  /* fetch whenever the page changes */
+  // Pagination calculation
+  const totalPages = Math.ceil(transactionList.length / itemsPerPage);
+  const paginatedTransactions = transactionList.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const isNextDisabled =
+    paginatedTransactions.length < itemsPerPage || currentPage >= totalPages;
+
   useEffect(() => {
-    let mounted = true;
-    setLoading(true);
+    const getTransactionData = async () => {
+      setLoading(true);
+      try {
+        const res = await transactions();
+        const data = res?.data;
 
-    fetchRecentTransactions(currentPage, limit)
-      .then(({ records, totalPages }) => {
-        if (!mounted) return;
-        setTransactions(records);
-        setTotalPages(totalPages);
-      })
-      .finally(() => mounted && setLoading(false));
+        const transactionArray = Array.isArray(data?.transactions)
+          ? data.transactions
+          : Array.isArray(data?.records)
+          ? data.records
+          : Array.isArray(data)
+          ? data
+          : [];
 
-    return () => {
-      mounted = false;
+        setTransactionList(transactionArray);
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      } finally {
+        setLoading(false);
+        // Scroll to the top of the table after data is loaded
+        if (tableRef.current) {
+          tableRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      }
     };
-  }, [currentPage]);
+
+    getTransactionData();
+  }, [currentPage]); // re-run when currentPage changes
 
   return (
     <div className="bg-white rounded-lg shadow-md">
       {/* Header */}
-      <div className="flex items-center justify-between  p-4">
+      <div className="flex items-center justify-between p-4">
         <h2 className="text-base sm:text-lg font-semibold text-gray-800">
           Recent Transactions
-          {/* <span className="bg-purple-100 text-purple-700 px-3 py-1 text-xs rounded-full ml-2">
-            {transactions.length}
-          </span> */}
         </h2>
         <Link href="/transactions">
           <Button className="text-sm font-medium text-primary hover:underline whitespace-nowrap">
@@ -80,9 +90,9 @@ export default function TransactionTable() {
                     <input type="checkbox" />
                   </td>
                   <th className="p-2 sm:p-3">
-                    <span className="flex items-center ">
+                    <span className="flex items-center">
                       ID
-                      <ArrowDown className="w-4s h-4" />
+                      <ArrowDown className="w-4 h-4 ml-1" />
                     </span>
                   </th>
                   <th className="p-2 sm:p-3">User</th>
@@ -93,7 +103,7 @@ export default function TransactionTable() {
                 </tr>
               </thead>
               <tbody>
-                {transactions.map((transaction) => (
+                {paginatedTransactions.map((transaction) => (
                   <tr
                     key={transaction._id}
                     className="border-b hover:bg-gray-50"
@@ -101,9 +111,7 @@ export default function TransactionTable() {
                     <td className="p-2">
                       <input type="checkbox" />
                     </td>
-
                     <td className="p-2 break-all">{transaction._id}</td>
-
                     <td className="p-2 flex items-center gap-2">
                       <Avatar
                         name={`${transaction.owner.firstname} ${transaction.owner.lastname}`}
@@ -118,7 +126,6 @@ export default function TransactionTable() {
                         </div>
                       </div>
                     </td>
-
                     <td className="p-2">
                       <span
                         className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full ${
@@ -136,14 +143,12 @@ export default function TransactionTable() {
                         {transaction.type}
                       </span>
                     </td>
-
                     <td className="p-2">
                       {transaction.sourceCurrency}{" "}
                       {Number(
                         transaction.sourceAmount.replace(/,/g, "")
                       ).toLocaleString()}
                     </td>
-
                     <td className="p-2">
                       <span
                         className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full ${
@@ -165,9 +170,7 @@ export default function TransactionTable() {
                           <Clock size={14} />
                         )}
                         {transaction.status === "refunded" && (
-                          <>
-                            <span className="w-2 h-2 rounded-full bg-yellow-500 inline-block" />
-                          </>
+                          <span className="w-2 h-2 rounded-full bg-yellow-500 inline-block" />
                         )}
                         {transaction.status === "failed" && (
                           <XCircle size={14} />
@@ -175,13 +178,11 @@ export default function TransactionTable() {
 
                         {transaction.status === "successful" && "Completed"}
                         {transaction.status === "pending" && "Pending"}
-
                         {transaction.status === "refunded" && "Refunded"}
                         {transaction.status === "failed" && "Failed"}
                         {!transaction.status && "..."}
                       </span>
                     </td>
-
                     <td className="p-2 text-gray-600">
                       {new Date(transaction.createdAt).toLocaleString()}
                     </td>
@@ -191,13 +192,14 @@ export default function TransactionTable() {
             </table>
           </div>
 
-          {/* Pagination (with smooth‑scroll) */}
+          {/* Pagination */}
           <div className="mt-4 p-2">
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={setCurrentPage}
               scrollTargetRef={tableRef}
+              isNextDisabled={isNextDisabled}
             />
           </div>
         </>

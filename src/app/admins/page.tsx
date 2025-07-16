@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import TransactionTable from "@/components/admin/TransactionsTable";
 import Button from "@/components/Button";
+import { getAdmin } from "@/lib/api/usercalls";
+import Spinner from "@/components/Spinner";
 
 import {
   CalendarDays,
@@ -13,6 +15,7 @@ import {
   User,
   UserPlus,
 } from "lucide-react";
+import AddAdminModal from "@/components/Modal/AddAdminModal";
 
 type Admin = {
   name: string;
@@ -23,85 +26,43 @@ type Admin = {
 };
 
 export default function AdminManagement() {
-  const [admins, setAdmins] = useState<Admin[]>([
-    {
-      name: "Savannah Nguyen",
-      email: "Savana@gmail.com",
-      role: "Admin",
-      status: "Active",
-      login: "Jan 6, 2025",
-    },
-    {
-      name: "Dianne Russell",
-      email: "Diane@gmail.com",
-      role: "Editor",
-      status: "Inactive",
-      login: "Jan 6, 2025",
-    },
-    {
-      name: "Ronald Richards",
-      email: "Ronald@gmail.com",
-      role: "Admin",
-      status: "Active",
-      login: "Jan 6, 2025",
-    },
-    {
-      name: "Jacob Jones",
-      email: "Jacob@gmail.com",
-      role: "Editor",
-      status: "Active",
-      login: "Jan 5, 2025",
-    },
-    {
-      name: "Cody Fisher",
-      email: "codycandy@gmail.com",
-      role: "Admin",
-      status: "Inactive",
-      login: "Jan 5, 2025",
-    },
-    {
-      name: "Cameron Williamson",
-      email: "WilliamsonC@gmail.com",
-      role: "Editor",
-      status: "Active",
-      login: "Jan 5, 2025",
-    },
-    {
-      name: "Theresa Webb",
-      email: "Theresa@gmail.com",
-      role: "Admin",
-      status: "Active",
-      login: "Jan 4, 2025",
-    },
-    {
-      name: "Ralph Edwards",
-      email: "REdwards@gmail.com",
-      role: "Editor",
-      status: "Active",
-      login: "Jan 3, 2025",
-    },
-    {
-      name: "Annette Black",
-      email: "AnnetteB@gmail.com",
-      role: "Admin",
-      status: "Inactive",
-      login: "Jan 3, 2025",
-    },
-    {
-      name: "Albert Flores",
-      email: "Albert@gmail.com",
-      role: "Editor",
-      status: "Active",
-      login: "Jan 3, 2025",
-    },
-  ]);
+  const [admins, setAdmins] = useState<Admin[]>([]);
   const [filteredAdmins, setFilteredAdmins] = useState<Admin[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setFilteredAdmins(admins);
-  }, [admins]);
+    const loadAdmins = async () => {
+      setLoading(true);
+      try {
+        const response = await getAdmin();
+        const adminData = response?.records || response || [];
+        
+        // Transform API data to match component expectations
+        const transformedAdmins = adminData.map((admin: any) => ({
+          _id: admin._id,
+          name: admin.name || `${admin.firstName || ''} ${admin.lastName || ''}`.trim(),
+          email: admin.email,
+          role: admin.role || 'Admin',
+          status: admin.isActive !== false ? 'Active' : 'Inactive',
+          login: admin.lastLogin ? new Date(admin.lastLogin).toLocaleDateString() : 
+                 admin.createdAt ? new Date(admin.createdAt).toLocaleDateString() : 'N/A',
+        }));
+        
+        setAdmins(transformedAdmins);
+        setFilteredAdmins(transformedAdmins);
+      } catch (error) {
+        console.error("Failed to fetch admins:", error);
+        setAdmins([]);
+        setFilteredAdmins([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAdmins();
+  }, []);
 
   useEffect(() => {
     if (!searchTerm) {
@@ -118,6 +79,36 @@ export default function AdminManagement() {
       setFilteredAdmins(filtered);
     }
   }, [searchTerm, admins]);
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleAdminAdded = () => {
+    // Reload admins after adding a new one
+    const loadAdmins = async () => {
+      try {
+        const response = await getAdmin();
+        const adminData = response?.records || response || [];
+        
+        const transformedAdmins = adminData.map((admin: any) => ({
+          _id: admin._id,
+          name: admin.name || `${admin.firstName || ''} ${admin.lastName || ''}`.trim(),
+          email: admin.email,
+          role: admin.role || 'Admin',
+          status: admin.isActive !== false ? 'Active' : 'Inactive',
+          login: admin.lastLogin ? new Date(admin.lastLogin).toLocaleDateString() : 
+                 admin.createdAt ? new Date(admin.createdAt).toLocaleDateString() : 'N/A',
+        }));
+        
+        setAdmins(transformedAdmins);
+        setFilteredAdmins(transformedAdmins);
+      } catch (error) {
+        console.error("Failed to reload admins:", error);
+      }
+    };
+    loadAdmins();
+  };
+
+  if (loading) return <Spinner />;
 
   return (
     <div className="flex min-h-screen bg-white">
@@ -158,7 +149,7 @@ export default function AdminManagement() {
               <ListFilter className="w-4 h-4" />
               Filters
             </Button>
-            <Button className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-purple-700">
+            <Button onClick={()=> setIsOpen(true)} className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-purple-700">
               <UserPlus className="w-4 h-4" />
               Invite Admin
             </Button>
@@ -174,6 +165,8 @@ export default function AdminManagement() {
           />
         </div>
       </main>
+
+      <AddAdminModal isOpen={isOpen} setIsOpen={setIsOpen} onAdminAdded={handleAdminAdded} />
     </div>
   );
 }

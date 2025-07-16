@@ -85,3 +85,14 @@ export const addAdmin = async (token?: string, data?: any) => {
     },
   }).then((res) => res.data);
 };
+export const getAdmin = async (token?: string) => {
+  return await apiRequest<{ data: any }>({
+    method: "GET",
+    url: `/admin-users`,
+    config: {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    },
+  }).then((res) => res.data);
+};

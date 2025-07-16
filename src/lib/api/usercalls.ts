@@ -72,3 +72,16 @@ export const fetchUserStats = async (id: string, token?: string) => {
     },
   }).then((res) => res.data);
 };
+
+export const addAdmin = async (token?: string, data?: any) => {
+  return await apiRequest<{ data: any }>({
+    method: "POST",
+    url: `/admin-users`,
+    data,
+    config: {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    },
+  }).then((res) => res.data);
+};

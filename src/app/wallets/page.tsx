@@ -1,98 +1,12 @@
 "use client";
-
-import { useEffect, useState } from "react";
 import Button from "@/components/Button";
 import WalletsTable from "../../components/wallets/WalletsTable";
 import { CalendarDays, ListFilter, Search } from "lucide-react";
-import { fetchUsers } from "@/lib/api/usercalls";
-import { fetchWalletsByUserId } from "@/lib/api/walletcalls";
-import Spinner from "@/components/Spinner";
-
-type User = {
-  _id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-};
-
-type Wallet = {
-  _id: string;
-  owner: string;
-  currency: string;
-  currencyName: string;
-  availableBalance: string;
-  createdAt: string;
-};
-
-type WalletWithUser = Wallet & {
-  user: User;
-};
 
 export default function WalletsPage() {
-  const [wallets, setWallets] = useState<WalletWithUser[]>([]);
-  const [filteredWallets, setFilteredWallets] = useState<WalletWithUser[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    const loadWallets = async () => {
-      setLoading(true);
-      try {
-        const { records: users } = await fetchUsers(currentPage, 10);
-
-        const allWallets = await Promise.all(
-          users.map(async (user) => {
-            try {
-              const userWallets: Wallet[] = await fetchWalletsByUserId(
-                user._id
-              );
-              return userWallets.map((wallet) => ({
-                ...wallet,
-                user,
-              }));
-            } catch (err) {
-              console.warn(`No wallets for user ${user._id}`);
-              return [];
-            }
-          })
-        );
-
-        const walletsData = allWallets.flat();
-        setWallets(walletsData);
-        setFilteredWallets(walletsData);
-      } catch (error) {
-        console.error("Failed to fetch wallets:", error);
-        setWallets([]);
-        setFilteredWallets([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadWallets();
-  }, [currentPage]);
-
-  useEffect(() => {
-    if (!searchTerm) {
-      setFilteredWallets(wallets);
-    } else {
-      const filtered = wallets.filter((wallet) => {
-        const fullName =
-          `${wallet.user.firstname} ${wallet.user.lastname}`.toLowerCase();
-        const email = wallet.user.email.toLowerCase();
-        const search = searchTerm.toLowerCase();
-
-        return fullName.includes(search) || email.includes(search);
-      });
-      setFilteredWallets(filtered);
-    }
-  }, [searchTerm, wallets]);
-
-  if (loading) return <Spinner />;
   return (
     <div className="flex min-h-screen bg-white">
-      <main className="flex-1 p-4 md:p-8">
+      <main className="flex-1 p-4 ">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div className="mb-4">
@@ -117,10 +31,8 @@ export default function WalletsPage() {
           {/* Input Search */}
           <div className="h-10 w-[356px] relative">
             <input
-              className="w-full h-full text-gray-700 placeholder:text-gray-400 placeholder:text-[14px] border border-gray-300 rounded-md pl-10 pr-3"
+              className="w-full h-full  text-gray-400 placeholder:text-gray-400 placeholder:text-[14px] border border-gray-300 rounded-md pl-10 pr-3"
               placeholder="Search by name, email"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
             />
             <div className="absolute left-3 top-1/2 -translate-y-1/2">
               <Search stroke="#A4A7AE" width={18} height={18} />
@@ -143,11 +55,7 @@ export default function WalletsPage() {
 
         {/* Table */}
         <div className="mt-6">
-          <WalletsTable
-            wallets={filteredWallets}
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
-          />
+          <WalletsTable />
         </div>
       </main>
     </div>

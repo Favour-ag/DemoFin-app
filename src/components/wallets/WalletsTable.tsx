@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import Button from "@/components/Button";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CalendarDays, ArrowUp, ArrowDown } from "lucide-react";
+import Image from "next/image";
+import { ArrowUp, ArrowDown, CalendarDays } from "lucide-react";
+import Button from "@/components/Button";
 import Pagination from "../Pagination";
 
 type TransitionDirection = "up" | "down";
@@ -58,10 +58,26 @@ const getStatusColor = (status: string) => {
   }
 };
 
-export default function WalletsTable() {
+export default function WalletsTable({ searchTerm }: { searchTerm: string }) {
+  const [filteredWallets, setFilteredWallets] =
+    useState<WalletUser[]>(mockWallets);
   const [currentPage, setCurrentPage] = useState(1);
-  const [wallets] = useState(mockWallets);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!searchTerm) {
+      setFilteredWallets(mockWallets);
+    } else {
+      const search = searchTerm.toLowerCase();
+      const filtered = mockWallets.filter((wallet) => {
+        return (
+          wallet.name.toLowerCase().includes(search) ||
+          wallet.email.toLowerCase().includes(search)
+        );
+      });
+      setFilteredWallets(filtered);
+    }
+  }, [searchTerm]);
 
   return (
     <>
@@ -69,7 +85,7 @@ export default function WalletsTable() {
         <div className="p-4 font-semibold border-b">
           User Wallets
           <span className="text-sm font-medium text-purple-700 bg-purple-100 px-3 py-1 rounded-full ml-2">
-            {mockWallets.length} History
+            {filteredWallets.length} transactions
           </span>
         </div>
         <div className="overflow-x-auto">
@@ -85,7 +101,7 @@ export default function WalletsTable() {
               </tr>
             </thead>
             <tbody>
-              {wallets.map((user) => (
+              {filteredWallets.map((user) => (
                 <tr
                   key={user.id}
                   onClick={() => router.push(`/wallets/${user.id}`)}
@@ -137,7 +153,6 @@ export default function WalletsTable() {
                       )}
                     </span>
                   </td>
-
                   <td className="px-4 py-3 text-gray-500">{user.date}</td>
                   <td className="px-4 py-3 font-semibold">{user.balance}</td>
                   <td className="px-4 py-3">
@@ -152,6 +167,7 @@ export default function WalletsTable() {
           </table>
         </div>
       </div>
+
       {/* Pagination */}
       <div className="mt-6">
         <Pagination

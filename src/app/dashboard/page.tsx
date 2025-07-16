@@ -104,7 +104,8 @@ export default function DashboardPage() {
       setFilteredTransactions(transactionList);
     } else {
       const filtered = transactionList.filter((transaction) => {
-        const fullName = `${transaction.owner?.firstname} ${transaction.owner?.lastname}`.toLowerCase();
+        const fullName =
+          `${transaction.owner?.firstname} ${transaction.owner?.lastname}`.toLowerCase();
         const email = transaction.owner?.email?.toLowerCase() || "";
         const transactionId = transaction._id?.toLowerCase() || "";
         const transactionType = transaction.type?.toLowerCase() || "";
@@ -209,27 +210,7 @@ export default function DashboardPage() {
           {/* Search and Table */}
           <section className="mt-6">
             <div className="bg-white rounded-lg shadow-md">
-              {/* Header with Search */}
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between p-4 border-b">
-                <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 md:mb-0">
-                  Recent Transactions
-                </h2>
-                <div className="flex items-center gap-4">
-                  {/* Search Input */}
-                  <div className="h-10 w-[300px] relative">
-                    <input
-                      className="w-full h-full text-gray-700 placeholder:text-gray-400 placeholder:text-[14px] border border-gray-300 rounded-md pl-10 pr-3"
-                      placeholder="Search by name, email, ID, type, status"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                      <Search stroke="#A4A7AE" width={18} height={18} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <TransactionTable 
+              <TransactionTable
                 transactions={filteredTransactions}
                 loading={transactionLoading}
               />

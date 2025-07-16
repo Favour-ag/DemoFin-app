@@ -1,15 +1,93 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CalendarDays, ListFilter, Search } from "lucide-react";
 import Button from "@/components/Button";
 import TransactionsTable from "@/components/transaction/TransactionsTable";
-
+import Spinner from "@/components/Spinner";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { transactions } from "@/lib/api/transactioncalls";
 
-// ✅ Define FilterType options
+type Transaction = {
+  _id: string;
+  owner: {
+    firstname: string;
+    lastname: string;
+    email: string;
+  };
+  direction: string;
+  type: string;
+  description?: string;
+  sourceCurrency: string;
+  sourceAmount: string;
+  status: string;
+  createdAt: string;
+};
 
 export default function TransactionsPage() {
+  const [transactionList, setTransactionList] = useState<Transaction[]>([]);
+  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const getTransactionData = async () => {
+      setLoading(true);
+      try {
+        const res = await transactions();
+        const data = res?.data;
+
+        const transactionArray = Array.isArray(data?.transactions)
+          ? data.transactions
+          : Array.isArray(data?.records)
+          ? data.records
+          : Array.isArray(data)
+          ? data
+          : [];
+
+        setTransactionList(transactionArray);
+        setFilteredTransactions(transactionArray);
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+        setTransactionList([]);
+        setFilteredTransactions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getTransactionData();
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (!searchTerm) {
+      setFilteredTransactions(transactionList);
+    } else {
+      const filtered = transactionList.filter((transaction) => {
+        const fullName = `${transaction.owner.firstname} ${transaction.owner.lastname}`.toLowerCase();
+        const email = transaction.owner.email.toLowerCase();
+        const amount = transaction.sourceAmount.replace(/,/g, "");
+        const description = transaction.description?.toLowerCase() || "";
+        const transactionId = transaction._id.toLowerCase();
+        const search = searchTerm.toLowerCase();
+        
+        return (
+          fullName.includes(search) ||
+          email.includes(search) ||
+          amount.includes(search) ||
+          description.includes(search) ||
+          transactionId.includes(search) ||
+          transaction.type.toLowerCase().includes(search) ||
+          transaction.status.toLowerCase().includes(search)
+        );
+      });
+      setFilteredTransactions(filtered);
+    }
+  }, [searchTerm, transactionList]);
+
+  if (loading) return <Spinner />;
+
   return (
     <ProtectedRoute>
       <div className="flex min-h-screen bg-white">
@@ -38,8 +116,10 @@ export default function TransactionsPage() {
             {/* Search */}
             <div className="h-10 w-[356px] relative">
               <input
-                className="w-full h-full text-gray-400 placeholder:text-gray-400 placeholder:text-[14px] border border-gray-300 rounded-md pl-10 pr-3"
+                className="w-full h-full text-gray-700 placeholder:text-gray-400 placeholder:text-[14px] border border-gray-300 rounded-md pl-10 pr-3"
                 placeholder="Search by name, email, ID, amount, description"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
               <div className="absolute left-3 top-1/2 -translate-y-1/2">
                 <Search stroke="#A4A7AE" width={18} height={18} />
@@ -57,7 +137,11 @@ export default function TransactionsPage() {
 
           {/* Table */}
           <div className="mt-6">
-            <TransactionsTable />
+            <TransactionsTable 
+              transactions={filteredTransactions}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+            />
           </div>
         </main>
       </div>

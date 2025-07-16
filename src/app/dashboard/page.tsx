@@ -12,8 +12,10 @@ import {
   Wallet,
   CircleDollarSign,
   BarChart2,
+  Search,
 } from "lucide-react";
 import { overview } from "../../lib/api/dashboardcalls";
+import { transactions } from "@/lib/api/transactioncalls";
 import { useEffect, useState } from "react";
 import Spinner from "@/components/Spinner";
 
@@ -34,6 +36,10 @@ export default function DashboardPage() {
   });
 
   const [loading, setLoading] = useState(true);
+  const [transactionList, setTransactionList] = useState<any[]>([]);
+  const [filteredTransactions, setFilteredTransactions] = useState<any[]>([]);
+  const [transactionLoading, setTransactionLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const getOverviewData = async () => {
@@ -65,6 +71,57 @@ export default function DashboardPage() {
 
     getOverviewData();
   }, []);
+
+  useEffect(() => {
+    const getTransactionData = async () => {
+      setTransactionLoading(true);
+      try {
+        const res = await transactions();
+        const data = res?.data;
+
+        const transactionArray = Array.isArray(data?.transactions)
+          ? data.transactions
+          : Array.isArray(data?.records)
+          ? data.records
+          : Array.isArray(data)
+          ? data
+          : [];
+
+        setTransactionList(transactionArray);
+        setFilteredTransactions(transactionArray);
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      } finally {
+        setTransactionLoading(false);
+      }
+    };
+
+    getTransactionData();
+  }, []);
+
+  useEffect(() => {
+    if (!searchTerm) {
+      setFilteredTransactions(transactionList);
+    } else {
+      const filtered = transactionList.filter((transaction) => {
+        const fullName = `${transaction.owner?.firstname} ${transaction.owner?.lastname}`.toLowerCase();
+        const email = transaction.owner?.email?.toLowerCase() || "";
+        const transactionId = transaction._id?.toLowerCase() || "";
+        const transactionType = transaction.type?.toLowerCase() || "";
+        const status = transaction.status?.toLowerCase() || "";
+        const search = searchTerm.toLowerCase();
+
+        return (
+          fullName.includes(search) ||
+          email.includes(search) ||
+          transactionId.includes(search) ||
+          transactionType.includes(search) ||
+          status.includes(search)
+        );
+      });
+      setFilteredTransactions(filtered);
+    }
+  }, [searchTerm, transactionList]);
 
   return (
     <ProtectedRoute>
@@ -149,9 +206,34 @@ export default function DashboardPage() {
             <ChartCard title="Transactions" />
           </section>
 
-          {/* Table */}
+          {/* Search and Table */}
           <section className="mt-6">
-            <TransactionTable />
+            <div className="bg-white rounded-lg shadow-md">
+              {/* Header with Search */}
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between p-4 border-b">
+                <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 md:mb-0">
+                  Recent Transactions
+                </h2>
+                <div className="flex items-center gap-4">
+                  {/* Search Input */}
+                  <div className="h-10 w-[300px] relative">
+                    <input
+                      className="w-full h-full text-gray-700 placeholder:text-gray-400 placeholder:text-[14px] border border-gray-300 rounded-md pl-10 pr-3"
+                      placeholder="Search by name, email, ID, type, status"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                      <Search stroke="#A4A7AE" width={18} height={18} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <TransactionTable 
+                transactions={filteredTransactions}
+                loading={transactionLoading}
+              />
+            </div>
           </section>
         </main>
       </div>

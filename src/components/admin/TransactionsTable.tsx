@@ -3,90 +3,29 @@
 import { CheckCircle, RotateCcw, MoreVertical } from "lucide-react";
 import Avatar from "../Avatar";
 import Pagination from "../Pagination";
-import { useState } from "react";
 
-const admins = [
-  {
-    name: "Savannah Nguyen",
-    email: "Savana@gmail.com",
-    role: "Admin",
-    status: "Active",
-    login: "Jan 6, 2025",
-  },
-  {
-    name: "Dianne Russell",
-    email: "Diane@gmail.com",
-    role: "Editor",
-    status: "Inactive",
-    login: "Jan 6, 2025",
-  },
-  {
-    name: "Ronald Richards",
-    email: "Ronald@gmail.com",
-    role: "Admin",
-    status: "Active",
-    login: "Jan 6, 2025",
-  },
-  {
-    name: "Jacob Jones",
-    email: "Jacob@gmail.com",
-    role: "Editor",
-    status: "Active",
-    login: "Jan 5, 2025",
-  },
-  {
-    name: "Cody Fisher",
-    email: "codycandy@gmail.com",
-    role: "Admin",
-    status: "Inactive",
-    login: "Jan 5, 2025",
-  },
-  {
-    name: "Cameron Williamson",
-    email: "WilliamsonC@gmail.com",
-    role: "Editor",
-    status: "Active",
-    login: "Jan 5, 2025",
-  },
-  {
-    name: "Theresa Webb",
-    email: "Theresa@gmail.com",
-    role: "Admin",
-    status: "Active",
-    login: "Jan 4, 2025",
-  },
-  {
-    name: "Ralph Edwards",
-    email: "REdwards@gmail.com",
-    role: "Editor",
-    status: "Active",
-    login: "Jan 3, 2025",
-  },
-  {
-    name: "Annette Black",
-    email: "AnnetteB@gmail.com",
-    role: "Admin",
-    status: "Inactive",
-    login: "Jan 3, 2025",
-  },
-  {
-    name: "Albert Flores",
-    email: "Albert@gmail.com",
-    role: "Editor",
-    status: "Active",
-    login: "Jan 3, 2025",
-  },
-];
+type Admin = {
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  login: string;
+};
 
-export default function AdminTable() {
-  const [currentPage, setCurrentPage] = useState(1);
+type AdminTableProps = {
+  admins: Admin[];
+  currentPage: number;
+  onPageChange: (page: number) => void;
+};
+
+export default function AdminTable({ admins, currentPage, onPageChange }: AdminTableProps) {
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
       <div className="flex items-center  mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Administrators</h2>
         <span className="bg-purple-100 text-purple-700 px-3 py-1 text-xs rounded-full">
-          {admins.length} transactions
+          {admins.length} admins
         </span>
       </div>
       {/* Table */}
@@ -155,7 +94,7 @@ export default function AdminTable() {
         <Pagination
           currentPage={currentPage}
           totalPages={10}
-          onPageChange={(page) => setCurrentPage(page)}
+          onPageChange={onPageChange}
         />
       </div>
     </div>

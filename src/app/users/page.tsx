@@ -1,10 +1,70 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Button from "@/components/Button";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import UserTable from "@/components/users/UserTable";
+import Spinner from "@/components/Spinner";
+import { fetchUsers } from "@/lib/api/usercalls";
 
 import { CalendarDays, ListFilter, UserPlus, Search } from "lucide-react";
 
+export interface User {
+  _id: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  isActive: boolean;
+  walletBalance: number;
+  createdAt: string;
+}
+
 export default function UserPage() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const limit = 10;
+
+  useEffect(() => {
+    const loadUsers = async () => {
+      setLoading(true);
+      try {
+        const { records, total } = await fetchUsers(currentPage, limit);
+        setUsers(records);
+        setFilteredUsers(records);
+        setTotalPages(Math.ceil(total / limit));
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+        setUsers([]);
+        setFilteredUsers([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUsers();
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (!searchTerm) {
+      setFilteredUsers(users);
+    } else {
+      const filtered = users.filter((user) => {
+        const fullName = `${user.firstname} ${user.lastname}`.toLowerCase();
+        const email = user.email.toLowerCase();
+        const search = searchTerm.toLowerCase();
+        
+        return fullName.includes(search) || email.includes(search);
+      });
+      setFilteredUsers(filtered);
+    }
+  }, [searchTerm, users]);
+
+  if (loading) return <Spinner />;
   return (
     <ProtectedRoute>
       <div className="flex min-h-screen bg-white">
@@ -33,8 +93,10 @@ export default function UserPage() {
             {/* Input Search */}
             <div className="h-10 w-[356px] relative">
               <input
-                className="w-full h-full  text-gray-400 placeholder:text-gray-400 placeholder:text-[14px] border border-gray-300 rounded-md pl-10 pr-3"
+                className="w-full h-full text-gray-700 placeholder:text-gray-400 placeholder:text-[14px] border border-gray-300 rounded-md pl-10 pr-3"
                 placeholder="Search by name, email"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
               <div className="absolute left-3 top-1/2 -translate-y-1/2">
                 <Search stroke="#A4A7AE" width={18} height={18} />
@@ -54,7 +116,12 @@ export default function UserPage() {
           </div>
 
           <div className="mt-6">
-            <UserTable />
+            <UserTable 
+              users={filteredUsers}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
         </main>
       </div>

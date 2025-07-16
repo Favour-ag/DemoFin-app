@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import TransactionTable from "@/components/admin/TransactionsTable";
 import Button from "@/components/Button";
 
@@ -11,7 +14,111 @@ import {
   UserPlus,
 } from "lucide-react";
 
+type Admin = {
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  login: string;
+};
+
 export default function AdminManagement() {
+  const [admins, setAdmins] = useState<Admin[]>([
+    {
+      name: "Savannah Nguyen",
+      email: "Savana@gmail.com",
+      role: "Admin",
+      status: "Active",
+      login: "Jan 6, 2025",
+    },
+    {
+      name: "Dianne Russell",
+      email: "Diane@gmail.com",
+      role: "Editor",
+      status: "Inactive",
+      login: "Jan 6, 2025",
+    },
+    {
+      name: "Ronald Richards",
+      email: "Ronald@gmail.com",
+      role: "Admin",
+      status: "Active",
+      login: "Jan 6, 2025",
+    },
+    {
+      name: "Jacob Jones",
+      email: "Jacob@gmail.com",
+      role: "Editor",
+      status: "Active",
+      login: "Jan 5, 2025",
+    },
+    {
+      name: "Cody Fisher",
+      email: "codycandy@gmail.com",
+      role: "Admin",
+      status: "Inactive",
+      login: "Jan 5, 2025",
+    },
+    {
+      name: "Cameron Williamson",
+      email: "WilliamsonC@gmail.com",
+      role: "Editor",
+      status: "Active",
+      login: "Jan 5, 2025",
+    },
+    {
+      name: "Theresa Webb",
+      email: "Theresa@gmail.com",
+      role: "Admin",
+      status: "Active",
+      login: "Jan 4, 2025",
+    },
+    {
+      name: "Ralph Edwards",
+      email: "REdwards@gmail.com",
+      role: "Editor",
+      status: "Active",
+      login: "Jan 3, 2025",
+    },
+    {
+      name: "Annette Black",
+      email: "AnnetteB@gmail.com",
+      role: "Admin",
+      status: "Inactive",
+      login: "Jan 3, 2025",
+    },
+    {
+      name: "Albert Flores",
+      email: "Albert@gmail.com",
+      role: "Editor",
+      status: "Active",
+      login: "Jan 3, 2025",
+    },
+  ]);
+  const [filteredAdmins, setFilteredAdmins] = useState<Admin[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    setFilteredAdmins(admins);
+  }, [admins]);
+
+  useEffect(() => {
+    if (!searchTerm) {
+      setFilteredAdmins(admins);
+    } else {
+      const filtered = admins.filter((admin) => {
+        const name = admin.name.toLowerCase();
+        const email = admin.email.toLowerCase();
+        const role = admin.role.toLowerCase();
+        const search = searchTerm.toLowerCase();
+        
+        return name.includes(search) || email.includes(search) || role.includes(search);
+      });
+      setFilteredAdmins(filtered);
+    }
+  }, [searchTerm, admins]);
+
   return (
     <div className="flex min-h-screen bg-white">
       <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
@@ -36,8 +143,10 @@ export default function AdminManagement() {
           {/* Input Search */}
           <div className="h-10 w-[356px] relative">
             <input
-              className="w-full h-full  text-gray-400 placeholder:text-gray-400 placeholder:text-[14px] border border-gray-300 rounded-md pl-10 pr-3"
-              placeholder="Search by name, email"
+              className="w-full h-full text-gray-700 placeholder:text-gray-400 placeholder:text-[14px] border border-gray-300 rounded-md pl-10 pr-3"
+              placeholder="Search by name, email, role"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
             <div className="absolute left-3 top-1/2 -translate-y-1/2">
               <Search stroke="#A4A7AE" width={18} height={18} />
@@ -58,7 +167,11 @@ export default function AdminManagement() {
 
         {/* Table */}
         <div className="mt-6">
-          <TransactionTable />
+          <TransactionTable 
+            admins={filteredAdmins} 
+            currentPage={currentPage} 
+            onPageChange={setCurrentPage} 
+          />
         </div>
       </main>
     </div>

@@ -1,64 +1,33 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState, useRef } from "react";
 import { Check, Clock, ArrowDown, ArrowUp, XCircle } from "lucide-react";
 import Avatar from "../Avatar";
 import Button from "../Button";
 import Pagination from "../Pagination";
 import Spinner from "@/components/Spinner";
-import { transactions } from "@/lib/api/transactioncalls";
 import Link from "next/link";
 
-export default function TransactionTable() {
-  const [transactionList, setTransactionList] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+interface TransactionTableProps {
+  transactions: any[];
+  loading: boolean;
+}
+
+export default function TransactionTable({ transactions, loading }: TransactionTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const tableRef = useRef<HTMLDivElement>(null);
 
   const itemsPerPage = 10;
 
   // Pagination calculation
-  const totalPages = Math.ceil(transactionList.length / itemsPerPage);
-  const paginatedTransactions = transactionList.slice(
+  const totalPages = Math.ceil(transactions.length / itemsPerPage);
+  const paginatedTransactions = transactions.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
   const isNextDisabled =
     paginatedTransactions.length < itemsPerPage || currentPage >= totalPages;
-
-  useEffect(() => {
-    const getTransactionData = async () => {
-      setLoading(true);
-      try {
-        const res = await transactions();
-        const data = res?.data;
-
-        const transactionArray = Array.isArray(data?.transactions)
-          ? data.transactions
-          : Array.isArray(data?.records)
-          ? data.records
-          : Array.isArray(data)
-          ? data
-          : [];
-
-        setTransactionList(transactionArray);
-      } catch (error) {
-        console.error("Error fetching transactions:", error);
-      } finally {
-        setLoading(false);
-        // Scroll to the top of the table after data is loaded
-        if (tableRef.current) {
-          tableRef.current.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        }
-      }
-    };
-
-    getTransactionData();
-  }, [currentPage]); // re-run when currentPage changes
 
   return (
     <div className="bg-white rounded-lg shadow-md">

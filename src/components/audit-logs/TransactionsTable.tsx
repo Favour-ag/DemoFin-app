@@ -2,78 +2,24 @@
 import { ArrowDown, ExternalLink } from "lucide-react";
 import Avatar from "../Avatar";
 import Pagination from "../Pagination";
-import { useState } from "react";
 import Button from "../Button";
 
-const data = [
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    admin: "Olivia Rhye",
-    type: "User activate",
-    description: "Villa curia reprehenderit cubi...",
-    amount: "67.100.45.152",
-    time: "9 months ago",
-  },
-  {
-    id: "#d8a7c304-92f4-4912-9d44-678a72cb15bd",
-    admin: "Phoenix Baker",
-    type: "Settings update",
-    description: "Villa curia reprehenderit cubi...",
-    amount: "67.100.45.152",
-    time: "2 weeks ago",
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    admin: "Olivia Rhye",
-    type: "Cancel Transaction",
-    description: "Villa curia reprehenderit cubi...",
-    amount: "67.100.45.152",
-    time: "9 months ago",
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    admin: "Olivia Rhye",
-    type: "Admin Update",
-    description: "Villa curia reprehenderit cubi...",
-    amount: "67.100.45.152",
-    time: "9 months ago",
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    admin: "Olivia Rhye",
-    type: "Wallet deduct",
-    description: "Villa curia reprehenderit cubi...",
-    amount: "67.100.45.152",
-    time: "9 months ago",
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    admin: "Olivia Rhye",
-    type: "Create Transaction",
-    description: "Villa curia reprehenderit cubi...",
-    amount: "67.100.45.152",
-    time: "9 months ago",
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    admin: "Olivia Rhye",
-    type: "Wallet Topup",
-    description: "Villa curia reprehenderit cubi...",
-    amount: "67.100.45.152",
-    time: "9 months ago",
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    admin: "Olivia Rhye",
-    type: "User Suspend",
-    description: "Villa curia reprehenderit cubi...",
-    amount: "67.100.45.152",
-    time: "9 months ago",
-  },
-];
+type AuditLog = {
+  id: string;
+  admin: string;
+  type: string;
+  description: string;
+  amount: string;
+  time: string;
+};
 
-export default function AuditLogs() {
-  const [currentPage, setCurrentPage] = useState(1);
+type TransactionsTableProps = {
+  auditLogs: AuditLog[];
+  currentPage: number;
+  onPageChange: (page: number) => void;
+};
+
+export default function TransactionsTable({ auditLogs, currentPage, onPageChange }: TransactionsTableProps) {
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
       {/* Title and View All */}
@@ -82,7 +28,7 @@ export default function AuditLogs() {
           Activity Timeline
         </h2>
         <Button className="gap-2 border text-purple-700 ml-2">
-          <span>{data.length} Activities</span>
+          <span>{auditLogs.length} Activities</span>
         </Button>
 
         {/* <button className="text-sm font-medium text-primary hover:underline">
@@ -112,7 +58,7 @@ export default function AuditLogs() {
             </tr>
           </thead>
           <tbody>
-            {data.map((row, i) => (
+            {auditLogs.map((row, i) => (
               <tr key={i} className="border-b hover:bg-gray-50">
                 <td className="p-2">
                   <input type="checkbox" className="accent-gray-300" />
@@ -156,7 +102,7 @@ export default function AuditLogs() {
         <Pagination
           currentPage={currentPage}
           totalPages={10}
-          onPageChange={(page) => setCurrentPage(page)}
+          onPageChange={onPageChange}
         />
       </div>
     </div>

@@ -306,15 +306,10 @@
 // }
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { fetchUsers } from "@/lib/api/usercalls";
-import { fetchWalletsByUserId } from "@/lib/api/walletcalls";
-import { fetchUserById } from "@/lib/api/usercalls";
 import Button from "@/components/Button";
 import { CalendarDays } from "lucide-react";
 import Pagination from "../Pagination";
-import Spinner from "@/components/Spinner";
 
 type User = {
   _id: string;
@@ -336,48 +331,14 @@ type WalletWithUser = Wallet & {
   user: User;
 };
 
-export default function WalletsTable() {
-  const [wallets, setWallets] = useState<WalletWithUser[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+interface WalletsTableProps {
+  wallets: WalletWithUser[];
+  currentPage: number;
+  onPageChange: (page: number) => void;
+}
+
+export default function WalletsTable({ wallets, currentPage, onPageChange }: WalletsTableProps) {
   const router = useRouter();
-
-  useEffect(() => {
-    const loadWallets = async () => {
-      setLoading(true);
-      try {
-        const { records: users } = await fetchUsers(currentPage, 10);
-
-        const allWallets = await Promise.all(
-          users.map(async (user) => {
-            try {
-              const userWallets: Wallet[] = await fetchWalletsByUserId(
-                user._id
-              ); // ✅ FIXED
-              return userWallets.map((wallet) => ({
-                ...wallet,
-                user,
-              }));
-            } catch (err) {
-              console.warn(`No wallets for user ${user._id}`);
-              return [];
-            }
-          })
-        );
-
-        setWallets(allWallets.flat());
-      } catch (error) {
-        console.error("Failed to fetch wallets:", error);
-        setWallets([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadWallets();
-  }, [currentPage]);
-
-  if (loading) return <Spinner />;
 
   return (
     <>
@@ -406,7 +367,7 @@ export default function WalletsTable() {
                 <tr
                   key={wallet._id}
                   className="hover:bg-gray-50 cursor-pointer border-b"
-                  onClick={() => router.push(`/wallets/${wallet.owner}`)}
+                  // onClick={() => router.push(`/wallets/${wallet.owner}`)}
                 >
                   <td className="px-4 py-3 font-medium">
                     {wallet.user.firstname || "-"} {wallet.user.lastname || ""}
@@ -442,7 +403,7 @@ export default function WalletsTable() {
         <Pagination
           currentPage={currentPage}
           totalPages={1}
-          onPageChange={(page) => setCurrentPage(page)}
+          onPageChange={onPageChange}
         />
       </div>
     </>

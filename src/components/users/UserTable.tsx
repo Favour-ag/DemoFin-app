@@ -18,12 +18,16 @@ interface UserTableProps {
   onPageChange: (page: number) => void;
 }
 
-export default function UserTable({ users, currentPage, totalPages, onPageChange }: UserTableProps) {
-
+export default function UserTable({
+  users,
+  currentPage,
+  totalPages,
+  onPageChange,
+}: UserTableProps) {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white  rounded-lg shadow-sm border border-gray-200">
       {/* Header */}
-      <div className="flex items-center flex-wrap gap-2 mb-4">
+      <div className="flex items-center flex-wrap gap-2  p-4">
         <h2 className="text-lg font-semibold text-gray-800">User lists</h2>
         <span className="bg-purple-100 text-purple-700 px-3 py-1 text-xs rounded-full whitespace-nowrap">
           {users.length} users
@@ -36,10 +40,7 @@ export default function UserTable({ users, currentPage, totalPages, onPageChange
           <thead>
             <tr className="text-left border-b text-gray-500 text-xs bg-[#F9FAFB] whitespace-nowrap">
               <th className="pl-4 pr-2 py-3 w-10">
-                <input
-                  type="checkbox"
-                  className="accent-gray-300 h-4 w-4"
-                />
+                <input type="checkbox" className="accent-gray-300 h-4 w-4" />
               </th>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Status</th>
@@ -69,7 +70,7 @@ export default function UserTable({ users, currentPage, totalPages, onPageChange
       </div>
 
       {/* Pagination */}
-      <div className="mt-4">
+      <div className="mt-4 p-4">
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

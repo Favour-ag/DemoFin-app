@@ -21,14 +21,6 @@ const transactions = [
     status: "Pending",
     date: "Jan 5, 2025",
   },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    type: "Debit",
-    description: "Villa curia reprehenderit cubic...",
-    amount: 144.55,
-    status: "Refunded",
-    date: "Jan 5, 2025",
-  },
 ];
 
 export default function TransactionsTab() {

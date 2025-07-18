@@ -79,7 +79,7 @@ export default function OverviewTab({ user, activities }: OverviewTabProps) {
       </div>
 
       {/* Table */}
-      <ActivityTable activities={activities} />
+      <ActivityTable />
 
       {/* Pagination */}
       <div className="mt-4 overflow-x-auto hide-scrollbar">

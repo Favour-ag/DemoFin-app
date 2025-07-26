@@ -14,7 +14,11 @@ import {
   BarChart2,
   Search,
 } from "lucide-react";
-import { overview } from "../../lib/api/dashboardcalls";
+import {
+  overview,
+  overviewMonthlyUserCount,
+  overviewMonthlyTransactionCount,
+} from "../../lib/api/dashboardcalls";
 import { transactions } from "@/lib/api/transactioncalls";
 import { useEffect, useState } from "react";
 import Spinner from "@/components/Spinner";
@@ -40,6 +44,9 @@ export default function DashboardPage() {
   const [filteredTransactions, setFilteredTransactions] = useState<any[]>([]);
   const [transactionLoading, setTransactionLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [userData, setUserData] = useState<any[]>([]);
+  const [transactionData, setTransactionData] = useState<any[]>([]);
+  const [overviewLoading, setOverviewLoading] = useState(true);
 
   useEffect(() => {
     const getOverviewData = async () => {
@@ -124,6 +131,44 @@ export default function DashboardPage() {
     }
   }, [searchTerm, transactionList]);
 
+  useEffect(() => {
+    const fetchOverviewData = async () => {
+      setOverviewLoading(true);
+      try {
+        const [userResponse, transactionResponse] = await Promise.all([
+          overviewMonthlyUserCount(),
+          overviewMonthlyTransactionCount(),
+        ]);
+
+        // Transform user data
+        const transformedUsers = Object.entries(userResponse.data).map(
+          ([month, count]) => ({
+            name: month,
+            users: count,
+          })
+        );
+        setUserData(transformedUsers);
+
+        // Transform transaction data
+        const transformedTransactions = Object.entries(
+          transactionResponse.data
+        ).map(([month, count]) => ({
+          name: month,
+          series1: count, // real value from API
+          series2: 0,
+          series3: 0,
+        }));
+        setTransactionData(transformedTransactions);
+      } catch (error) {
+        console.error("Error fetching overview data:", error);
+      } finally {
+        setOverviewLoading(false);
+      }
+    };
+
+    fetchOverviewData();
+  }, []);
+
   return (
     <ProtectedRoute>
       <div className="flex min-h-screen bg-white">
@@ -203,8 +248,16 @@ export default function DashboardPage() {
 
           {/* Charts */}
           <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-            <LineChartCard title="Total users" />
-            <ChartCard title="Transactions" />
+            <LineChartCard
+              title="Total users"
+              data={userData}
+              loading={overviewLoading}
+            />
+            <ChartCard
+              title="Transactions"
+              data={transactionData}
+              loading={overviewLoading}
+            />
           </section>
 
           {/* Search and Table */}

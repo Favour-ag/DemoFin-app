@@ -13,7 +13,10 @@ interface TransactionTableProps {
   loading: boolean;
 }
 
-export default function TransactionTable({ transactions, loading }: TransactionTableProps) {
+export default function TransactionTable({
+  transactions,
+  loading,
+}: TransactionTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const tableRef = useRef<HTMLDivElement>(null);
 

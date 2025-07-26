@@ -8,3 +8,19 @@ export const overview = async () => {
   // return res.data; // ✅ return unwrapped token + user
   return res;
 };
+export const overviewMonthlyUserCount = async () => {
+  const res = await apiRequest({
+    method: "GET",
+    url: "/overview/monthly-user-count",
+  });
+  // return res.data; // ✅ return unwrapped token + user
+  return res;
+};
+export const overviewMonthlyTransactionCount = async () => {
+  const res = await apiRequest({
+    method: "GET",
+    url: "/overview/monthly-transaction-count",
+  });
+  // return res.data; // ✅ return unwrapped token + user
+  return res;
+};

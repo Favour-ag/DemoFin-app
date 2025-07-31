@@ -24,7 +24,7 @@ export default function AdminTable({
   admins,
   currentPage,
   onPageChange,
-  itemsPerPage = 5,
+  itemsPerPage = 10,
 }: AdminTableProps) {
   const tableRef = useRef<HTMLDivElement>(null);
 

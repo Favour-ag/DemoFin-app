@@ -6,13 +6,7 @@ import TransactionsTab from "./TransactionsTab";
 import Button from "@/components/Button";
 import { Shield, Wallet } from "lucide-react";
 
-type Activity = {
-  id: string;
-  type: string;
-  description: string;
-  date: string;
-  amount: number;
-};
+import { Activity } from "@/types/activity";
 
 type ProfileTabsProps = {
   user: {

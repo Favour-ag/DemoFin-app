@@ -1,96 +1,20 @@
 "use client";
 
 import { ArrowUp, ArrowDown } from "lucide-react";
+import { Activity } from "@/types/activity";
 
-type Activity = {
-  id: string;
-  type: "Credit" | "Debit";
-  description: string;
-  date: string;
-  amount: number;
+type ActivityTableProps = {
+  activities: Activity[];
 };
 
-const mockActivities: Activity[] = [
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    type: "Credit",
-    description: "Villa curia reprehenderit cubicularis certus vorago.",
-    date: "Jan 6, 2025",
-    amount: 144.55,
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    type: "Debit",
-    description: "Villa curia reprehenderit cubicularis certus vorago.",
-    date: "Jan 6, 2025",
-    amount: 144.55,
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    type: "Credit",
-    description: "Villa curia reprehenderit cubicularis certus vorago.",
-    date: "Jan 6, 2025",
-    amount: 144.55,
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    type: "Debit",
-    description: "Villa curia reprehenderit cubicularis certus vorago.",
-    date: "Jan 5, 2025",
-    amount: 144.55,
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    type: "Credit",
-    description: "Villa curia reprehenderit cubicularis certus vorago.",
-    date: "Jan 5, 2025",
-    amount: 144.55,
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    type: "Debit",
-    description: "Villa curia reprehenderit cubicularis certus vorago.",
-    date: "Jan 5, 2025",
-    amount: 144.55,
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    type: "Credit",
-    description: "Villa curia reprehenderit cubicularis certus vorago.",
-    date: "Jan 4, 2025",
-    amount: 144.55,
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    type: "Credit",
-    description: "Villa curia reprehenderit cubicularis certus vorago.",
-    date: "Jan 3, 2025",
-    amount: 144.55,
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    type: "Debit",
-    description: "Villa curia reprehenderit cubicularis certus vorago.",
-    date: "Jan 3, 2025",
-    amount: 144.55,
-  },
-  {
-    id: "#9590dffb-2c00-457c-8a7245",
-    type: "Credit",
-    description: "Villa curia reprehenderit cubicularis certus vorago.",
-    date: "Jan 3, 2025",
-    amount: 144.55,
-  },
-];
-
-export default function ActivityTable() {
+export default function ActivityTable({ activities }: ActivityTableProps) {
   return (
-    <div className="bg-white  rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
       {/* Header */}
-      <div className="flex items-center flex-wrap gap-2  p-4">
-        <h2 className="text-lg font-semibold text-gray-800">User lists</h2>
+      <div className="flex items-center flex-wrap gap-2 p-4">
+        <h2 className="text-lg font-semibold text-gray-800">User Activities</h2>
         <span className="bg-purple-100 text-purple-700 px-3 py-1 text-xs rounded-full whitespace-nowrap">
-          {mockActivities.length} users
+          {activities.length} records
         </span>
       </div>
 
@@ -112,7 +36,7 @@ export default function ActivityTable() {
             </tr>
           </thead>
           <tbody>
-            {mockActivities.map((activity, index) => (
+            {activities.map((activity, index) => (
               <tr
                 key={`${activity.id}-${index}`}
                 className="border-t hover:bg-gray-50"

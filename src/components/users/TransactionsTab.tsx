@@ -1,8 +1,8 @@
 "use client";
 
-import Pagination from "../Pagination";
+import { useMemo, useRef, useState } from "react";
 import TransactionTable from "./TransactionsTable";
-import { useState } from "react";
+import Pagination from "../Pagination";
 
 const transactions = [
   {
@@ -21,15 +21,35 @@ const transactions = [
     status: "Pending",
     date: "Jan 5, 2025",
   },
+  // Add more transactions here...
 ];
 
 export default function TransactionsTab() {
   const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const tableRef = useRef<HTMLDivElement>(null);
+
+  const totalPages = Math.ceil(transactions.length / itemsPerPage);
+
+  const paginatedTransactions = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return transactions.slice(start, end);
+  }, [transactions, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    if (tableRef.current) {
+      tableRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const isNextDisabled = currentPage >= totalPages;
 
   return (
-    <div className="bg-white  rounded-xl shadow-sm">
+    <div className="bg-white rounded-xl shadow-sm">
       {/* Filters */}
-      <div className=" flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <input
           type="text"
           placeholder="Search transactions"
@@ -47,7 +67,8 @@ export default function TransactionsTab() {
           </button>
         </div>
       </div>
-      {/* Transaction History */}
+
+      {/* Transaction History Header */}
       <div className="flex items-center justify-between flex-wrap gap-4 mt-4">
         <div className="flex items-center gap-2">
           <h2 className="text-lg font-semibold text-gray-900">
@@ -60,14 +81,18 @@ export default function TransactionsTab() {
       </div>
 
       {/* Table */}
-      <TransactionTable transactions={transactions} />
+      <div ref={tableRef} className="mt-4">
+        <TransactionTable transactions={paginatedTransactions} />
+      </div>
 
       {/* Pagination */}
       <div className="mt-6">
         <Pagination
           currentPage={currentPage}
-          totalPages={10}
-          onPageChange={(page) => setCurrentPage(page)}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          scrollTargetRef={tableRef}
+          isNextDisabled={isNextDisabled}
         />
       </div>
     </div>

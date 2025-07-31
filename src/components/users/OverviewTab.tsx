@@ -1,18 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Wallet, CircleDollarSign, BarChart2 } from "lucide-react";
 import StatCard from "@/components/users/StatCard";
 import ActivityTable from "@/components/users/ActivityTable";
 import Pagination from "../Pagination";
-
-type Activity = {
-  id: string;
-  type: string;
-  description: string;
-  date: string;
-  amount: number;
-};
+import { Activity } from "@/types/activity";
 
 type OverviewTabProps = {
   user: {
@@ -25,6 +18,23 @@ type OverviewTabProps = {
 
 export default function OverviewTab({ user, activities }: OverviewTabProps) {
   const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const tableRef = useRef<HTMLDivElement>(null);
+
+  const totalPages = Math.ceil(activities.length / itemsPerPage);
+
+  const paginatedActivities = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return activities.slice(start, end);
+  }, [activities, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    if (tableRef.current) {
+      tableRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <>
@@ -32,6 +42,7 @@ export default function OverviewTab({ user, activities }: OverviewTabProps) {
         Account Summary
       </h2>
 
+      {/* Stat Cards */}
       <section className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         <StatCard
           title="Wallet Balance"
@@ -40,7 +51,7 @@ export default function OverviewTab({ user, activities }: OverviewTabProps) {
           icon={<Wallet className="w-5 h-5 text-purple-600" />}
           iconBg="bg-purple-100"
           largeBgIcon={<Wallet className="w-20 h-20" />}
-          span={true}
+          span
         />
         <StatCard
           title="Transactions"
@@ -79,14 +90,18 @@ export default function OverviewTab({ user, activities }: OverviewTabProps) {
       </div>
 
       {/* Table */}
-      <ActivityTable />
+      <div ref={tableRef} className="mt-6">
+        <ActivityTable activities={paginatedActivities} />
+      </div>
 
       {/* Pagination */}
       <div className="mt-4 overflow-x-auto hide-scrollbar">
         <Pagination
           currentPage={currentPage}
-          totalPages={10}
-          onPageChange={(page) => setCurrentPage(page)}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          scrollTargetRef={tableRef}
+          isNextDisabled={currentPage >= totalPages}
         />
       </div>
     </>

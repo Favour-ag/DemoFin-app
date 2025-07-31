@@ -1,6 +1,7 @@
 "use client";
 
-import { CheckCircle, RotateCcw, MoreVertical } from "lucide-react";
+import { useMemo, useRef } from "react";
+import { MoreVertical } from "lucide-react";
 import Avatar from "../Avatar";
 import Pagination from "../Pagination";
 
@@ -16,23 +17,44 @@ type AdminTableProps = {
   admins: Admin[];
   currentPage: number;
   onPageChange: (page: number) => void;
+  itemsPerPage?: number;
 };
 
-export default function AdminTable({ admins, currentPage, onPageChange }: AdminTableProps) {
+export default function AdminTable({
+  admins,
+  currentPage,
+  onPageChange,
+  itemsPerPage = 5,
+}: AdminTableProps) {
+  const tableRef = useRef<HTMLDivElement>(null);
+
+  const totalPages = Math.ceil(admins.length / itemsPerPage);
+
+  const paginatedAdmins = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = currentPage * itemsPerPage;
+    return admins.slice(start, end);
+  }, [admins, currentPage, itemsPerPage]);
+
+  const isNextDisabled = currentPage >= totalPages;
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-      <div className="flex items-center  mb-4">
+    <div
+      className="bg-white p-4 rounded-lg shadow-sm border border-gray-200"
+      ref={tableRef}
+    >
+      <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Administrators</h2>
         <span className="bg-purple-100 text-purple-700 px-3 py-1 text-xs rounded-full">
           {admins.length} admins
         </span>
       </div>
+
       {/* Table */}
       <div className="overflow-x-auto hide-scrollbar">
         <table className="min-w-full text-sm">
           <thead>
-            <tr className="text-left border-b text-gray-500  bg-gray-50">
+            <tr className="text-left border-b text-gray-500 bg-gray-50">
               <th className="p-3">
                 <input type="checkbox" className="accent-gray-300" />
               </th>
@@ -44,7 +66,7 @@ export default function AdminTable({ admins, currentPage, onPageChange }: AdminT
             </tr>
           </thead>
           <tbody>
-            {admins.map((admin, i) => (
+            {paginatedAdmins.map((admin, i) => (
               <tr key={i} className="border-b hover:bg-gray-50">
                 <td className="p-3">
                   <input type="checkbox" className="accent-gray-300" />
@@ -90,11 +112,14 @@ export default function AdminTable({ admins, currentPage, onPageChange }: AdminT
         </table>
       </div>
 
-      <div className="mt-4 overflow-x-auto hide-scrollbar">
+      {/* Pagination */}
+      <div className="mt-4 p-2">
         <Pagination
           currentPage={currentPage}
-          totalPages={10}
+          totalPages={totalPages}
           onPageChange={onPageChange}
+          scrollTargetRef={tableRef}
+          isNextDisabled={isNextDisabled}
         />
       </div>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowUp, ArrowDown, CalendarDays } from "lucide-react";
@@ -59,35 +59,43 @@ const getStatusColor = (status: string) => {
 };
 
 export default function WalletsTable({ searchTerm }: { searchTerm: string }) {
-  const [filteredWallets, setFilteredWallets] =
-    useState<WalletUser[]>(mockWallets);
-  const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-  useEffect(() => {
-    if (!searchTerm) {
-      setFilteredWallets(mockWallets);
-    } else {
-      const search = searchTerm.toLowerCase();
-      const filtered = mockWallets.filter((wallet) => {
-        return (
-          wallet.name.toLowerCase().includes(search) ||
-          wallet.email.toLowerCase().includes(search)
-        );
-      });
-      setFilteredWallets(filtered);
-    }
+  const tableRef = useRef<HTMLDivElement>(null);
+
+  const filteredWallets = useMemo(() => {
+    if (!searchTerm) return mockWallets;
+
+    const search = searchTerm.toLowerCase();
+    return mockWallets.filter(
+      (wallet) =>
+        wallet.name.toLowerCase().includes(search) ||
+        wallet.email.toLowerCase().includes(search)
+    );
   }, [searchTerm]);
+
+  const totalPages = Math.ceil(filteredWallets.length / itemsPerPage);
+
+  const paginatedWallets = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = currentPage * itemsPerPage;
+    return filteredWallets.slice(start, end);
+  }, [filteredWallets, currentPage]);
+
+  const isNextDisabled = currentPage >= totalPages;
 
   return (
     <>
-      <div className="bg-white rounded-md shadow border mt-4">
+      <div ref={tableRef} className="bg-white rounded-md shadow border mt-4">
         <div className="p-4 font-semibold border-b">
           User Wallets
           <span className="text-sm font-medium text-purple-700 bg-purple-100 px-3 py-1 rounded-full ml-2">
             {filteredWallets.length} transactions
           </span>
         </div>
+
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
@@ -101,7 +109,7 @@ export default function WalletsTable({ searchTerm }: { searchTerm: string }) {
               </tr>
             </thead>
             <tbody>
-              {filteredWallets.map((user) => (
+              {paginatedWallets.map((user) => (
                 <tr
                   key={user.id}
                   onClick={() => router.push(`/wallets/${user.id}`)}
@@ -168,12 +176,14 @@ export default function WalletsTable({ searchTerm }: { searchTerm: string }) {
         </div>
       </div>
 
-      {/* Pagination */}
-      <div className="mt-6">
+      {/* Pagination Controls */}
+      <div className="mt-4 p-2">
         <Pagination
           currentPage={currentPage}
-          totalPages={10}
-          onPageChange={(page) => setCurrentPage(page)}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+          scrollTargetRef={tableRef}
+          isNextDisabled={isNextDisabled}
         />
       </div>
     </>

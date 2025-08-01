@@ -8,8 +8,7 @@ export const overview = async () => {
   // return res.data; // ✅ return unwrapped token + user
   return res;
 };
-
-export const monthlyUserCount = async () => {
+export const overviewMonthlyUserCount = async () => {
   const res = await apiRequest({
     method: "GET",
     url: "/overview/monthly-user-count",
@@ -17,8 +16,7 @@ export const monthlyUserCount = async () => {
   // return res.data; // ✅ return unwrapped token + user
   return res;
 };
-
-export const monthlyTransactionCount = async () => {
+export const overviewMonthlyTransactionCount = async () => {
   const res = await apiRequest({
     method: "GET",
     url: "/overview/monthly-transaction-count",

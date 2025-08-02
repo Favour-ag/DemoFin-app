@@ -134,7 +134,7 @@ export default function UserRow({
 
       <td className="px-4 py-4">
         <div className="flex items-center gap-2">
-          <Toggle active={status === "active"} />
+          {/* <Toggle active={status === "active"} /> */}
           <span
             className={`text-xs font-medium ${
               status === "active" ? "text-purple-600" : "text-gray-500"

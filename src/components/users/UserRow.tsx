@@ -82,6 +82,7 @@ import Avatar from "../Avatar";
 import Toggle from "../Toggle";
 import UserActionsDropdown from "@/components/Modal/userActionsDropdown";
 import { MoreVertical } from "lucide-react";
+import UserBalanceModal from "../Modal/UserBalanceModal";
 
 type Props = {
   id: string;
@@ -101,11 +102,14 @@ export default function UserRow({
   date,
 }: Props) {
   const [showActions, setShowActions] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggleActions = (e: React.MouseEvent) => {
     e.stopPropagation();
     setShowActions((prev) => !prev);
   };
+
+  // console.log(balance, "balance")
 
   return (
     <tr className="border-b hover:bg-gray-50">
@@ -141,7 +145,14 @@ export default function UserRow({
         </div>
       </td>
 
-      <td className="px-4 py-4">${balance.toFixed(2)}</td>
+      <td className="px-4 py-4  cursor-pointer text-purple-600">
+        <span
+          className="bg-purple-100 p-[5px] rounded-[10px] text-[14px] "
+          onClick={() => setIsOpen(true)}
+        >
+          See Balances
+        </span>
+      </td>
 
       <td className="px-4 py-4">{date}</td>
 
@@ -159,6 +170,8 @@ export default function UserRow({
           />
         )}
       </td>
+
+      <UserBalanceModal id={id} isOpen={isOpen} setIsOpen={setIsOpen} />
     </tr>
   );
 }

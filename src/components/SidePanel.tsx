@@ -22,6 +22,12 @@ const menuItems = [
     path: "/transactions",
     isSettings: false,
   },
+  {
+    text: "Transfers",
+    icon: CircleDollarSign,
+    path: "/transfers",
+    isSettings: false,
+  },
   { text: "Wallets", icon: Wallet, path: "/wallets", isSettings: false },
   { text: "Admins", icon: Users, path: "/admins", isSettings: false },
   {

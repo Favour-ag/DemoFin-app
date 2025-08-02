@@ -22,6 +22,7 @@ import {
 import { transactions } from "@/lib/api/transactioncalls";
 import { useEffect, useState } from "react";
 import Spinner from "@/components/Spinner";
+import { formatCurrencyWithSymbol } from "@/lib/utils";
 
 //  Define a proper type for balance item
 type Balance = {
@@ -55,10 +56,11 @@ export default function DashboardPage() {
         // console.log("Overview API Response:", res);
 
         const data = res?.data;
+        console.log(data, "data")
 
         //  Safely find USD balance with type
         const usdBalance: Balance | undefined = data?.balances?.find(
-          (bal: Balance) => bal.currency === "USD"
+          (bal: Balance) => bal.currency === "NGN"
         );
 
         if (data) {
@@ -209,7 +211,7 @@ export default function DashboardPage() {
             <StatCard
               title="Wallet Balance"
               value={
-                loading ? <Spinner /> : `$${stats.walletBalanceUSD.toFixed(2)}`
+                loading ? <Spinner /> : `${formatCurrencyWithSymbol(stats.walletBalanceUSD.toFixed(2))}`
               }
               percent={40}
               icon={

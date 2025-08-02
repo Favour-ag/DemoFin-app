@@ -22,7 +22,7 @@ type Transaction = {
 };
 
 type TransactionsTableProps = {
-  transactions: Transaction[];
+  transactions: any
   currentPage: number;
   onPageChange: (page: number) => void;
 };
@@ -79,7 +79,7 @@ export default function TransactionsTable({
           </thead>
 
           <tbody>
-            {paginatedTransactions.map((transaction, index) => (
+            {paginatedTransactions.map((transaction: any, index: number) => (
               <tr key={`${transaction._id}-${index}`} className="border-b">
                 <td className="p-2">
                   <input type="checkbox" className="accent-gray-300" />

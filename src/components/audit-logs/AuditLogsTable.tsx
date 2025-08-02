@@ -4,6 +4,7 @@ import { ArrowDown, ExternalLink, Eye } from "lucide-react";
 import Avatar from "../Avatar";
 import Pagination from "../Pagination";
 import Button from "../Button";
+import Link from "next/link";
 
 type AuditLog = {
   _id: string;
@@ -25,7 +26,7 @@ type AuditLog = {
 type AuditLogsTableProps = {
   auditLogs: AuditLog[];
   currentPage: number;
-  totalPages: number,
+  totalPages: number;
   onPageChange: (page: number) => void;
   onViewLog?: (log: AuditLog) => void;
 };
@@ -69,7 +70,9 @@ export default function AuditLogsTable({
                 <td className="p-2 text-gray-700">{log._id.slice(-6)}...</td>
                 <td className="p-2 flex items-center gap-2">
                   <Avatar name={log.username} />
-                  <span className="text-gray-900 font-medium">{log.username}</span>
+                  <span className="text-gray-900 font-medium">
+                    {log.username}
+                  </span>
                 </td>
                 <td className="p-2 text-purple-600 font-medium">
                   {log.actionType}
@@ -85,13 +88,13 @@ export default function AuditLogsTable({
                   {new Date(log.timestamp).toLocaleString()}
                 </td>
                 <td className="p-2">
-                  <button
-                    onClick={() => onViewLog?.(log)}
+                  <Link
+                    href={`/audit-logs/${log._id}`}
                     className="text-blue-600 hover:underline flex items-center gap-1"
                   >
                     <Eye className="w-4 h-4" />
                     View
-                  </button>
+                  </Link>
                 </td>
               </tr>
             ))}

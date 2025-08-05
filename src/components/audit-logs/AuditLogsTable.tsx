@@ -105,6 +105,7 @@ export default function AuditLogsTable({
       {/* Pagination */}
       <div className="mt-4 overflow-x-auto hide-scrollbar">
         <Pagination
+        itemsPerPage={10}
           currentPage={currentPage}
           totalPages={10}
           onPageChange={onPageChange}

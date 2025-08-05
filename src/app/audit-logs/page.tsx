@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { allAudit } from "@/lib/api/auditcalls";
 import AuditLogsTable from "@/components/audit-logs/AuditLogsTable";
+import Spinner from "@/components/Spinner";
 
 type AuditLog = {
   _id: string;
@@ -76,6 +77,12 @@ export default function AuditLogPage() {
     console.log("View single log:", log);
     // You can open a modal or side panel here
   };
+
+   if (loading) return (
+    <div className="w-full h-full flex items-center justify-center">
+       <Spinner />
+    </div>
+   );
 
   return (
     <div className="p-6 space-y-6">

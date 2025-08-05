@@ -122,6 +122,7 @@ export default function UserPage() {
                 users={filteredUsers}
                 currentPage={currentPage}
                 totalPages={totalPages}
+                itemsPerPage={limit}
                 onPageChange={setCurrentPage}
               />
             )}

@@ -10,3 +10,14 @@ export const fetchWalletsByUserId = async (userId: string) => {
   // ✅ This returns ONLY the array of wallets
   return response.data;
 };
+
+
+export const fetchWallets = async ()=> {
+   const response = await apiRequest({
+    method: "GET",
+    url: `/wallets`,
+  });
+
+  // ✅ This returns ONLY the array of wallets
+  return response.data;
+}

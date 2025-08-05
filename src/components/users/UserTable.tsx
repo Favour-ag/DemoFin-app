@@ -15,6 +15,7 @@ interface UserTableProps {
   users: User[];
   currentPage: number;
   totalPages: number;
+  itemsPerPage: number;
   onPageChange: (page: number) => void;
 }
 
@@ -23,6 +24,7 @@ export default function UserTable({
   currentPage,
   totalPages,
   onPageChange,
+  itemsPerPage
 }: UserTableProps) {
   return (
     <div className="bg-white  rounded-lg shadow-sm border border-gray-200">
@@ -74,6 +76,7 @@ export default function UserTable({
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
+          itemsPerPage={itemsPerPage}
           onPageChange={(page) => {
             onPageChange(page);
             window.scrollTo({ top: 0, behavior: "smooth" });

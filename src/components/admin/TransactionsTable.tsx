@@ -15,10 +15,11 @@ type Admin = {
 type AdminTableProps = {
   admins: Admin[];
   currentPage: number;
+  itemsPerPage: number;
   onPageChange: (page: number) => void;
 };
 
-export default function AdminTable({ admins, currentPage, onPageChange }: AdminTableProps) {
+export default function AdminTable({ admins, currentPage, onPageChange, itemsPerPage }: AdminTableProps) {
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
@@ -92,8 +93,9 @@ export default function AdminTable({ admins, currentPage, onPageChange }: AdminT
 
       <div className="mt-4 overflow-x-auto hide-scrollbar">
         <Pagination
+        itemsPerPage={10}
           currentPage={currentPage}
-          totalPages={10}
+totalPages={Math.ceil(admins.length / itemsPerPage)}
           onPageChange={onPageChange}
         />
       </div>

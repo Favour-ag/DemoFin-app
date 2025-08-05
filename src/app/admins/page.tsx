@@ -31,6 +31,7 @@ export default function AdminManagement() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const loadAdmins = async () => {
@@ -38,18 +39,23 @@ export default function AdminManagement() {
       try {
         const response = await getAdmin();
         const adminData = response?.records || response || [];
-        
+
         // Transform API data to match component expectations
         const transformedAdmins = adminData.map((admin: any) => ({
           _id: admin._id,
-          name: admin.name || `${admin.firstName || ''} ${admin.lastName || ''}`.trim(),
+          name:
+            admin.name ||
+            `${admin.firstName || ""} ${admin.lastName || ""}`.trim(),
           email: admin.email,
-          role: admin.role || 'Admin',
-          status: admin.isActive !== false ? 'Active' : 'Inactive',
-          login: admin.lastLogin ? new Date(admin.lastLogin).toLocaleDateString() : 
-                 admin.createdAt ? new Date(admin.createdAt).toLocaleDateString() : 'N/A',
+          role: admin.role || "Admin",
+          status: admin.isActive !== false ? "Active" : "Inactive",
+          login: admin.lastLogin
+            ? new Date(admin.lastLogin).toLocaleDateString()
+            : admin.createdAt
+            ? new Date(admin.createdAt).toLocaleDateString()
+            : "N/A",
         }));
-        
+
         setAdmins(transformedAdmins);
         setFilteredAdmins(transformedAdmins);
       } catch (error) {
@@ -73,11 +79,16 @@ export default function AdminManagement() {
         const email = admin.email.toLowerCase();
         const role = admin.role.toLowerCase();
         const search = searchTerm.toLowerCase();
-        
-        return name.includes(search) || email.includes(search) || role.includes(search);
+
+        return (
+          name.includes(search) ||
+          email.includes(search) ||
+          role.includes(search)
+        );
       });
       setFilteredAdmins(filtered);
     }
+    setCurrentPage(1); // Reset page on search
   }, [searchTerm, admins]);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -88,17 +99,22 @@ export default function AdminManagement() {
       try {
         const response = await getAdmin();
         const adminData = response?.records || response || [];
-        
+
         const transformedAdmins = adminData.map((admin: any) => ({
           _id: admin._id,
-          name: admin.name || `${admin.firstName || ''} ${admin.lastName || ''}`.trim(),
+          name:
+            admin.name ||
+            `${admin.firstName || ""} ${admin.lastName || ""}`.trim(),
           email: admin.email,
-          role: admin.role || 'Admin',
-          status: admin.isActive !== false ? 'Active' : 'Inactive',
-          login: admin.lastLogin ? new Date(admin.lastLogin).toLocaleDateString() : 
-                 admin.createdAt ? new Date(admin.createdAt).toLocaleDateString() : 'N/A',
+          role: admin.role || "Admin",
+          status: admin.isActive !== false ? "Active" : "Inactive",
+          login: admin.lastLogin
+            ? new Date(admin.lastLogin).toLocaleDateString()
+            : admin.createdAt
+            ? new Date(admin.createdAt).toLocaleDateString()
+            : "N/A",
         }));
-        
+
         setAdmins(transformedAdmins);
         setFilteredAdmins(transformedAdmins);
       } catch (error) {
@@ -149,7 +165,10 @@ export default function AdminManagement() {
               <ListFilter className="w-4 h-4" />
               Filters
             </Button>
-            <Button onClick={()=> setIsOpen(true)} className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-purple-700">
+            <Button
+              onClick={() => setIsOpen(true)}
+              className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-purple-700"
+            >
               <UserPlus className="w-4 h-4" />
               Invite Admin
             </Button>
@@ -158,15 +177,24 @@ export default function AdminManagement() {
 
         {/* Table */}
         <div className="mt-6">
-          <TransactionTable 
-            admins={filteredAdmins} 
-            currentPage={currentPage} 
-            onPageChange={setCurrentPage} 
+          <TransactionTable
+            admins={filteredAdmins.slice(
+              (currentPage - 1) * itemsPerPage,
+              currentPage * itemsPerPage
+            )}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+            itemsPerPage={itemsPerPage}
+            
           />
         </div>
       </main>
 
-      <AddAdminModal isOpen={isOpen} setIsOpen={setIsOpen} onAdminAdded={handleAdminAdded} />
+      <AddAdminModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        onAdminAdded={handleAdminAdded}
+      />
     </div>
   );
 }

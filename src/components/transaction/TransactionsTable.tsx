@@ -46,6 +46,8 @@ export default function TransactionsTable({
   const isNextDisabled =
     paginatedTransactions.length < itemsPerPage || currentPage >= totalPages;
 
+    console.log(transactions, "transactions")
+
   /* ---------------- render ---------------- */
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
@@ -60,7 +62,7 @@ export default function TransactionsTable({
       </div>
 
       {/* Table */}
-      <div ref={tableRef} className="overflow-x-auto hide-scrollbar">
+      <div ref={tableRef} className="overflow-x-auto relative hide-scrollbar">
         <table className="min-w-full text-sm table-auto border border-gray-200">
           <thead>
             <tr className="text-left border-b text-gray-500 font-medium bg-gray-50">
@@ -70,8 +72,9 @@ export default function TransactionsTable({
               <th className="p-2">ID</th>
               <th className="p-2">User</th>
               <th className="p-2">Type</th>
-              <th className="p-2">Description</th>
+              {/* <th className="p-2">Description</th> */}
               <th className="p-2">Amount</th>
+              <th className="p-2">Amount Debitted</th>
               <th className="p-2">Status</th>
               <th className="p-2">Date</th>
               <th className="p-2">Action</th>
@@ -118,7 +121,14 @@ export default function TransactionsTable({
                     {transaction.type}
                   </span>
                 </td>
-                <td className="p-2">{transaction.description ?? "..."}</td>
+                {/* <td className="p-2">{transaction.description ?? "..."}</td> */}
+                
+                <td className="p-2">
+                  {transaction.destinationCurrency}{" "}
+                  {Number(
+                    transaction.destinationAmount.replace(/,/g, "")
+                  ).toLocaleString()}
+                </td>
                 <td className="p-2">
                   {transaction.sourceCurrency}{" "}
                   {Number(

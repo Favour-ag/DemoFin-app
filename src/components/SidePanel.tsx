@@ -31,7 +31,7 @@ const menuItems = [
   { text: "Wallets", icon: Wallet, path: "/wallets", isSettings: false },
   { text: "Admins", icon: Users, path: "/admins", isSettings: false },
   {
-    text: "Audit Logs",
+    text: "Activities Logs",
     icon: FileText,
     path: "/audit-logs",
     isSettings: false,

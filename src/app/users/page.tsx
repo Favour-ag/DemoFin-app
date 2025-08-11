@@ -28,11 +28,13 @@ export default function UserPage() {
 
   const limit = 10;
 
+  console.log("length", users?.length)
+
   useEffect(() => {
     const loadUsers = async () => {
       setLoading(true);
       try {
-        const { records, total } = await fetchUsers(currentPage, limit);
+        const { records, total } = await fetchUsers();
         setUsers(records);
         setFilteredUsers(records);
         setTotalPages(Math.ceil(total / limit));

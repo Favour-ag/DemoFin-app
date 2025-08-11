@@ -74,8 +74,8 @@ export default function UserTable({
       {/* Pagination */}
       <div className="mt-4 p-4">
         <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
+          currentPage={currentPage}   
+          totalPages={users.length / itemsPerPage}
           itemsPerPage={itemsPerPage}
           onPageChange={(page) => {
             onPageChange(page);

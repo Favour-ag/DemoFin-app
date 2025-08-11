@@ -28,7 +28,7 @@ export default function AddAdminModal({
 
   function close() {
     setIsOpen(false);
-    setFormData({ firstName: "", lastName: "", email: "", role: "admin" });
+    setFormData({ firstName: "", lastName: "", email: "", role: "super-admin" });
     setError("");
   }
 
@@ -38,12 +38,14 @@ export default function AddAdminModal({
     setError("");
 
     try {
-      await addAdmin(undefined, {
+      const data = {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-        role: formData.role,
-      });
+        role: formData.role.toLocaleLowerCase()
+      }
+      console.log(data)
+      await addAdmin(undefined,  data);
       
       onAdminAdded?.();
       close();
@@ -83,7 +85,7 @@ export default function AddAdminModal({
               </p>
 
               {error && (
-                <div className="mt-2 p-2 bg-red-100 border border-red-400 text-red-700 rounded">
+                <div className="my-2 p-2 bg-red-100 border border-red-400 text-red-700 rounded">
                   {error}
                 </div>
               )}
@@ -129,11 +131,11 @@ export default function AddAdminModal({
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                     className="h-[45px] w-full border border-[#D5D7DA] outline-none px-[10px] rounded-[8px] mt-[5px]"
                   >
+                    <option value="super-admin">Super Admin</option>
                     <option value="investor">Investor</option>
                     <option value="crm">CRM</option>
                     <option value="marketer">Marketer</option>
                     <option value="compliance">Compliance</option>
-                    <option value="super-admin">Super Admin</option>
                   </select>
                 </div>
                 

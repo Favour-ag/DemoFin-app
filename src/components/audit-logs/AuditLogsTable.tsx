@@ -5,6 +5,7 @@ import Avatar from "../Avatar";
 import Pagination from "../Pagination";
 import Button from "../Button";
 import Link from "next/link";
+import { formatDateCustom } from "@/lib/utils";
 
 type AuditLog = {
   _id: string;
@@ -85,7 +86,7 @@ export default function AuditLogsTable({
                 </td> */}
                 <td className="p-2 text-gray-500">{log.ipAddress}</td>
                 <td className="p-2 text-gray-500">
-                  {new Date(log.timestamp).toLocaleString()}
+                  {formatDateCustom(new Date(log.timestamp))}
                 </td>
                 <td className="p-2">
                   <Link

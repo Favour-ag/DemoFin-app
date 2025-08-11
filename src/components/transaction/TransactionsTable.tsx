@@ -6,6 +6,7 @@ import { useRef } from "react";
 import Pagination from "../Pagination";
 import { ArrowDown, ArrowUp, Check, Clock, CornerUpLeft } from "lucide-react";
 import Avatar from "../Avatar";
+import { formatDateCustom } from "@/lib/utils";
 
 type Transaction = {
   _id: string;
@@ -124,7 +125,7 @@ export default function TransactionsTable({
               <th className="p-2 min-w-[200px]">Source Transaction </th>
               <th className="p-2 min-w-[200px]">Destination Transaction</th>
               <th className="p-2 min-w-[200px]">Status</th>
-              <th className="p-2 min-w-[100px]">Date</th>
+              <th className="p-2 min-w-[200px]">Date</th>
               <th className="p-2">Action</th>
             </tr>
           </thead>
@@ -203,7 +204,7 @@ export default function TransactionsTable({
                   </span>
                 </td>
                 <td className="p-2 text-gray-600">
-                  {new Date(transaction.createdAt).toLocaleString()}
+                  {formatDateCustom(new Date(transaction.createdAt))}
                 </td>
                 <td className="p-2 text-center text-gray-600">⋮</td>
               </tr>
@@ -213,106 +214,7 @@ export default function TransactionsTable({
     </table>
 </div>
 
-      {/* <div ref={tableRef} className="overflow-x-auto relative hide-scrollbar">
-        <table className="w-full text-sm table-auto border border-gray-200">
-          <thead>
-            <tr className="text-left border-b text-gray-500 font-medium bg-gray-50">
-              <th className="p-2">
-                <input type="checkbox" className="accent-gray-300" />
-              </th>
-              <th className="p-2 min-w-[300px]">ID</th>
-              <th className="p-2 min-w-[300px]">User</th>
-              <th className="p-2">Type</th>
-              <th className="p-2 min-w-[200px]">Source Transaction </th>
-              <th className="p-2 min-w-[200px]">Destination Transaction</th>
-              <th className="p-2 min-w-[200px]">Status</th>
-              <th className="p-2 min-w-[100px]">Date</th>
-              <th className="p-2">Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {paginatedTransactions.map((transaction: any, index: number) => (
-              <tr key={`${transaction._id}-${index}`} className="border-b">
-                <td className="p-2">
-                  <input type="checkbox" className="accent-gray-300" />
-                </td>
-                <td className="p-2 break-all font-medium">
-                  {transaction._id}
-                </td>
-                <td className="p-2 flex items-center gap-2">
-                  <Avatar
-                    name={`${transaction.owner.firstname} ${transaction.owner.lastname}`}
-                  />
-                  <div>
-                    <div className="font-medium">
-                      {transaction.owner.firstname}{" "}
-                      {transaction.owner.lastname}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {transaction.owner.email}
-                    </div>
-                  </div>
-                </td>
-
-            
-                <td className="p-2 min-w-[200px]">
-                  <span
-                    className={`inline-flex items-center gap-1 text-xs font-semibold text-purple-500 bg-purple-200 px-2 py-1 rounded-full `}
-                  >
-                    {transaction.direction === "debit" && (
-                      <ArrowUp size={14} />
-                    )}
-                    {transaction.direction === "credit" && (
-                      <ArrowDown size={14} />
-                    )}
-                    {transaction.type}
-                  </span>
-                </td>
-                <td className="p-2">
-                  {transaction.sourceCurrency}{" "}
-                  {Number(
-                    transaction.sourceAmount.replace(/,/g, "")
-                  ).toLocaleString()}
-                </td>
-                <td className="p-2">
-                  {transaction.destinationCurrency}{" "}
-                  {Number(
-                    transaction.destinationAmount.replace(/,/g, "")
-                  ).toLocaleString()}
-                </td>
-                
-                <td className="p-2">
-                  <span
-                    className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full ${
-                      transaction.status === "successful"
-                        ? "bg-green-100 text-green-600"
-                        : transaction.status === "Pending"
-                        ? "bg-yellow-100 text-yellow-600"
-                        : "bg-red-100 text-red-600"
-                    }`}
-                  >
-                    {transaction.status === "Completed" && (
-                      <Check size={14} />
-                    )}
-                    {transaction.status === "Pending" && (
-                      <Clock size={14} />
-                    )}
-                    {transaction.status === "Refunded" && (
-                      <CornerUpLeft size={14} />
-                    )}
-                    {transaction.status}
-                  </span>
-                </td>
-                <td className="p-2 text-gray-600">
-                  {new Date(transaction.createdAt).toLocaleString()}
-                </td>
-                <td className="p-2 text-center text-gray-600">⋮</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div> */}
+   
 
       {/* Pagination */}
       <div className="mt-4 p-2">

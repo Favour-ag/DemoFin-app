@@ -83,6 +83,7 @@ import Toggle from "../Toggle";
 import UserActionsDropdown from "@/components/Modal/userActionsDropdown";
 import { MoreVertical } from "lucide-react";
 import UserBalanceModal from "../Modal/UserBalanceModal";
+import { formatDateCustom } from "@/lib/utils";
 
 type Props = {
   id: string;
@@ -154,7 +155,7 @@ export default function UserRow({
         </span>
       </td>
 
-      <td className="px-4 py-4">{date}</td>
+      <td className="px-4 py-4">{formatDateCustom(new Date(date))}</td>
 
       <td className="px-4 py-4 relative text-center">
         <button

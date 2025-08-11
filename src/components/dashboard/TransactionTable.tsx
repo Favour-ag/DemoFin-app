@@ -7,6 +7,7 @@ import Button from "../Button";
 import Pagination from "../Pagination";
 import Spinner from "@/components/Spinner";
 import Link from "next/link";
+import { formatDateCustom } from "@/lib/utils";
 
 interface TransactionTableProps {
   transactions: any[];
@@ -156,7 +157,7 @@ export default function TransactionTable({
                       </span>
                     </td>
                     <td className="p-2 text-gray-600">
-                      {new Date(transaction.createdAt).toLocaleString()}
+                      {formatDateCustom(new Date(transaction.createdAt))}
                     </td>
                   </tr>
                 ))}

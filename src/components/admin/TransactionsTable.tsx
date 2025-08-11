@@ -3,6 +3,7 @@
 import { MoreVertical } from "lucide-react";
 import Avatar from "../Avatar";
 import Pagination from "../Pagination";
+import { formatDateCustom } from "@/lib/utils";
 
 type Admin = {
   name: string;
@@ -87,7 +88,7 @@ export default function AdminTable({
                     {admin.status}
                   </span>
                 </td>
-                <td className="p-3 text-gray-600">{admin.login}</td>
+                <td className="p-3 text-gray-600">{formatDateCustom(new Date(admin.login))}</td>
                 <td className="p-3">
                   <MoreVertical className="text-gray-500 cursor-pointer" />
                 </td>

@@ -24,6 +24,7 @@ import { transactions } from "@/lib/api/transactioncalls";
 import { useEffect, useState } from "react";
 import Spinner from "@/components/Spinner";
 import { formatCurrencyWithSymbol } from "@/lib/utils";
+import { get } from "http";
 
 //  Define a proper type for balance item
 type Balance = {
@@ -49,7 +50,7 @@ export default function DashboardPage() {
   const [userData, setUserData] = useState<any[]>([]);
   const [transactionData, setTransactionData] = useState<any[]>([]);
   const [overviewLoading, setOverviewLoading] = useState(true);
-  const [volumeData, setVolumeData] = useState<any[]>([]);
+  const [volumeData, setVolumeData] = useState<number>(0);
 
   useEffect(() => {
     const getOverviewData = async () => {
@@ -58,7 +59,7 @@ export default function DashboardPage() {
         // console.log("Overview API Response:", res);
 
         const data = res?.data;
-        console.log(data, "data")
+        // console.log(data, "data")
 
         //  Safely find USD balance with type
         const usdBalance: Balance | undefined = data?.balances?.find(
@@ -84,20 +85,28 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    const getVolueData = async () => {
+    const getVolumeData = async () => {
       try {
         const res = await transactionVolume();
-        // console.log("Transaction Volume API Response:", res);
 
         const data = res?.data;
         if (data) {
-          setVolumeData(data);
+          const transactionVolumeArray = res?.data
+          // console.log("Transaction Volume Data:", transactionVolumeArray[0].totalVolume.$numberDecimal);
+
+          setVolumeData(
+  Number(transactionVolumeArray?.[0]?.totalVolume?.$numberDecimal ?? 0)
+);
+
+         
         }
       } catch (error) {
         console.error("Error fetching transaction volume data:", error);
       }
     }
-  }, [volumeData] )
+
+    getVolumeData();
+  }, [] )
 
   useEffect(() => {
     const getTransactionData = async () => {
@@ -256,7 +265,9 @@ export default function DashboardPage() {
                 loading ? (
                   <Spinner />
                 ) : (
-                  `$${stats.transactionVolumeUSD.toFixed(2)}`
+                  <span>
+                    {formatCurrencyWithSymbol(volumeData.toFixed(2))}
+                  </span>
                 )
               }
               percent={40}

@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle, RotateCcw, MoreVertical } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 import Avatar from "../Avatar";
 import Pagination from "../Pagination";
 
@@ -16,11 +16,17 @@ type AdminTableProps = {
   admins: Admin[];
   currentPage: number;
   itemsPerPage: number;
+  totalPages: number;
   onPageChange: (page: number) => void;
 };
 
-export default function AdminTable({ admins, currentPage, onPageChange, itemsPerPage }: AdminTableProps) {
-
+export default function AdminTable({
+  admins,
+  currentPage,
+  onPageChange,
+  itemsPerPage,
+  totalPages
+}: AdminTableProps) {
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
       <div className="flex items-center  mb-4">
@@ -93,9 +99,9 @@ export default function AdminTable({ admins, currentPage, onPageChange, itemsPer
 
       <div className="mt-4 overflow-x-auto hide-scrollbar">
         <Pagination
-        itemsPerPage={10}
+          itemsPerPage={10}
           currentPage={currentPage}
-totalPages={Math.ceil(admins.length / itemsPerPage)}
+          totalPages={totalPages}
           onPageChange={onPageChange}
         />
       </div>

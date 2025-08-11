@@ -1,13 +1,15 @@
 import { apiRequest } from "./api";
 
-export const transactions = async () => {
+export const transactions = async (page: number, limit : number) => {
   const res = await apiRequest({
     method: "GET",
-    url: "/transactions?page=1&limit=200&filters[type]=deposit",
+    url: `/transactions?page=${page}&limit=${limit}`,
   });
   // return res.data; // ✅ return unwrapped token + user
   return res;
 };
+
+//&filters[type]=deposit
 
 
 export const transfers = async () => {
@@ -28,3 +30,21 @@ export const requiresApproval = async () => {
   // return res.data; // ✅ return unwrapped token + user
   return res;
 };
+
+export const approveTransfer = async (transferId: string) => {
+  const res = await apiRequest({
+    method: "POST",
+    url: `/transfers/${transferId}/approve`,
+  });
+  // return res.data; // ✅ return unwrapped token + user
+  return res;
+}
+
+export const rejectTransfer = async (transferId: string) => {
+  const res = await apiRequest({
+    method: "POST",
+    url: `/transfers/${transferId}/reject`,
+  });
+  // return res.data; // ✅ return unwrapped token + user
+  return res;
+}

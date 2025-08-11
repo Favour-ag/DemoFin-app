@@ -32,7 +32,7 @@ export default function UserTable({
       <div className="flex items-center flex-wrap gap-2  p-4">
         <h2 className="text-lg font-semibold text-gray-800">User lists</h2>
         <span className="bg-purple-100 text-purple-700 px-3 py-1 text-xs rounded-full whitespace-nowrap">
-          {users.length} users
+          {/* {users.length} users */}
         </span>
       </div>
 
@@ -58,7 +58,7 @@ export default function UserTable({
                 id={u._id}
                 name={`${u.firstname} ${u.lastname}`}
                 email={u.email}
-                status={u.isActive ? "active" : "pending"}
+                status={u.isActive ? "active" : "inactive"}
                 balance={u.walletBalance || 144.55}
                 date={new Date(u.createdAt).toLocaleDateString("en-US", {
                   month: "short",
@@ -75,7 +75,7 @@ export default function UserTable({
       <div className="mt-4 p-4">
         <Pagination
           currentPage={currentPage}   
-          totalPages={users.length / itemsPerPage}
+          totalPages={totalPages}
           itemsPerPage={itemsPerPage}
           onPageChange={(page) => {
             onPageChange(page);

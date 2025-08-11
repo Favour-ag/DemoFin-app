@@ -19,3 +19,16 @@ export function formatCurrency(amount: number | string): string {
 export function formatCurrencyWithSymbol(amount: number | string, symbol = '₦'): string {
   return `${symbol}${formatCurrency(amount)}`;
 }
+
+
+export function formatDateCustom(date: Date): string {
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  };
+
+  const formatted = date.toLocaleDateString("en-US", options);
+  return formatted.replace(/, (\d{4})$/, " $1"); // remove comma before year
+}

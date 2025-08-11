@@ -74,7 +74,7 @@ function SidePanel() {
   }
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 w-20 lg:w-56 bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ease-in-out">
+    <aside className=" inset-y-0 left-0 z-40 w-20 lg:w-56 bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ease-in-out">
       <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
         <div className="flex items-center justify-center mb-4 lg:justify-start pl-0 lg:pl-2 mt-2">
           <Link href="/dashboard" className="flex items-center gap-2 px-4 mb-8">

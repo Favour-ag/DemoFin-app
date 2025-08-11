@@ -46,7 +46,7 @@ export default function WalletsPage() {
           </div>
 
           {/* Filters and Create Button */}
-          <div className="mt-4 md:mt-0 flex gap-2 ">
+          {/* <div className="mt-4 md:mt-0 flex gap-2 ">
             <Button className="bg-white text-black border border-gray-300 px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-gray-50">
               All time ✕
             </Button>
@@ -57,7 +57,7 @@ export default function WalletsPage() {
               <ListFilter className="w-4 h-4" />
               More Filters
             </Button>
-          </div>
+          </div> */}
         </div>
 
         {/* Table */}

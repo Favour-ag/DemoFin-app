@@ -89,7 +89,7 @@ function Header() {
   if (!isHydrated) return null;
 
   return (
-    <div className="border-b border-gray-200 py-4 px-4 bg-white">
+    <div className="border-b top-0 z-20 sticky border-gray-200 py-4 px-4 bg-white">
       <div className="flex flex-row justify-between items-center">
         {/* Search Bar */}
         <div className="h-10 w-[356px] relative">

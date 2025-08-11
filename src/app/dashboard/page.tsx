@@ -18,6 +18,7 @@ import {
   overview,
   overviewMonthlyUserCount,
   overviewMonthlyTransactionCount,
+  transactionVolume,
 } from "../../lib/api/dashboardcalls";
 import { transactions } from "@/lib/api/transactioncalls";
 import { useEffect, useState } from "react";
@@ -48,6 +49,7 @@ export default function DashboardPage() {
   const [userData, setUserData] = useState<any[]>([]);
   const [transactionData, setTransactionData] = useState<any[]>([]);
   const [overviewLoading, setOverviewLoading] = useState(true);
+  const [volumeData, setVolumeData] = useState<any[]>([]);
 
   useEffect(() => {
     const getOverviewData = async () => {
@@ -82,10 +84,28 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
+    const getVolueData = async () => {
+      try {
+        const res = await transactionVolume();
+        // console.log("Transaction Volume API Response:", res);
+
+        const data = res?.data;
+        if (data) {
+          setVolumeData(data);
+        }
+      } catch (error) {
+        console.error("Error fetching transaction volume data:", error);
+      }
+    }
+  }, [volumeData] )
+
+  useEffect(() => {
     const getTransactionData = async () => {
       setTransactionLoading(true);
       try {
-        const res = await transactions();
+        const page = 1
+        const limit = 10
+        const res = await transactions(page, limit);
         const data = res?.data;
 
         const transactionArray = Array.isArray(data?.transactions)

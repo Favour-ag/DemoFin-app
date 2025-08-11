@@ -88,7 +88,7 @@ type Props = {
   id: string;
   name: string;
   email: string;
-  status: "active" | "pending";
+  status: "active" | "inactive";
   balance: number;
   date: string;
 };
@@ -166,6 +166,7 @@ export default function UserRow({
         {showActions && (
           <UserActionsDropdown
             userId={id}
+            status={status}
             onClose={() => setShowActions(false)}
           />
         )}

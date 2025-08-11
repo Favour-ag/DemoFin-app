@@ -29,9 +29,9 @@ export default function ClientLayout({
 
   return (
     <ClientWrapper>
-      <div className="flex w-full min-h-screen bg-gray-50 font-inter">
+      <div className="flex min-h-screen overflow-hidden h-screen bg-gray-50 font-inter">
         <SidePanel />
-        <div className="ml-20 lg:ml-56 w-full">
+        <div className="flex-1 h-full overflow-auto">
           <Header />
           {children}
         </div>

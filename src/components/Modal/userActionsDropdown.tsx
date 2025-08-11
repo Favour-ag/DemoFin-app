@@ -1,21 +1,40 @@
 // components/UserActionsDropdown.tsx
 "use client";
 
+import { activateUser } from "@/lib/api/usercalls";
 import { Eye, Pencil, Wallet, Slash } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface Props {
   userId: string;
   onClose: () => void;
+  status: string;
 }
 
-export default function UserActionsDropdown({ userId, onClose }: Props) {
+export default function UserActionsDropdown({
+  status,
+  userId,
+  onClose,
+}: Props) {
   const router = useRouter();
+
+  console.log(status, "user-d")
 
   const handleNavigate = (e: React.MouseEvent) => {
     e.stopPropagation();
     router.push(`/users/${userId}`);
     onClose();
+  };
+
+  const handleSuspend = async () => {
+    try {
+      const state = status === "active" ? "activate" : "deactivate";
+      console.log( state, "user status")
+      // const res = await activateUser(state, userId);
+      // console.log(res, "res");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -45,9 +64,12 @@ export default function UserActionsDropdown({ userId, onClose }: Props) {
           <Wallet className="w-4 h-4" />
           Manage wallet
         </li>
-        <li className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 cursor-pointer">
+        <li
+          onClick={handleSuspend}
+          className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 cursor-pointer"
+        >
           <Slash className="w-4 h-4" />
-          Suspend
+          {status === "active" ? "Suspend" : "Un-Suspend"}
         </li>
       </ul>
     </div>

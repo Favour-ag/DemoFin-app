@@ -71,6 +71,31 @@ export const activateUser = async ( userId: string, token?: string,) => {
     },
   }).then((res) => res.data);
 };
+
+export const activateAdmin = async ( userId: string, token?: string,) => {
+  return await apiRequest<{ data: any }>({
+    method: "PATCH",
+    url: `/admin-users/${userId}/activate`,
+    config: {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    },
+  }).then((res) => res);
+};
+
+
+export const deactivateAdmin = async ( userId: string,  token?: string,) => {
+  return await apiRequest<{ data: any }>({
+    method: "PATCH",
+    url: `/admin-users/${userId}/deactivate`,
+    config: {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    },
+  }).then((res) => res);
+};
 export const deactivateUser = async ( userId: string,  token?: string,) => {
   return await apiRequest<{ data: any }>({
     method: "PATCH",

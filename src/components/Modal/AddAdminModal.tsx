@@ -21,7 +21,7 @@ export default function AddAdminModal({
     firstName: "",
     lastName: "",
     email: "",
-    role: "admin",
+    role: "super-admin",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -51,7 +51,7 @@ export default function AddAdminModal({
       close();
     } catch (error: any) {
       console.error("Failed to add admin:", error);
-      setError(error?.message || "Failed to add admin. Please try again.");
+      setError(error?.message || error?.error || "Failed to add admin. Please try again.");
     } finally {
       setLoading(false);
     }

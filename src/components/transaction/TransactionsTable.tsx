@@ -123,7 +123,7 @@ export default function TransactionsTable({
               <th className="p-2 min-w-[200px]">Destination Transaction</th>
               <th className="p-2 min-w-[200px]">Status</th>
               <th className="p-2 min-w-[200px]">Date</th>
-              <th className="p-2">Action</th>
+              {/* <th className="p-2">Action</th> */}
             </tr>
           </thead>
         <tbody>
@@ -203,7 +203,7 @@ export default function TransactionsTable({
                 <td className="p-2 text-gray-600">
                   {formatDateCustom(new Date(transaction.createdAt))}
                 </td>
-                <td className="p-2 text-center text-gray-600">⋮</td>
+                {/* <td className="p-2 text-center text-gray-600">⋮</td> */}
               </tr>
             ))}
           

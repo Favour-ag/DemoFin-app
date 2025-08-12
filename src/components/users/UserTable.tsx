@@ -31,9 +31,9 @@ export default function UserTable({
       {/* Header */}
       <div className="flex items-center flex-wrap gap-2  p-4">
         <h2 className="text-lg font-semibold text-gray-800">User lists</h2>
-        <span className="bg-purple-100 text-purple-700 px-3 py-1 text-xs rounded-full whitespace-nowrap">
-          {/* {users.length} users */}
-        </span>
+        {/* <span className="bg-purple-100 text-purple-700 px-3 py-1 text-xs rounded-full whitespace-nowrap">
+          {users.length} users
+        </span> */}
       </div>
 
       {/* Table */}

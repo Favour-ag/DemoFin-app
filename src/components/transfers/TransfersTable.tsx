@@ -195,7 +195,7 @@ export default function TransfersTable({
                     <button
                       onClick={() => handleApproveTransfer(tx._id)}
                       disabled={loadingApprovals[tx._id] || loadingRejections[tx._id]}
-                      className={`bg-purple-300 text-purple-600 p-[5px] rounded disabled:opacity-50`}
+                      className={`bg-green-300 text-green-600 p-[5px] rounded disabled:opacity-50`}
                     >
                       {loadingApprovals[tx._id] ? "Approving..." : "Approve"}
                     </button>

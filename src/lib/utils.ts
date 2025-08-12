@@ -22,13 +22,30 @@ export function formatCurrencyWithSymbol(amount: number | string, symbol = '₦'
 
 
 export function formatDateCustom(date: Date): string {
-  const options: Intl.DateTimeFormatOptions = {
+  const dateOptions: Intl.DateTimeFormatOptions = {
     weekday: "long",
     month: "long",
     day: "numeric",
-    year: "numeric"
+    year: "numeric",
   };
 
-  const formatted = date.toLocaleDateString("en-US", options);
-  return formatted.replace(/, (\d{4})$/, " $1"); // remove comma before year
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  };
+
+  // Format date and remove the comma before year
+  const formattedDate = date
+    .toLocaleDateString("en-US", dateOptions)
+    .replace(/, (\d{4})$/, " $1");
+
+  // Format time and make AM/PM lowercase
+  const formattedTime = date
+    .toLocaleTimeString("en-US", timeOptions)
+    .toLowerCase();
+
+  return `${formattedDate} - ${formattedTime}`;
 }
+

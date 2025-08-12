@@ -43,13 +43,10 @@ export default function TransactionsTable({
 
   // Pagination calculation
   
-  const paginatedTransactions = transactions.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+
 
   const isNextDisabled =
-    paginatedTransactions.length < itemsPerPage || currentPage >= totalPages;
+    transactions.length < itemsPerPage || currentPage >= totalPages;
 
     console.log(transactions, "transactions")
 
@@ -130,7 +127,7 @@ export default function TransactionsTable({
             </tr>
           </thead>
         <tbody>
-           {paginatedTransactions.map((transaction: any, index: number) => (
+           {transactions.map((transaction: any, index: number) => (
               <tr key={`${transaction._id}-${index}`} className="border-b">
                 <td className="p-2">
                   <input type="checkbox" className="accent-gray-300" />

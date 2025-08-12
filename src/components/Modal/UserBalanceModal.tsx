@@ -68,6 +68,7 @@
 
 
 import { fetchWalletsByUserId } from "@/lib/api/walletcalls";
+import { formatCurrencyWithSymbol } from "@/lib/utils";
 import {
   Button,
   Dialog,
@@ -98,11 +99,11 @@ const currencySymbols: Record<string, string> = {
   // Add more as needed
 };
 
-function formatCurrency(amount: string | number, currency: string) {
-  const symbol = currencySymbols[currency] || "";
-  const numericAmount = typeof amount === "string" ? parseFloat(amount) : amount;
-  return `${symbol}${numericAmount.toLocaleString()}`;
-}
+// function formatCurrency(amount: string | number, currency: string) {
+//   const symbol = currencySymbols[currency] || "";
+//   const numericAmount = typeof amount === "string" ? parseFloat(amount) : amount;
+//   return `${symbol}${numericAmount.toLocaleString()}`;
+// }
 
 export default function UserBalanceModal({
   isOpen,
@@ -139,6 +140,8 @@ export default function UserBalanceModal({
     fetchUserWallets();
   }, [id]);
 
+  console.log(wallets, "wallets");
+
   return (
     <Dialog
       open={isOpen}
@@ -170,18 +173,18 @@ export default function UserBalanceModal({
                     </p>
                     <p>
                       Available Balance:{" "}
-                      {formatCurrency(wallet.availableBalance, wallet.currency)}
+                      {wallet.availableBalance}
+                      {/* {formatCurrencyWithSymbol(wallet.availableBalance, wallet.currency)} */}
                     </p>
                     <p>
                       Ledger Balance:{" "}
-                      {formatCurrency(wallet.ledgerBalance, wallet.currency)}
+                      {wallet.ledgerBalance}
+                      {/* {formatCurrencyWithSymbol(wallet.ledgerBalance, wallet.currency)} */}
                     </p>
                     <p>
                       Locked Balance:{" "}
-                      {formatCurrency(
-                        wallet.lockedBalance.$numberDecimal,
-                        wallet.currency
-                      )}
+                      {wallet.lockedBalance.$numberDecimal}
+                     
                     </p>
                   </div>
                 ))}

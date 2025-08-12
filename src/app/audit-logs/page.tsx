@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
@@ -43,7 +41,23 @@ export default function AuditLogPage() {
   const getAuditLogs = async () => {
     setLoading(true);
     try {
-      const data = await allAudit();
+      const firstRes = await allAudit(1, 1);
+      console.log(firstRes)
+      const totalCount =
+        firstRes?.metadata?.totalPages ||
+        firstRes?.metadata?.totalRecords ||
+        0;
+
+        console.log("Total audit logs count:", totalCount);
+
+      if (!totalCount) {
+        setAuditLogs([]);
+        return;
+      }
+
+      const allRes = await allAudit(1, totalCount);
+      const data = allRes;
+      console.log("Total audit logs count:", data);
       setAuditLogs(data || []);
     } catch (error) {
       console.error("Failed to fetch audit logs", error);
@@ -65,6 +79,8 @@ export default function AuditLogPage() {
         log.description.toLowerCase().includes(term) ||
         log.entityType.toLowerCase().includes(term)
     );
+          // setCurrentPage(1); // reset to first page after search
+
   }, [search, auditLogs]);
 
   const totalPages = Math.ceil(filteredAuditLogs.length / ITEMS_PER_PAGE);
@@ -78,26 +94,27 @@ export default function AuditLogPage() {
     // You can open a modal or side panel here
   };
 
-   if (loading) return (
-    <div className="w-full h-full flex items-center justify-center">
-       <Spinner />
-    </div>
-   );
+  if (loading)
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">Audit Logs</h2>
         <div className="flex items-center gap-3">
-          <Button  size="sm" onClick={getAuditLogs}>
+          <Button size="sm" onClick={getAuditLogs}>
             <RotateCcw className="w-4 h-4 mr-2" />
             Refresh
           </Button>
-          <Button  size="sm">
+          <Button size="sm">
             <CalendarDays className="w-4 h-4 mr-2" />
             Date Filter
           </Button>
-          <Button  size="sm">
+          <Button size="sm">
             <ListFilter className="w-4 h-4 mr-2" />
             Action Type
           </Button>

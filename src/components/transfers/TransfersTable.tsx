@@ -62,17 +62,15 @@ export default function TransfersTable({
 }: TransactionsTableProps) {
   const tableRef = useRef<HTMLDivElement>(null);
 
+
   // Track loading states for approve/reject per row
   const [loadingApprovals, setLoadingApprovals] = useState<Record<string, boolean>>({});
   const [loadingRejections, setLoadingRejections] = useState<Record<string, boolean>>({});
 
-  const paginated = transfers.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+ 
 
   const isNextDisabled =
-    paginated.length < itemsPerPage || currentPage >= totalPages;
+    transfers.length < itemsPerPage || currentPage >= totalPages;
 
   const handleApproveTransfer = async (id: string) => {
     try {
@@ -105,9 +103,7 @@ export default function TransfersTable({
         <h2 className="text-lg font-semibold text-gray-800">
           Transfers History
         </h2>
-        <span className="bg-purple-100 text-purple-700 px-3 py-1 text-xs rounded-full">
-          {transfers.length} transactions
-        </span>
+        
       </div>
 
       {/* Table */}
@@ -129,7 +125,7 @@ export default function TransfersTable({
           </thead>
 
           <tbody>
-            {paginated.map((tx, index) => (
+            {transfers.map((tx, index) => (
               <tr key={`${tx._id}-${index}`} className="border-b">
                 <td className="p-2">
                   <input type="checkbox" className="accent-gray-300" />

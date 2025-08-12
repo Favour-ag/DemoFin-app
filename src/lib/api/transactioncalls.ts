@@ -12,10 +12,10 @@ export const transactions = async (page: number, limit : number) => {
 //&filters[type]=deposit
 
 
-export const transfers = async () => {
+export const transfers = async (page: number, limit: number) => {
   const res = await apiRequest({
     method: "GET",
-    url: "/transfers",
+    url: `/transfers?page=${page}&limit=${limit}`,
   });
   // return res.data; // ✅ return unwrapped token + user
   return res;

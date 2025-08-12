@@ -155,7 +155,9 @@ export default function UserRow({
         </span>
       </td>
 
-      <td className="px-4 py-4">{formatDateCustom(new Date(date))}</td>
+      <td className="px-4 py-4">
+        <span>{formatDateCustom(new Date(date))}</span>
+      </td>
 
       <td className="px-4 py-4 relative text-center">
         <button

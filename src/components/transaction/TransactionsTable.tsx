@@ -201,7 +201,7 @@ export default function TransactionsTable({
                   </span>
                 </td>
                 <td className="p-2 text-gray-600">
-                  {formatDateCustom(new Date(transaction.createdAt))}
+                 <span> {formatDateCustom(new Date(transaction.createdAt))}</span>
                 </td>
                 {/* <td className="p-2 text-center text-gray-600">⋮</td> */}
               </tr>

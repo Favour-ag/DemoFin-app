@@ -142,6 +142,7 @@ export default function AuditLogPage() {
       </div>
 
       <AuditLogsTable
+      loading={loading}
         auditLogs={paginatedLogs}
         currentPage={currentPage}
         totalPages={totalPages}

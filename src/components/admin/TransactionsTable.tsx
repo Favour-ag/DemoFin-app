@@ -9,6 +9,7 @@ import Avatar from "../Avatar";
 import Pagination from "../Pagination";
 import { formatDateCustom } from "@/lib/utils";
 import { activateAdmin, deactivateAdmin } from "@/lib/api/usercalls";
+import Spinner from "../Spinner";
 
 type Admin = {
   _id: string;
@@ -24,6 +25,7 @@ type AdminTableProps = {
   currentPage: number;
   itemsPerPage: number;
   totalPages: number;
+  loading: boolean;
   onPageChange: (page: number) => void;
 };
 
@@ -33,6 +35,7 @@ export default function AdminTable({
   onPageChange,
   itemsPerPage,
   totalPages,
+  loading
 }: AdminTableProps) {
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -66,6 +69,22 @@ export default function AdminTable({
   };
 
   console.log(admins, "admins");
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-10">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!loading && admins.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-gray-500">No administrators found</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
@@ -131,7 +150,10 @@ export default function AdminTable({
                   </span>
                 </td>
                 <td className="p-3 text-gray-600">
-                  {formatDateCustom(new Date(admin.login))}
+                 <div>
+                  <p>{formatDateCustom(new Date(admin.login)).formattedDate}</p>
+                  <p>{formatDateCustom(new Date(admin.login)).formattedTime}</p>
+                 </div>
                 </td>
                 <td className="p-3">
                   <div>

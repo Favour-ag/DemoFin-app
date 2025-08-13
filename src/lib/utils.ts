@@ -22,7 +22,7 @@ export function formatCurrencyWithSymbol(
   return `${symbol}${formatCurrency(amount)}`;
 }
 
-export function formatDateCustom(date: Date) {
+export function formatDateCustom(date: Date): { formattedDate: string; formattedTime: string } {
   const dateOptions: Intl.DateTimeFormatOptions = {
     weekday: "long",
     month: "long",
@@ -45,6 +45,10 @@ export function formatDateCustom(date: Date) {
     .toLocaleTimeString("en-US", timeOptions)
     .toLowerCase();
 
-  return `${formattedDate}\n${formattedTime}`;
+  return {
+    formattedDate,
+    formattedTime
+  };
 }
+
 

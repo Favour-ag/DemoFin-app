@@ -85,6 +85,39 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
+    const getRevenueData = async () => {
+      try {
+        const res = await overview();
+        // console.log("Overview API Response:", res);
+
+        const data = res?.data;
+        console.log("Revenue Data:", data);
+        // console.log(data, "data")
+
+        //  Safely find USD balance with type
+        // const usdBalance: Balance | undefined = data?.balances?.find(
+        //   (bal: Balance) => bal.currency === "NGN"
+        // );
+
+        // if (data) {
+        //   setStats({
+        //     totalUsers: data.counts?.totalUsers || 0,
+        //     walletBalanceUSD: usdBalance?.totalAmount || 0,
+        //     transactions: data.counts?.transactions || 0,
+        //     transactionVolumeUSD: data.transactionVolumeInUSD || 0,
+        //   });
+        // }
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getRevenueData();
+  }, []);
+
+  useEffect(() => {
     const getVolumeData = async () => {
       try {
         const res = await transactionVolume();
@@ -216,15 +249,7 @@ export default function DashboardPage() {
               </p>
             </div>
 
-            <div className="flex items-center gap-1">
-              <Button
-                className="border text-gray-700 text-sm md:text-base"
-                bgColor="#fff"
-              >
-                <CalendarDays className="w-4 h-4" />
-                <span className="text-sm">Jan 06, 2025 - Jan 13, 2025</span>
-              </Button>
-            </div>
+           
           </div>
 
           {/* Stat Cards */}

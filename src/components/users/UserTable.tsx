@@ -1,5 +1,6 @@
 import Pagination from "@/components/Pagination";
 import UserRow from "@/components/users/UserRow";
+import Spinner from "../Spinner";
 
 export interface User {
   _id: string;
@@ -17,15 +18,35 @@ interface UserTableProps {
   totalPages: number;
   itemsPerPage: number;
   onPageChange: (page: number) => void;
+  loading: boolean;
 }
 
 export default function UserTable({
+  loading,
   users,
   currentPage,
   totalPages,
   onPageChange,
   itemsPerPage
 }: UserTableProps) {
+
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!loading && users.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-gray-500">No users found</p>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white  rounded-lg shadow-sm border border-gray-200">
       {/* Header */}

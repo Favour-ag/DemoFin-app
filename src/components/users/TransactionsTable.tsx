@@ -20,9 +20,10 @@ type Transaction = {
 
 type Props = {
   transactions: Transaction[];
+  loading: boolean;
 };
 
-export default function TransactionTable({ transactions }: Props) {
+export default function TransactionTable({ transactions, loading }: Props) {
   const renderStatusBadge = (status: string) => {
     switch (status) {
       case "Completed":

@@ -154,6 +154,7 @@ export default function AdminManagement() {
         {/* Table */}
         <div className="mt-6">
           <TransactionTable
+          loading={loading}
             admins={filteredAdmins.slice(
               (currentPage - 1) * itemsPerPage,
               currentPage * itemsPerPage

@@ -200,12 +200,10 @@ export default function TransfersPage() {
             </div>
           </div>
 
-          {/* Table */}
-          {loading ? (
-            <Spinner />
-          ) : (
+         
             <div className="mt-6">
               <TransfersTable
+              loading={loading}
                 transfers={paginatedTransfers}
                 currentPage={currentPage}
                 totalPages={Math.ceil(
@@ -215,7 +213,7 @@ export default function TransfersPage() {
                 onPageChange={setCurrentPage}
               />
             </div>
-          )}
+          
         </main>
       </div>
     </ProtectedRoute>

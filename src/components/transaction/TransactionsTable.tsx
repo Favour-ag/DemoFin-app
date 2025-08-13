@@ -7,6 +7,7 @@ import Pagination from "../Pagination";
 import { ArrowDown, ArrowUp, Check, Clock, CornerUpLeft } from "lucide-react";
 import Avatar from "../Avatar";
 import { formatDateCustom } from "@/lib/utils";
+import Spinner from "../Spinner";
 
 type Transaction = {
   _id: string;
@@ -25,30 +26,55 @@ type Transaction = {
 };
 
 type TransactionsTableProps = {
-  transactions: any
+  transactions: any;
   currentPage: number;
   totalPages: number;
+  loading: boolean;
   onPageChange: (page: number) => void;
 };
 
-export default function TransactionsTable({ 
-  transactions, 
-  currentPage, 
+export default function TransactionsTable({
+  transactions,
+  loading,
+  currentPage,
   onPageChange,
-  totalPages
+  totalPages,
 }: TransactionsTableProps) {
   const tableRef = useRef<HTMLDivElement>(null);
 
   const itemsPerPage = 10;
 
   // Pagination calculation
-  
-
 
   const isNextDisabled =
     transactions.length < itemsPerPage || currentPage >= totalPages;
 
-    console.log(transactions, "transactions")
+  console.log(transactions, "transactions");
+
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-10">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!loading && transactions.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-14 px-4 bg-white rounded-lg border border-gray-200">
+        <div className="flex items-center justify-center w-16 h-16 rounded-full bg-purple-50 mb-4">
+          <ArrowDown className="h-8 w-8 text-purple-600" />
+        </div>
+        <h3 className="text-lg font-semibold text-gray-700">
+          No transactions found
+        </h3>
+        <p className="text-sm text-gray-500 mt-1 max-w-sm text-center">
+          It seems like you haven't made any transactions yet.
+        </p>
+      </div>
+    );
+  }
 
   /* ---------------- render ---------------- */
   return (
@@ -64,11 +90,10 @@ export default function TransactionsTable({
       </div>
 
       {/* Table */}
-      
 
-<div className="relative overflow-x-auto  sm:rounded-lg">
-    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        {/* <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <div className="relative overflow-x-auto  sm:rounded-lg">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          {/* <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" className="p-4">
                     <div className="flex items-center">
@@ -111,7 +136,7 @@ export default function TransactionsTable({
                 </th>
             </tr>
         </thead> */}
-         <thead>
+          <thead>
             <tr className="text-left border-b text-gray-500 font-medium bg-gray-50">
               <th className="p-2">
                 <input type="checkbox" className="accent-gray-300" />
@@ -126,24 +151,20 @@ export default function TransactionsTable({
               {/* <th className="p-2">Action</th> */}
             </tr>
           </thead>
-        <tbody>
-           {transactions.map((transaction: any, index: number) => (
+          <tbody>
+            {transactions.map((transaction: any, index: number) => (
               <tr key={`${transaction._id}-${index}`} className="border-b">
                 <td className="p-2">
                   <input type="checkbox" className="accent-gray-300" />
                 </td>
-                <td className="p-2 break-all font-medium">
-                  {transaction._id}
-                </td>
+                <td className="p-2 break-all font-medium">{transaction._id}</td>
                 <td className="p-2 flex items-center gap-2">
                   <Avatar
-                  
                     name={`${transaction.owner.firstname} ${transaction.owner.lastname}`}
                   />
                   <div>
                     <div className="font-medium">
-                      {transaction.owner.firstname}{" "}
-                      {transaction.owner.lastname}
+                      {transaction.owner.firstname} {transaction.owner.lastname}
                     </div>
                     <div className="text-xs text-gray-500">
                       {transaction.owner.email}
@@ -151,14 +172,11 @@ export default function TransactionsTable({
                   </div>
                 </td>
 
-            
                 <td className="p-2 min-w-[200px]">
                   <span
                     className={`inline-flex items-center gap-1 text-xs font-semibold text-purple-500 bg-purple-200 px-2 py-1 rounded-full `}
                   >
-                    {transaction.direction === "debit" && (
-                      <ArrowUp size={14} />
-                    )}
+                    {transaction.direction === "debit" && <ArrowUp size={14} />}
                     {transaction.direction === "credit" && (
                       <ArrowDown size={14} />
                     )}
@@ -177,7 +195,7 @@ export default function TransactionsTable({
                     transaction.destinationAmount.replace(/,/g, "")
                   ).toLocaleString()}
                 </td>
-                
+
                 <td className="p-2">
                   <span
                     className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full ${
@@ -188,12 +206,8 @@ export default function TransactionsTable({
                         : "bg-red-100 text-red-600"
                     }`}
                   >
-                    {transaction.status === "Completed" && (
-                      <Check size={14} />
-                    )}
-                    {transaction.status === "Pending" && (
-                      <Clock size={14} />
-                    )}
+                    {transaction.status === "Completed" && <Check size={14} />}
+                    {transaction.status === "Pending" && <Clock size={14} />}
                     {transaction.status === "Refunded" && (
                       <CornerUpLeft size={14} />
                     )}
@@ -201,17 +215,27 @@ export default function TransactionsTable({
                   </span>
                 </td>
                 <td className="p-2 text-gray-600">
-                 <span> {formatDateCustom(new Date(transaction.createdAt))}</span>
+                  <p>
+                    {" "}
+                    {
+                      formatDateCustom(new Date(transaction.createdAt))
+                        .formattedDate
+                    }
+                  </p>
+                  <p>
+                    {" "}
+                    {
+                      formatDateCustom(new Date(transaction.createdAt))
+                        .formattedTime
+                    }
+                  </p>
                 </td>
                 {/* <td className="p-2 text-center text-gray-600">⋮</td> */}
               </tr>
             ))}
-          
-        </tbody>
-    </table>
-</div>
-
-   
+          </tbody>
+        </table>
+      </div>
 
       {/* Pagination */}
       <div className="mt-4 p-2">

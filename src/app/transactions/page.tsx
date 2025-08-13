@@ -1,6 +1,3 @@
-
-
-
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
@@ -29,7 +26,9 @@ type Transaction = {
 
 export default function TransactionsPage() {
   const [transactionList, setTransactionList] = useState<Transaction[]>([]);
-  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
+  const [filteredTransactions, setFilteredTransactions] = useState<
+    Transaction[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,7 +49,7 @@ export default function TransactionsPage() {
           firstRes?.data?.transactions?.length ||
           0;
 
-          console.log("Total transactions count:", totalCount);
+        console.log("Total transactions count:", totalCount);
 
         if (!totalCount) {
           setTransactionList([]);
@@ -92,7 +91,8 @@ export default function TransactionsPage() {
       setFilteredTransactions(transactionList);
     } else {
       const filtered = transactionList.filter((transaction) => {
-        const fullName = `${transaction.owner.firstname} ${transaction.owner.lastname}`.toLowerCase();
+        const fullName =
+          `${transaction.owner.firstname} ${transaction.owner.lastname}`.toLowerCase();
         const email = transaction.owner.email.toLowerCase();
         const amount = transaction.sourceAmount.replace(/,/g, "");
         const description = transaction.description?.toLowerCase() || "";
@@ -133,13 +133,15 @@ export default function TransactionsPage() {
               </p>
             </div>
             <div className="flex items-center gap-1">
-              <Button className="border text-gray-700 text-sm md:text-base" bgColor="#fff">
+              <Button
+                className="border text-gray-700 text-sm md:text-base"
+                bgColor="#fff"
+              >
                 <CalendarDays className="w-4 h-4" />
                 <span className="text-sm">Jan 06, 2025 - Jan 13, 2025</span>
               </Button>
             </div>
           </div>
-
           {/* Filters & Search */}
           <div className="flex flex-col md:flex-row justify-between p-3 items-start md:items-center bg-gray-50 mt-4 relative">
             <div className="h-10 w-[356px] relative">
@@ -160,20 +162,19 @@ export default function TransactionsPage() {
               </Button>
             </div> */}
           </div>
-
           {/* Table */}
-          {loading ? (
-            <Spinner />
-          ) : (
-            <div className="mt-6">
-              <TransactionsTable
-                transactions={paginatedTransactions}
-                currentPage={currentPage}
-                onPageChange={setCurrentPage}
-                totalPages={Math.ceil(filteredTransactions.length / ITEMS_PER_PAGE)}
-              />
-            </div>
-          )}
+          <div className="mt-6">
+            <TransactionsTable
+              loading={loading}
+              transactions={paginatedTransactions}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+              totalPages={Math.ceil(
+                filteredTransactions.length / ITEMS_PER_PAGE
+              )}
+            />
+          </div>
+          
         </main>
       </div>
     </ProtectedRoute>

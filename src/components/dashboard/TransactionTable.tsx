@@ -1,7 +1,14 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Check, Clock, ArrowDown, ArrowUp, XCircle } from "lucide-react";
+import {
+  Check,
+  Clock,
+  ArrowDown,
+  ArrowUp,
+  XCircle,
+  CircleDollarSign,
+} from "lucide-react";
 import Avatar from "../Avatar";
 import Button from "../Button";
 import Pagination from "../Pagination";
@@ -32,6 +39,31 @@ export default function TransactionTable({
 
   const isNextDisabled =
     paginatedTransactions.length < itemsPerPage || currentPage >= totalPages;
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-10">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!loading && transactions.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-14 px-4 bg-white rounded-lg border border-gray-200">
+        <div className="flex items-center justify-center w-16 h-16 rounded-full bg-purple-50 mb-4">
+          <CircleDollarSign className="h-8 w-8 text-purple-600" />
+        </div>
+        <h3 className="text-lg font-semibold text-gray-700">
+          No transactions found
+        </h3>
+        <p className="text-sm text-gray-500 mt-1 max-w-sm text-center">
+          Your recent transactions will appear here once they are made. Try
+          adjusting filters or check back later.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-md">
@@ -76,7 +108,7 @@ export default function TransactionTable({
                 </tr>
               </thead>
               <tbody>
-                {paginatedTransactions.map((transaction) => (
+                {paginatedTransactions.map((transaction: any) => (
                   <tr
                     key={transaction._id}
                     className="border-b hover:bg-gray-50"
@@ -157,7 +189,20 @@ export default function TransactionTable({
                       </span>
                     </td>
                     <td className="p-2 text-gray-600">
-                      {formatDateCustom(new Date(transaction.createdAt))}
+                      <div>
+                        <p>
+                          {
+                            formatDateCustom(new Date(transaction.createdAt))
+                              .formattedDate
+                          }
+                        </p>
+                        <p>
+                          {
+                            formatDateCustom(new Date(transaction.createdAt))
+                              .formattedTime
+                          }
+                        </p>
+                      </div>
                     </td>
                   </tr>
                 ))}

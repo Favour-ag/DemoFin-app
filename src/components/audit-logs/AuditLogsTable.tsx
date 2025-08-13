@@ -6,6 +6,7 @@ import Pagination from "../Pagination";
 import Button from "../Button";
 import Link from "next/link";
 import { formatDateCustom } from "@/lib/utils";
+import Spinner from "../Spinner";
 
 type AuditLog = {
   _id: string;
@@ -30,14 +31,32 @@ type AuditLogsTableProps = {
   totalPages: number;
   onPageChange: (page: number) => void;
   onViewLog?: (log: AuditLog) => void;
+  loading: boolean;
 };
 
 export default function AuditLogsTable({
   auditLogs,
+  loading,
   currentPage,
   onPageChange,
   onViewLog,
 }: AuditLogsTableProps) {
+  if (loading) {
+    return (
+      <div className="flex justify-center py-10">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!loading && auditLogs.length === 0) {
+    return (
+      <div className="flex justify-center py-10">
+        <p className="text-gray-500">No audit logs found.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
       {/* Title */}
@@ -86,7 +105,14 @@ export default function AuditLogsTable({
                 </td> */}
                 <td className="p-2 text-gray-500">{log.ipAddress}</td>
                 <td className="p-2 text-gray-500">
-                  {formatDateCustom(new Date(log.timestamp))}
+                  <div>
+                    <p>
+                      {formatDateCustom(new Date(log.createdAt)).formattedDate}
+                    </p>
+                    <p>
+                      {formatDateCustom(new Date(log.createdAt)).formattedTime}
+                    </p>
+                  </div>
                 </td>
                 <td className="p-2">
                   <Link
@@ -106,7 +132,7 @@ export default function AuditLogsTable({
       {/* Pagination */}
       <div className="mt-4 overflow-x-auto hide-scrollbar">
         <Pagination
-        itemsPerPage={10}
+          itemsPerPage={10}
           currentPage={currentPage}
           totalPages={10}
           onPageChange={onPageChange}

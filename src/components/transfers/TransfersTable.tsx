@@ -15,6 +15,7 @@ import Avatar from "../Avatar";
 import Pagination from "../Pagination";
 import { approveTransfer, rejectTransfer } from "@/lib/api/transactioncalls";
 import { formatDateCustom } from "@/lib/utils";
+import Spinner from "../Spinner";
 
 type Transfer = {
   _id: string;
@@ -51,6 +52,7 @@ type TransactionsTableProps = {
   totalPages: number;
   itemsPerPage: number;
   onPageChange: (page: number) => void;
+  loading: boolean;
 };
 
 export default function TransfersTable({
@@ -58,7 +60,8 @@ export default function TransfersTable({
   currentPage,
   onPageChange,
   totalPages,
-  itemsPerPage
+  itemsPerPage,
+  loading,
 }: TransactionsTableProps) {
   const tableRef = useRef<HTMLDivElement>(null);
 
@@ -95,6 +98,22 @@ export default function TransfersTable({
       setLoadingRejections(prev => ({ ...prev, [id]: false }));
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-10">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!loading && transfers.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-gray-500">No transfers found</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
@@ -184,7 +203,10 @@ export default function TransfersTable({
                   </div>
                 </td>
                 <td className="p-2 text-gray-600">
-                  {formatDateCustom(new Date(tx.createdAt))}
+                 <div>
+                  <p>{formatDateCustom(new Date(tx.createdAt)).formattedDate}</p>
+                  <p>{formatDateCustom(new Date(tx.createdAt)).formattedTime}</p>
+                 </div>
                 </td>
                 <td className="p-2 text-center text-gray-600">
                   <div className="flex items-center space-x-[10px] justify-center">

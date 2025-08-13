@@ -8,6 +8,14 @@ export const overview = async () => {
   // return res.data; // ✅ return unwrapped token + user
   return res;
 };
+export const revenue = async () => {
+  const res = await apiRequest({
+    method: "GET",
+    url: "/revenue",
+  });
+  // return res.data; // ✅ return unwrapped token + user
+  return res;
+};
 export const transactionVolume = async () => {
   const res = await apiRequest({
     method: "GET",

@@ -19,6 +19,7 @@ import {
   overviewMonthlyUserCount,
   overviewMonthlyTransactionCount,
   transactionVolume,
+  revenue,
 } from "../../lib/api/dashboardcalls";
 import { transactions } from "@/lib/api/transactioncalls";
 import { useEffect, useState } from "react";
@@ -87,7 +88,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const getRevenueData = async () => {
       try {
-        const res = await overview();
+        const res = await revenue();
         // console.log("Overview API Response:", res);
 
         const data = res?.data;
@@ -256,6 +257,56 @@ export default function DashboardPage() {
           <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mt-6">
             <StatCard
               title="Total Users"
+              value={loading ? <Spinner /> : stats.totalUsers.toString()}
+              percent={40}
+              icon={<Users className="w-4 md:w-5 h-4 md:h-5" />}
+              iconBgColor="bg-blue-50"
+              trend="up"
+            />
+            <StatCard
+              title="Wallet Balance"
+              value={
+                loading ? <Spinner /> : `${formatCurrencyWithSymbol(stats.walletBalanceUSD.toFixed(2))}`
+              }
+              percent={40}
+              icon={
+                <Wallet className="w-4 md:w-5 h-4 md:h-5 text-purple-800" />
+              }
+              iconBgColor="bg-purple-50"
+              trend="up"
+            />
+            <StatCard
+              title="Transactions"
+              value={loading ? <Spinner /> : stats.transactions.toString()}
+              percent={40}
+              icon={
+                <CircleDollarSign className="w-4 md:w-5 h-4 md:h-5 text-orange-500" />
+              }
+              iconBgColor="bg-orange-50"
+              trend="up"
+            />
+            <StatCard
+              title="Transaction Volume"
+              value={
+                loading ? (
+                  <Spinner />
+                ) : (
+                  <span>
+                    {formatCurrencyWithSymbol(volumeData.toFixed(2))}
+                  </span>
+                )
+              }
+              percent={40}
+              icon={
+                <BarChart2 className="w-4 md:w-5 h-4 md:h-5 text-green-800" />
+              }
+              iconBgColor="bg-green-50"
+              trend="up"
+            />
+          </section>
+           <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mt-6">
+            <StatCard
+              title="Profit from Cards"
               value={loading ? <Spinner /> : stats.totalUsers.toString()}
               percent={40}
               icon={<Users className="w-4 md:w-5 h-4 md:h-5" />}

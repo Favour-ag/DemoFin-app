@@ -48,6 +48,7 @@ export const addAdmin = async (token?: string, data?: any) => {
     },
   }).then((res) => res.data);
 };
+
 export const getAdmin = async ({ page, limit, token }: { page: number; limit: number; token?: string }) => {
   return await apiRequest<{ data: any }>({
     method: "GET",
@@ -72,10 +73,10 @@ export const activateUser = async ( userId: string, token?: string,) => {
   }).then((res) => res.data);
 };
 
-export const activateAdmin = async ( userId: string, token?: string,) => {
+export const activateAdmin = async ( id: string, token?: string,) => {
   return await apiRequest<{ data: any }>({
     method: "PATCH",
-    url: `/admin-users/${userId}/activate`,
+    url: `/admin-users/${id}/activate`,
     config: {
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -85,10 +86,10 @@ export const activateAdmin = async ( userId: string, token?: string,) => {
 };
 
 
-export const deactivateAdmin = async ( userId: string,  token?: string,) => {
+export const deactivateAdmin = async ( id: string,  token?: string,) => {
   return await apiRequest<{ data: any }>({
     method: "PATCH",
-    url: `/admin-users/${userId}/deactivate`,
+    url: `/admin-users/${id}/deactivate`,
     config: {
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),

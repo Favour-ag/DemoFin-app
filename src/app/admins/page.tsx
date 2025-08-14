@@ -48,23 +48,23 @@ export default function AdminManagement() {
       const fullResponse = await getAdmin({ limit: totalCount, page: 1 });
       const adminData = fullResponse?.records || fullResponse || [];
 
-      const transformedAdmins: Admin[] = adminData.map((admin: any) => ({
-        _id: admin._id,
-        name:
-          admin.name ||
-          `${admin.firstName || ""} ${admin.lastName || ""}`.trim(),
-        email: admin.email,
-        role: admin.role || "Admin",
-        status: admin.isActive !== false ? "Active" : "Inactive",
-        login: admin.lastLogin
-          ? new Date(admin.lastLogin).toLocaleDateString()
-          : admin.createdAt
-          ? new Date(admin.createdAt).toLocaleDateString()
-          : "N/A",
-      }));
+      // const transformedAdmins: Admin[] = adminData.map((admin: any) => ({
+      //   _id: admin._id,
+      //   name:
+      //     admin.name ||
+      //     `${admin.firstName || ""} ${admin.lastName || ""}`.trim(),
+      //   email: admin.email,
+      //   role: admin.role || "Admin",
+      //   status: admin.isActive !== false ? "Active" : "Inactive",
+      //   login: admin.lastLogin
+      //     ? new Date(admin.lastLogin).toLocaleDateString()
+      //     : admin.createdAt
+      //     ? new Date(admin.createdAt).toLocaleDateString()
+      //     : "N/A",
+      // }));
 
-      setAdmins(transformedAdmins);
-      setFilteredAdmins(transformedAdmins);
+      setAdmins(adminData);
+      setFilteredAdmins(adminData);
     } catch (error) {
       console.error("Failed to fetch admins:", error);
       setAdmins([]);
@@ -77,6 +77,30 @@ export default function AdminManagement() {
   useEffect(() => {
     fetchAdmins();
   }, []);
+
+  const reloadData = async () => {
+    try {
+      // Phase 1: Get total count
+      const firstResponse = await getAdmin({ limit: 1, page: 1 });
+      const totalCount =
+        firstResponse?.total ||
+        firstResponse?.count ||
+        firstResponse?.records?.length ||
+        0;
+      setLimit(totalCount);
+
+      // Phase 2: Fetch all admins
+      const fullResponse = await getAdmin({ limit: totalCount, page: 1 });
+      const adminData = fullResponse?.records || fullResponse || [];
+
+      setAdmins(adminData);
+      setFilteredAdmins(adminData);
+    } catch (error) {
+      console.error("Failed to fetch admins:", error);
+      setAdmins([]);
+      setFilteredAdmins([]);
+    }
+  };
 
   useEffect(() => {
     if (!searchTerm) {
@@ -154,7 +178,8 @@ export default function AdminManagement() {
         {/* Table */}
         <div className="mt-6">
           <TransactionTable
-          loading={loading}
+            reloadData={reloadData}
+            loading={loading}
             admins={filteredAdmins.slice(
               (currentPage - 1) * itemsPerPage,
               currentPage * itemsPerPage

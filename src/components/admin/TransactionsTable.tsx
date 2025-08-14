@@ -16,17 +16,18 @@ type Admin = {
   name: string;
   email: string;
   role: string;
-  status: string;
+  isDisabled: boolean;
   login: string;
 };
 
 type AdminTableProps = {
-  admins: Admin[];
+  admins: any;
   currentPage: number;
   itemsPerPage: number;
   totalPages: number;
   loading: boolean;
   onPageChange: (page: number) => void;
+  reloadData: () => void; // 👈 New
 };
 
 export default function AdminTable({
@@ -35,7 +36,8 @@ export default function AdminTable({
   onPageChange,
   itemsPerPage,
   totalPages,
-  loading
+  loading,
+  reloadData // 👈 New
 }: AdminTableProps) {
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -46,6 +48,7 @@ export default function AdminTable({
     try {
       const res = await activateAdmin(adminId);
       console.log(res);
+      reloadData(); // 👈 Call the new function to refresh data
     } catch (err: any) {
       console.error(err);
       setError(err.message || "Failed to activate admin");
@@ -60,6 +63,7 @@ export default function AdminTable({
     try {
       const res = await deactivateAdmin(adminId);
       console.log(res);
+      reloadData(); // 👈 Call the new function to refresh data
     } catch (err: any) {
       console.error(err);
       setError(err.message || "Failed to deactivate admin");
@@ -68,7 +72,6 @@ export default function AdminTable({
     }
   };
 
-  console.log(admins, "admins");
 
   if (loading) {
     return (
@@ -110,13 +113,13 @@ export default function AdminTable({
               <th className="p-3">Name</th>
               <th className="p-3">Role</th>
               <th className="p-3">Status</th>
-              <th className="p-3">Last Login</th>
+              {/* <th className="p-3">Last Login</th> */}
               <th className="p-3">Action</th>
             </tr>
           </thead>
           <tbody>
-            {admins.map((admin) => (
-              <tr key={admin._id} className="border-b hover:bg-gray-50">
+            {admins.map((admin: any) => (
+              <tr key={admin._id} onClick={()=> console.log(admin, "single admin")} className="border-b hover:bg-gray-50">
                 <td className="p-3">
                   <input type="checkbox" className="accent-gray-300" />
                 </td>
@@ -141,38 +144,34 @@ export default function AdminTable({
                 <td className="p-3">
                   <span
                     className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full ${
-                      admin.status === "Active"
+                      admin.isDisabled === false
                         ? "bg-green-100 text-green-600"
                         : "bg-red-100 text-red-600"
                     }`}
                   >
-                    {admin.status}
+                    {admin.isDisabled === true ? "Inactive" : "Active"}
                   </span>
                 </td>
-                <td className="p-3 text-gray-600">
-                 <div>
-                  <p>{formatDateCustom(new Date(admin.login)).formattedDate}</p>
-                  <p>{formatDateCustom(new Date(admin.login)).formattedTime}</p>
-                 </div>
-                </td>
+               
                 <td className="p-3">
                   <div>
                     {loadingId === admin._id ? (
                     <Loader2 className="w-4 h-4 animate-spin text-gray-500" />
-                  ) : admin.status === "Active" ? (
+                  ) : admin.isDisabled === true ? (
+                     <button
+                      onClick={() => handleActivateAdmin(admin._id)}
+                      className="text-xs px-3 py-1 bg-green-100 text-green-600 rounded hover:bg-green-200"
+                    >
+                      Activate
+                    </button>
+                  ) : (
                     <button
                       onClick={() => handleDeactivateAdmin(admin._id)}
                       className="text-xs px-3 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200"
                     >
                       Deactivate
                     </button>
-                  ) : (
-                    <button
-                      onClick={() => handleActivateAdmin(admin._id)}
-                      className="text-xs px-3 py-1 bg-green-100 text-green-600 rounded hover:bg-green-200"
-                    >
-                      Activate
-                    </button>
+                   
                   )}
                   </div>
                 </td>

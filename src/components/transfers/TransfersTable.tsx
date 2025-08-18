@@ -213,14 +213,14 @@ export default function TransfersTable({
                     <button
                       onClick={() => handleApproveTransfer(tx._id)}
                       disabled={loadingApprovals[tx._id] || loadingRejections[tx._id]}
-                      className={`bg-green-300 text-green-600 p-[5px] rounded disabled:opacity-50`}
+                      className={`bg-green-100 text-green-600 p-[3px_10px] text-[12px] rounded-full disabled:opacity-50`}
                     >
                       {loadingApprovals[tx._id] ? "Approving..." : "Approve"}
                     </button>
                     <button
                       onClick={() => handleRejectTransfer(tx._id)}
                       disabled={loadingRejections[tx._id] || loadingApprovals[tx._id]}
-                      className={`bg-red-300 text-red-600 p-[5px] rounded disabled:opacity-50`}
+                      className={`bg-red-100 text-red-600 p-[3px_10px] text-[12px] rounded-full disabled:opacity-50`}
                     >
                       {loadingRejections[tx._id] ? "Rejecting..." : "Reject"}
                     </button>

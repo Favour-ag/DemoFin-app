@@ -304,7 +304,7 @@ export default function DashboardPage() {
               trend="up"
             />
           </section>
-           <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mt-6">
+           <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 mt-6">
             <StatCard
               title="Profit from Cards"
               value={loading ? <Spinner /> : stats.totalUsers.toString()}
@@ -314,7 +314,7 @@ export default function DashboardPage() {
               trend="up"
             />
             <StatCard
-              title="Wallet Balance"
+              title="Profit from NGN"
               value={
                 loading ? <Spinner /> : `${formatCurrencyWithSymbol(stats.walletBalanceUSD.toFixed(2))}`
               }
@@ -326,7 +326,7 @@ export default function DashboardPage() {
               trend="up"
             />
             <StatCard
-              title="Transactions"
+              title="Profit from ZAR"
               value={loading ? <Spinner /> : stats.transactions.toString()}
               percent={40}
               icon={
@@ -335,24 +335,7 @@ export default function DashboardPage() {
               iconBgColor="bg-orange-50"
               trend="up"
             />
-            <StatCard
-              title="Transaction Volume"
-              value={
-                loading ? (
-                  <Spinner />
-                ) : (
-                  <span>
-                    {formatCurrencyWithSymbol(volumeData.toFixed(2))}
-                  </span>
-                )
-              }
-              percent={40}
-              icon={
-                <BarChart2 className="w-4 md:w-5 h-4 md:h-5 text-green-800" />
-              }
-              iconBgColor="bg-green-50"
-              trend="up"
-            />
+            
           </section>
 
           {/* Charts */}

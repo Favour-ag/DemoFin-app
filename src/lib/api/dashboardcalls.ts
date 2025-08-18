@@ -11,7 +11,7 @@ export const overview = async () => {
 export const revenue = async () => {
   const res = await apiRequest({
     method: "GET",
-    url: "/overview",
+    url: "/overview/revenue",
   });
   // return res.data; // ✅ return unwrapped token + user
   return res;

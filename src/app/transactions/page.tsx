@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { CalendarDays, ListFilter, Search } from "lucide-react";
+import { ListFilter, Search } from "lucide-react";
 import Button from "@/components/Button";
 import TransactionsTable from "@/components/transaction/TransactionsTable";
 import Spinner from "@/components/Spinner";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import DateRangePicker from "@/components/DateRangePicker";
 import { transactions } from "@/lib/api/transactioncalls";
+import { filterByDateRange } from "@/utils/dateFilter";
 
 type Transaction = {
   _id: string;
@@ -31,6 +33,8 @@ export default function TransactionsPage() {
   >([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   const ITEMS_PER_PAGE = 10;
@@ -85,12 +89,16 @@ export default function TransactionsPage() {
     fetchAllTransactions();
   }, []);
 
-  // Search filter
+  // Combined search and date filter
   useEffect(() => {
-    if (!searchTerm) {
-      setFilteredTransactions(transactionList);
-    } else {
-      const filtered = transactionList.filter((transaction) => {
+    let filtered = transactionList;
+
+    // Apply date filter first
+    filtered = filterByDateRange(filtered, startDate, endDate);
+
+    // Apply search filter
+    if (searchTerm) {
+      filtered = filtered.filter((transaction) => {
         const fullName =
           `${transaction.owner.firstname} ${transaction.owner.lastname}`.toLowerCase();
         const email = transaction.owner.email.toLowerCase();
@@ -109,10 +117,11 @@ export default function TransactionsPage() {
           transaction.status.toLowerCase().includes(search)
         );
       });
-      setFilteredTransactions(filtered);
-      setCurrentPage(1); // reset to first page after search
     }
-  }, [searchTerm, transactionList]);
+
+    setFilteredTransactions(filtered);
+    setCurrentPage(1); // reset to first page after filter change
+  }, [searchTerm, startDate, endDate, transactionList]);
 
   // Paginated data (client-side)
   const paginatedTransactions = useMemo(() => {
@@ -133,13 +142,14 @@ export default function TransactionsPage() {
               </p>
             </div>
             <div className="flex items-center gap-1">
-              <Button
-                className="border text-gray-700 text-sm md:text-base"
-                bgColor="#fff"
-              >
-                <CalendarDays className="w-4 h-4" />
-                <span className="text-sm">Jan 06, 2025 - Jan 13, 2025</span>
-              </Button>
+              <DateRangePicker
+                startDate={startDate}
+                endDate={endDate}
+                onDateChange={(start, end) => {
+                  setStartDate(start);
+                  setEndDate(end);
+                }}
+              />
             </div>
           </div>
           {/* Filters & Search */}

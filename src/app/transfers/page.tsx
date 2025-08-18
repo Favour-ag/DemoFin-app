@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CalendarDays, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import Button from "@/components/Button";
 import Spinner from "@/components/Spinner";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import DateRangePicker from "@/components/DateRangePicker";
 import { transfers, requiresApproval } from "@/lib/api/transactioncalls";
+import { filterByDateRange } from "@/utils/dateFilter";
 import TransfersTable from "@/components/transfers/TransfersTable";
 
 type Transfer = {
@@ -43,6 +45,8 @@ export default function TransfersPage() {
   const [filteredTransfers, setFilteredTransfers] = useState<Transfer[]>([]);
   const [activeTab, setActiveTab] = useState<"all" | "pending">("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -99,18 +103,17 @@ export default function TransfersPage() {
 
   console.log("TransfersTable rendered with transfers:", filteredTransfers);
 
-  // Search filter (client-side on current page's data)
+  // Combined search and date filter
   useEffect(() => {
-    const list = activeTab === "all" ? transfersList : pendingTransfers;
+    let list = activeTab === "all" ? transfersList : pendingTransfers;
 
-    if (!searchTerm.trim()) {
-      setFilteredTransfers(list);
-      return;
-    }
+    // Apply date filter first
+    list = filterByDateRange(list, startDate, endDate);
 
-    const search = searchTerm.toLowerCase();
-    setFilteredTransfers(
-      list.filter((t) => {
+    // Apply search filter
+    if (searchTerm.trim()) {
+      const search = searchTerm.toLowerCase();
+      list = list.filter((t) => {
         return (
           t.narration?.toLowerCase().includes(search) ||
           t.amount?.replace(/,/g, "").includes(search) ||
@@ -121,10 +124,12 @@ export default function TransfersPage() {
           t.recipient?.accountNumber.includes(search) ||
           t.recipient?.bankName?.toLowerCase().includes(search)
         );
-      })
-    );
-    setCurrentPage(1); // Reset to first page after search
-  }, [searchTerm, activeTab, transfersList, pendingTransfers]);
+      });
+    }
+
+    setFilteredTransfers(list);
+    setCurrentPage(1); // Reset to first page after filter change
+  }, [searchTerm, startDate, endDate, activeTab, transfersList, pendingTransfers]);
 
   // if (loading) return <Spinner />;
 
@@ -145,13 +150,14 @@ export default function TransfersPage() {
                 View all transfers and approvals
               </p>
             </div>
-            <Button
-              className="border text-gray-700 text-sm md:text-base"
-              bgColor="#fff"
-            >
-              <CalendarDays className="w-4 h-4" />
-              <span className="text-sm">Jan 06, 2025 - Jan 13, 2025</span>
-            </Button>
+            <DateRangePicker
+              startDate={startDate}
+              endDate={endDate}
+              onDateChange={(start, end) => {
+                setStartDate(start);
+                setEndDate(end);
+              }}
+            />
           </div>
 
           {/* Tabs */}

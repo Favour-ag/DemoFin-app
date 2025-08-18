@@ -8,8 +8,10 @@ import Button from "@/components/Button";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import UserTable from "@/components/users/UserTable";
 import Spinner from "@/components/Spinner";
+import DateRangePicker from "@/components/DateRangePicker";
 import { fetchUsers } from "@/lib/api/usercalls";
-import { CalendarDays, ListFilter, UserPlus, Search } from "lucide-react";
+import { filterByDateRange } from "@/utils/dateFilter";
+import { ListFilter, UserPlus, Search } from "lucide-react";
 
 export interface User {
   _id: string;
@@ -27,6 +29,8 @@ export default function UserPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const itemsPerPage = 10;
 
@@ -54,20 +58,25 @@ export default function UserPage() {
     loadAllUsers();
   }, []);
 
-  // Search filtering
+  // Combined search and date filtering
   useEffect(() => {
-    if (!searchTerm) {
-      setFilteredUsers(allUsers);
-    } else {
+    let filtered = allUsers;
+
+    // Apply date filter first
+    filtered = filterByDateRange(filtered, startDate, endDate);
+
+    // Apply search filter
+    if (searchTerm) {
       const search = searchTerm.toLowerCase();
-      const filtered = allUsers.filter((user) => {
+      filtered = filtered.filter((user) => {
         const fullName = `${user.firstname} ${user.lastname}`.toLowerCase();
         return fullName.includes(search) || user.email.toLowerCase().includes(search);
       });
-      setFilteredUsers(filtered);
-      setCurrentPage(1); // reset to page 1 after search
     }
-  }, [searchTerm, allUsers]);
+
+    setFilteredUsers(filtered);
+    setCurrentPage(1); // reset to page 1 after filter change
+  }, [searchTerm, startDate, endDate, allUsers]);
 
   // Local pagination slice
   const paginatedUsers = filteredUsers.slice(
@@ -76,6 +85,8 @@ export default function UserPage() {
   );
 
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+
+  console.log(startDate, endDate)
 
   return (
     <ProtectedRoute>
@@ -90,10 +101,14 @@ export default function UserPage() {
               </p>
             </div>
             <div className="flex items-center gap-1">
-              <Button className="border text-gray-700 text-sm md:text-base" bgColor="#fff">
-                <CalendarDays className="w-4 h-4" />
-                <span className="text-sm">Jan 06, 2025 - Jan 13, 2025</span>
-              </Button>
+              <DateRangePicker
+                startDate={startDate}
+                endDate={endDate}
+                onDateChange={(start, end) => {
+                  setStartDate(start);
+                  setEndDate(end);
+                }}
+              />
             </div>
           </div>
 

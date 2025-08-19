@@ -19,7 +19,7 @@ export function formatCurrencyWithSymbol(
   amount: number | string,
   symbol = "₦"
 ): string {
-  return `${symbol}${formatCurrency(amount)}`;
+  return `${symbol} ${formatCurrency(amount)}`;
 }
 
 export function formatDateCustom(date: Date): { formattedDate: string; formattedTime: string } {

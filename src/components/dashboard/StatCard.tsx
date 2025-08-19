@@ -5,7 +5,7 @@ import Button from "../Button";
 interface StatCardProps {
   title: string;
   value: string | number | ReactNode;
-  percent: number;
+  percent?: number;
   icon: ReactNode;
   iconBgColor?: string;
   trend?: "up" | "down";
@@ -42,10 +42,7 @@ export default function StatCard({
       <h3 className="text-3xl font-bold text-gray-900 mt-1">{value}</h3>
 
       {/* Trend */}
-      <div className={`flex items-center ${trendColor} text-sm font-medium`}>
-        <TrendIcon className="w-4 h-4 mr-1" />
-        {percent}% <span className="text-gray-500 ml-1">vs last month</span>
-      </div>
+      
 
       {/* Buttons (only for Wallet Balance) */}
       {showButtons && (

@@ -52,6 +52,11 @@ export default function DashboardPage() {
   const [transactionData, setTransactionData] = useState<any[]>([]);
   const [overviewLoading, setOverviewLoading] = useState(true);
   const [volumeData, setVolumeData] = useState<number>(0);
+  const [profits, setProfits] = useState({
+    card: 0,
+    naira: 0,
+    zar: 0,
+  });
 
   useEffect(() => {
     const getOverviewData = async () => {
@@ -93,21 +98,25 @@ export default function DashboardPage() {
 
         const data = res?.data;
         console.log("Revenue Data:", data);
-        // console.log(data, "data")
 
-        //  Safely find USD balance with type
-        // const usdBalance: Balance | undefined = data?.balances?.find(
-        //   (bal: Balance) => bal.currency === "NGN"
-        // );
+        const cardCreation = data.cardCreation?.totalInUSD || 0;
+        const cardWithdrawals = data.cardWithdrawals?.totalInUSD || 0;
+        const cardFunding = data.cardFunding?.totalInUSD || 0;
+        const cardTotal = cardCreation + cardWithdrawals + cardFunding;
+        const nairaWithdrawals =
+          data.withdrawals?.breakdown?.find((b: any) => b.currency === "NGN")
+            ?.sum || 0;
+        const zarWithdrawals =
+          data.withdrawals?.breakdown?.find((b: any) => b.currency === "NGN")
+            ?.sum || 0;
 
-        // if (data) {
-        //   setStats({
-        //     totalUsers: data.counts?.totalUsers || 0,
-        //     walletBalanceUSD: usdBalance?.totalAmount || 0,
-        //     transactions: data.counts?.transactions || 0,
-        //     transactionVolumeUSD: data.transactionVolumeInUSD || 0,
-        //   });
-        // }
+        if (data) {
+          setProfits({
+            card: cardTotal,
+            zar: zarWithdrawals,
+            naira: nairaWithdrawals,
+          });
+        }
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {
@@ -125,29 +134,29 @@ export default function DashboardPage() {
 
         const data = res?.data;
         if (data) {
-          const transactionVolumeArray = res?.data
+          const transactionVolumeArray = res?.data;
           // console.log("Transaction Volume Data:", transactionVolumeArray[0].totalVolume.$numberDecimal);
 
           setVolumeData(
-  Number(transactionVolumeArray?.[0]?.totalVolume?.$numberDecimal ?? 0)
-);
-
-         
+            Number(
+              transactionVolumeArray?.[0]?.totalVolume?.$numberDecimal ?? 0
+            )
+          );
         }
       } catch (error) {
         console.error("Error fetching transaction volume data:", error);
       }
-    }
+    };
 
     getVolumeData();
-  }, [] )
+  }, []);
 
   useEffect(() => {
     const getTransactionData = async () => {
       setTransactionLoading(true);
       try {
-        const page = 1
-        const limit = 10
+        const page = 1;
+        const limit = 10;
         const res = await transactions(page, limit);
         const data = res?.data;
 
@@ -249,8 +258,6 @@ export default function DashboardPage() {
                 Here is what's happening today on your platform
               </p>
             </div>
-
-           
           </div>
 
           {/* Stat Cards */}
@@ -266,7 +273,13 @@ export default function DashboardPage() {
             <StatCard
               title="Wallet Balance"
               value={
-                loading ? <Spinner /> : `${formatCurrencyWithSymbol(stats.walletBalanceUSD.toFixed(2))}`
+                loading ? (
+                  <Spinner />
+                ) : (
+                  `${formatCurrencyWithSymbol(
+                    stats.walletBalanceUSD.toFixed(2)
+                  )}`
+                )
               }
               percent={40}
               icon={
@@ -291,9 +304,7 @@ export default function DashboardPage() {
                 loading ? (
                   <Spinner />
                 ) : (
-                  <span>
-                    {formatCurrencyWithSymbol(volumeData.toFixed(2))}
-                  </span>
+                  <span>{formatCurrencyWithSymbol(volumeData.toFixed(2))}</span>
                 )
               }
               percent={40}
@@ -304,38 +315,55 @@ export default function DashboardPage() {
               trend="up"
             />
           </section>
-           <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 mt-6">
+          <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 mt-6">
             <StatCard
               title="Profit from Cards"
-              value={loading ? <Spinner /> : stats.totalUsers.toString()}
-              percent={40}
-              icon={<Users className="w-4 md:w-5 h-4 md:h-5" />}
-              iconBgColor="bg-blue-50"
-              trend="up"
-            />
-            <StatCard
-              title="Profit from NGN"
               value={
-                loading ? <Spinner /> : `${formatCurrencyWithSymbol(stats.walletBalanceUSD.toFixed(2))}`
+                loading ? (
+                  <Spinner />
+                ) : (
+                  formatCurrencyWithSymbol(profits.card.toFixed(2), "$")
+                )
               }
-              percent={40}
-              icon={
-                <Wallet className="w-4 md:w-5 h-4 md:h-5 text-purple-800" />
-              }
-              iconBgColor="bg-purple-50"
-              trend="up"
-            />
-            <StatCard
-              title="Profit from ZAR"
-              value={loading ? <Spinner /> : stats.transactions.toString()}
-              percent={40}
+              // percent={40}
               icon={
                 <CircleDollarSign className="w-4 md:w-5 h-4 md:h-5 text-orange-500" />
               }
-              iconBgColor="bg-orange-50"
-              trend="up"
+              iconBgColor="bg-blue-50"
+              // trend="up"
             />
-            
+            <StatCard
+              title="Profit for Withdrawals in NGN"
+              value={
+                loading ? (
+                  <Spinner />
+                ) : (
+                  formatCurrencyWithSymbol(profits.naira.toFixed(2))
+                )
+              }
+              // percent={40}
+              icon={
+                <CircleDollarSign className="w-4 md:w-5 h-4 md:h-5 text-orange-500" />
+              }
+              iconBgColor="bg-blue-50"
+              // trend="up"
+            />
+            <StatCard
+              title="Profit from Withdrawals in ZAR"
+              value={
+                loading ? (
+                  <Spinner />
+                ) : (
+                  formatCurrencyWithSymbol(profits.zar.toFixed(2), "ZAR")
+                )
+              }
+              // percent={40}
+              icon={
+                <CircleDollarSign className="w-4 md:w-5 h-4 md:h-5 text-orange-500" />
+              }
+              iconBgColor="bg-blue-50"
+              // trend="up"
+            />
           </section>
 
           {/* Charts */}

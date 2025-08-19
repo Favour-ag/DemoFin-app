@@ -13,6 +13,11 @@ import { allAudit } from "@/lib/api/auditcalls";
 import AuditLogsTable from "@/components/audit-logs/AuditLogsTable";
 import Spinner from "@/components/Spinner";
 
+
+
+const ITEMS_PER_PAGE = 10;
+
+
 type AuditLog = {
   _id: string;
   timestamp: string;
@@ -30,35 +35,33 @@ type AuditLog = {
   __v: number;
 };
 
-const ITEMS_PER_PAGE = 10;
+type AuditResponse = {
+  data: AuditLog[];
+  metadata: {
+    page: number;
+    pageSize: number;
+    totalRecords: number;
+    totalPages: number;
+  };
+};
 
 export default function AuditLogPage() {
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(10)
   const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
 
   const getAuditLogs = async () => {
     setLoading(true);
     try {
-      const firstRes = await allAudit(1, 1);
-      console.log(firstRes)
-      const totalCount =
-        firstRes?.metadata?.totalPages ||
-        firstRes?.metadata?.totalRecords ||
-        0;
-
-        console.log("Total audit logs count:", totalCount);
-
-      if (!totalCount) {
-        setAuditLogs([]);
-        return;
-      }
-
-      const allRes = await allAudit(1, totalCount);
-      const data = allRes;
+      const firstRes = await allAudit(currentPage, limit);
+     
+      const data = firstRes?.data;
       console.log("Total audit logs count:", data);
       setAuditLogs(data || []);
+       setTotalPages(firstRes?.metadata?.totalPages || 1);
     } catch (error) {
       console.error("Failed to fetch audit logs", error);
     } finally {
@@ -68,26 +71,25 @@ export default function AuditLogPage() {
 
   useEffect(() => {
     getAuditLogs();
-  }, []);
+  }, [currentPage]);
 
   const filteredAuditLogs = useMemo(() => {
     const term = search.toLowerCase();
-    return auditLogs.filter(
+    return auditLogs?.filter(
       (log) =>
         log.username.toLowerCase().includes(term) ||
         log.actionType.toLowerCase().includes(term) ||
         log.description.toLowerCase().includes(term) ||
         log.entityType.toLowerCase().includes(term)
-    );
+    ) || [];
           // setCurrentPage(1); // reset to first page after search
 
   }, [search, auditLogs]);
 
-  const totalPages = Math.ceil(filteredAuditLogs.length / ITEMS_PER_PAGE);
-  const paginatedLogs = useMemo(() => {
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredAuditLogs.slice(start, start + ITEMS_PER_PAGE);
-  }, [filteredAuditLogs, currentPage]);
+  // const paginatedLogs = useMemo(() => {
+  //   const start = (currentPage - 1) * ITEMS_PER_PAGE;
+  //   return filteredAuditLogs.slice(start, start + ITEMS_PER_PAGE);
+  // }, [filteredAuditLogs, currentPage]);
 
   const handleViewLog = (log: AuditLog) => {
     console.log("View single log:", log);
@@ -105,20 +107,7 @@ export default function AuditLogPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">Audit Logs</h2>
-        <div className="flex items-center gap-3">
-          <Button size="sm" onClick={getAuditLogs}>
-            <RotateCcw className="w-4 h-4 mr-2" />
-            Refresh
-          </Button>
-          <Button size="sm">
-            <CalendarDays className="w-4 h-4 mr-2" />
-            Date Filter
-          </Button>
-          <Button size="sm">
-            <ListFilter className="w-4 h-4 mr-2" />
-            Action Type
-          </Button>
-        </div>
+        
       </div>
 
       <div className="flex items-center gap-3">
@@ -135,17 +124,14 @@ export default function AuditLogPage() {
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <Button size="sm">
-          <UserPlus className="w-4 h-4 mr-2" />
-          Export
-        </Button>
+       
       </div>
 
-      <AuditLogsTable
-      loading={loading}
-        auditLogs={paginatedLogs}
+       <AuditLogsTable
+        loading={loading}
+        auditLogs={filteredAuditLogs} // ✅ if client-side search
         currentPage={currentPage}
-        totalPages={totalPages}
+        totalPages={totalPages} // ✅ now from backend
         onPageChange={setCurrentPage}
         onViewLog={handleViewLog}
       />

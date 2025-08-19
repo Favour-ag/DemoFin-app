@@ -39,6 +39,7 @@ export default function AuditLogsTable({
   loading,
   currentPage,
   onPageChange,
+  totalPages,
   onViewLog,
 }: AuditLogsTableProps) {
   if (loading) {
@@ -134,7 +135,7 @@ export default function AuditLogsTable({
         <Pagination
           itemsPerPage={10}
           currentPage={currentPage}
-          totalPages={10}
+          totalPages={totalPages}
           onPageChange={onPageChange}
         />
       </div>

@@ -107,7 +107,7 @@ export default function DashboardPage() {
           data.withdrawals?.breakdown?.find((b: any) => b.currency === "NGN")
             ?.sum || 0;
         const zarWithdrawals =
-          data.withdrawals?.breakdown?.find((b: any) => b.currency === "NGN")
+          data.withdrawals?.breakdown?.find((b: any) => b.currency === "ZAR")
             ?.sum || 0;
 
         if (data) {

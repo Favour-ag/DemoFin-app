@@ -1,12 +1,14 @@
 // components/transactions/TransactionTable.tsx
 "use client";
 
+import { formatDateCustom } from "@/lib/utils";
 import {
   ArrowUp,
   ArrowDown,
   CheckCircle,
   Clock,
   CornerUpLeft,
+  Plus,
 } from "lucide-react";
 
 type Transaction = {
@@ -26,24 +28,24 @@ type Props = {
 export default function TransactionTable({ transactions, loading }: Props) {
   const renderStatusBadge = (status: string) => {
     switch (status) {
-      case "Completed":
+      case "successful":
         return (
           <span className="inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">
             <CheckCircle className="w-3.5 h-3.5" />
             {status}
           </span>
         );
-      case "Pending":
+      case "f":
         return (
           <span className="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
             <Clock className="w-3.5 h-3.5" />
             {status}
           </span>
         );
-      case "Refunded":
+      case "failed":
         return (
-          <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded-full">
-            <CornerUpLeft className="w-3.5 h-3.5" />
+          <span className="inline-flex items-center gap-1 text-xs font-medium text-red-600 bg-red-100 px-2 py-1 rounded-full">
+            <Plus className="w-3.5 rotate-45 h-3.5" />
 
             {status}
           </span>
@@ -73,8 +75,11 @@ export default function TransactionTable({ transactions, loading }: Props) {
             <th className="px-4 py-2 text-left text-gray-500 font-medium">
               Description
             </th>
-            <th className="px-4 py-2 text-left text-gray-500 font-medium">
-              Amount
+            <th className="px-4 py-2 text-left text-gray-500 font-medium min-w-[120px]">
+              Source Amount
+            </th>
+            <th className="px-4 py-2 text-left text-gray-500 font-medium min-w-[200px]">
+              Destination Amount
             </th>
             <th className="px-4 py-2 text-left text-gray-500 font-medium">
               Status
@@ -104,30 +109,42 @@ export default function TransactionTable({ transactions, loading }: Props) {
                   <input type="checkbox" />
                 </td>
                 <td className="px-4 py-3 font-medium text-gray-800">
-                  {txn.id}
+                  {txn._id}
                 </td>
                 <td className="px-4 py-3">
                   <span
                     className={`inline-flex items-center text-xs font-medium px-2 py-1 rounded-full ${
-                      txn.type === "Credit"
+                      txn.direction === "credit"
                         ? "text-green-600 bg-green-50"
                         : "text-red-600 bg-red-50"
                     }`}
                   >
-                    {txn.type === "Credit" ? (
+                    {txn.direction === "credit" ? (
                       <ArrowUp className="w-3.5 h-3.5 mr-1" />
                     ) : (
                       <ArrowDown className="w-3.5 h-3.5 mr-1" />
                     )}
-                    {txn.type}
+                    {txn.direction}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-gray-700">{txn.description}</td>
-                <td className="px-4 py-3 text-gray-500">
-                  ${txn.amount.toFixed(2)}
+                <td className="px-4 py-3 text-gray-700">{txn?.description}</td>
+                <td className="px-4 py-3 text-gray-700 min-w-[200px]">
+                  {txn?.sourceCurrency} {txn?.sourceAmount}
                 </td>
+                <td className="px-4 py-3 text-gray-700">
+                  {txn?.destinationCurrency} {txn?.destinationAmount}
+                </td>
+
                 <td className="px-4 py-3">{renderStatusBadge(txn.status)}</td>
-                <td className="px-4 py-3 text-gray-500">{txn.date}</td>
+                {/* <td className="px-4 py-3 text-gray-500">{txn.createdAt}</td> */}
+                <td className="px-4 py-3 text-gray-500 min-w-[200px]">
+                  {" "}
+                  <div>
+                     <p>{formatDateCustom(new Date(txn.createdAt)).formattedDate}</p>
+                     <p>{formatDateCustom(new Date(txn.createdAt)).formattedTime}</p>
+                  </div>
+                  {/* {formatDateCustom(new Date(txn.createdAt)).formattedDate} */}
+                </td>
               </tr>
             ))
           )}

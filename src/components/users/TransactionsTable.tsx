@@ -20,7 +20,7 @@ type Transaction = {
 
 type Props = {
   transactions: Transaction[];
-  loading: boolean;
+  loading?: boolean;
 };
 
 export default function TransactionTable({ transactions, loading }: Props) {
@@ -85,36 +85,52 @@ export default function TransactionTable({ transactions, loading }: Props) {
           </tr>
         </thead>
         <tbody>
-          {transactions.map((txn, i) => (
-            <tr key={i} className="border-t hover:bg-gray-50">
-              <td className="px-4 py-3">
-                <input type="checkbox" />
+          {loading ? (
+            <tr>
+              <td colSpan={7} className="px-4 py-6 text-center text-gray-500">
+                Loading transactions...
               </td>
-              <td className="px-4 py-3 font-medium text-gray-800">{txn.id}</td>
-              <td className="px-4 py-3">
-                <span
-                  className={`inline-flex items-center text-xs font-medium px-2 py-1 rounded-full ${
-                    txn.type === "Credit"
-                      ? "text-green-600 bg-green-50"
-                      : "text-red-600 bg-red-50"
-                  }`}
-                >
-                  {txn.type === "Credit" ? (
-                    <ArrowUp className="w-3.5 h-3.5 mr-1" />
-                  ) : (
-                    <ArrowDown className="w-3.5 h-3.5 mr-1" />
-                  )}
-                  {txn.type}
-                </span>
-              </td>
-              <td className="px-4 py-3 text-gray-700">{txn.description}</td>
-              <td className="px-4 py-3 text-gray-500">
-                ${txn.amount.toFixed(2)}
-              </td>
-              <td className="px-4 py-3">{renderStatusBadge(txn.status)}</td>
-              <td className="px-4 py-3 text-gray-500">{txn.date}</td>
             </tr>
-          ))}
+          ) : transactions?.length === 0 ? (
+            <tr>
+              <td colSpan={7} className="px-4 py-6 text-center text-gray-500">
+                No transactions found
+              </td>
+            </tr>
+          ) : (
+            transactions.map((txn: any, i: number) => (
+              <tr key={i} className="border-t hover:bg-gray-50">
+                <td className="px-4 py-3">
+                  <input type="checkbox" />
+                </td>
+                <td className="px-4 py-3 font-medium text-gray-800">
+                  {txn.id}
+                </td>
+                <td className="px-4 py-3">
+                  <span
+                    className={`inline-flex items-center text-xs font-medium px-2 py-1 rounded-full ${
+                      txn.type === "Credit"
+                        ? "text-green-600 bg-green-50"
+                        : "text-red-600 bg-red-50"
+                    }`}
+                  >
+                    {txn.type === "Credit" ? (
+                      <ArrowUp className="w-3.5 h-3.5 mr-1" />
+                    ) : (
+                      <ArrowDown className="w-3.5 h-3.5 mr-1" />
+                    )}
+                    {txn.type}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-gray-700">{txn.description}</td>
+                <td className="px-4 py-3 text-gray-500">
+                  ${txn.amount.toFixed(2)}
+                </td>
+                <td className="px-4 py-3">{renderStatusBadge(txn.status)}</td>
+                <td className="px-4 py-3 text-gray-500">{txn.date}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

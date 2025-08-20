@@ -23,14 +23,15 @@ type ProfileTabsProps = {
     transactionVolume: string;
   };
   activities: Activity[];
+  transactionsList: any
 };
 
-export default function ProfileTabs({ user, activities }: ProfileTabsProps) {
+export default function ProfileTabs({ user, activities, transactionsList }: ProfileTabsProps) {
   const [tab, setTab] = useState("overview");
 
   const tabs = [
     { label: "Overview", value: "overview" },
-    { label: "Transactions", value: "transactions" },
+    // { label: "Transactions", value: "transactions" },
   ];
 
   return (
@@ -65,9 +66,9 @@ export default function ProfileTabs({ user, activities }: ProfileTabsProps) {
       </div>
 
       {tab === "overview" && (
-        <OverviewTab user={user} activities={activities} />
+        <OverviewTab transactionsList={transactionsList} user={user} activities={activities} />
       )}
-      {tab === "transactions" && <TransactionsTab />}
+      {/* {tab === "transactions" && <TransactionsTab transactionList={transactionsList} />} */}
     </div>
   );
 }

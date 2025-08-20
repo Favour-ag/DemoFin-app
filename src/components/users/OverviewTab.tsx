@@ -5,6 +5,7 @@ import { Wallet, CircleDollarSign, BarChart2 } from "lucide-react";
 import StatCard from "@/components/users/StatCard";
 import ActivityTable from "@/components/users/ActivityTable";
 import Pagination from "../Pagination";
+import TransactionsTab from "./TransactionsTab";
 
 type Activity = {
   id: string;
@@ -21,9 +22,10 @@ type OverviewTabProps = {
     transactionVolume: string;
   };
   activities: Activity[];
+  transactionsList: any
 };
 
-export default function OverviewTab({ user, activities }: OverviewTabProps) {
+export default function OverviewTab({ user, activities, transactionsList }: OverviewTabProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
   return (
@@ -59,36 +61,26 @@ export default function OverviewTab({ user, activities }: OverviewTabProps) {
       </section>
 
       {/* Filters */}
-      <div className="mt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      {/* <div className="mt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <input
           type="text"
           placeholder="Search transactions"
           className="border rounded-md px-3 py-2 w-full md:w-1/3"
         />
-        <div className="flex gap-2 flex-wrap">
-          <span className="text-sm bg-gray-100 px-2 py-1 rounded-md">
-            All time ✕
-          </span>
-          <span className="text-sm bg-gray-100 px-2 py-1 rounded-md">
-            US, AU +4 ✕
-          </span>
-          <button className="text-sm text-purple-600 hover:underline">
-            More filters
-          </button>
-        </div>
-      </div>
+       
+      </div> */}
 
       {/* Table */}
-      <ActivityTable />
+      <TransactionsTab transactionList={transactionsList} />
 
       {/* Pagination */}
-      <div className="mt-4 overflow-x-auto hide-scrollbar">
+      {/* <div className="mt-4 overflow-x-auto hide-scrollbar">
         <Pagination
           currentPage={currentPage}
           totalPages={10}
           onPageChange={(page) => setCurrentPage(page)}
         />
-      </div>
+      </div> */}
     </>
   );
 }

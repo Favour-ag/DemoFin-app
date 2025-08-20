@@ -12,6 +12,7 @@ export const fetchUsers = async (page: number, limit: number ) => {
   return res.data;
 };
 
+
 export const fetchUserById = async (id: string, token?: string) => {
   return await apiRequest<{ data: any }>({
     method: "GET",

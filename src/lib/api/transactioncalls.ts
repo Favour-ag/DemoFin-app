@@ -9,6 +9,20 @@ export const transactions = async (page: number, limit : number) => {
   return res;
 };
 
+export const transactionsByUser = async (id: string, token? : string) => {
+  const res = await apiRequest({
+    method: "GET",
+    url: `/transactions/user/${id}`,
+    config: {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    },
+  });
+  // return res.data; // ✅ return unwrapped token + user
+  return res;
+};
+
 //&filters[type]=deposit
 
 

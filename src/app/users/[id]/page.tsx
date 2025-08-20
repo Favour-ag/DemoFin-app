@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, CalendarDays, Mail, Phone } from "lucide-react";
 import ProfileTabs from "@/components/users/ProfileTabs";
 import type { Metadata } from "next";
+import { transactionsByUser } from "@/lib/api/transactioncalls";
 
 // ✅ FIX: Promise-based props to satisfy Next.js type constraints
 export type Props = {
@@ -20,12 +21,15 @@ export default async function UserProfile({ params }: Props) {
   const token = cookieStore.get("token")?.value;
 
   try {
-    const [user, stats] = await Promise.all([
+    const [user, stats, transactions] = await Promise.all([
       fetchUserById(id, token),
       fetchUserStats(id, token),
+      transactionsByUser(id, token)
     ]);
 
-    if (!user || !stats) return notFound();
+    if (!user || !stats || !transactions) return notFound();
+
+    console.log(transactions, user, "user transaxtions")
 
     return (
       <div className="p-4 md:p-8 space-y-6 bg-white">
@@ -92,6 +96,7 @@ export default async function UserProfile({ params }: Props) {
 
         {/* Tabs */}
         <ProfileTabs
+         transactionsList={transactions?.data}
           user={{
             name: `${user.firstname} ${user.lastname}`,
             email: user.email,
